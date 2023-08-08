@@ -1,0 +1,92 @@
+@mixin debug ($offset: 0, $color: red) {
+  outline: 1px solid $color;
+
+  @if $offset {
+    outline-offset: $offset;
+  }
+}
+
+@mixin easing ($properties...) {
+  transition-duration: var(--ui-easing-duration);
+  transition-timing-function: var(--ui-easing-timing-function);
+
+  @if length($properties) > 1 {
+    transition-property: $properties;
+  } @else {
+    transition-property: all;
+  }
+}
+
+@mixin no-select {
+  -webkit-touch-callout: none;
+  user-select: none;
+}
+
+@mixin reset-button {
+  width: auto;
+  padding: 0;
+  margin: 0;
+  overflow: visible;
+
+  font: inherit;
+  -webkit-font-smoothing: inherit;
+  -moz-osx-font-smoothing: inherit;
+  line-height: inherit;
+  color: inherit;
+
+  background: transparent;
+  border: none;
+  resize: none;
+  appearance: none;
+
+  -webkit-tap-highlight-color: rgba(0 0 0 / 0%);
+
+  &::-moz-focus-inner { padding: 0; border: 0; }
+  &:focus { outline: none; }
+}
+
+@mixin invisible-scroll ($direction: x) {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  @if $direction == x {
+    overflow-x: scroll;
+    overflow-y: hidden;
+  } @else if $direction == y {
+    overflow-x: hidden;
+    overflow-y: scroll;
+  } @else {
+    overflow-x: scroll;
+    overflow-y: scroll;
+  }
+
+  &::-webkit-scrollbar {
+    display: none;
+    height: 0;
+    background: transparent;
+  }
+}
+
+@keyframes loader-spin {
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@mixin loader ($size: 5rem, $thickness: 1rem, $foreground: black, $background: transparent, $speed: 1s) {
+  content: '';
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  width: $size;
+  height: $size;
+
+  pointer-events: none;
+
+  border: $thickness solid $background;
+  border-top: $thickness solid $foreground;
+  border-left: $thickness solid $foreground;
+  border-radius: 50%;
+  animation: loader-spin $speed linear infinite;
+}

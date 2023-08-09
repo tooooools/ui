@@ -21,6 +21,10 @@
     @include ui-icon;
   }
 
+  &:not(.has-icon) &__icon {
+    display: none;
+  }
+
   &.is-waiting &__icon {
     position: relative;
     color: transparent;

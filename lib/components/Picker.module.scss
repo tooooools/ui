@@ -1,0 +1,28 @@
+.picker {
+  @include ui-container(false);
+
+  gap: 0;
+  background: var(--ui-color-background);
+  border-radius: var(--ui-border-radius);
+
+  &__toolbar {
+    @include debug;
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+  }
+
+  &:not(.is-open) &__toolbar > *:not(.is-active) {
+    display: none;
+  }
+
+  // Disable active feedback on active button when <Picker> is not open
+  &:not(.is-open) .is-active:not(:hover, :focus) {
+    color: var(--ui-color-text);
+    background: var(--ui-color-background);
+  }
+
+  &__toggle {
+    border-bottom-left-radius: 0 !important;
+    border-top-left-radius: 0 !important;
+  }
+}

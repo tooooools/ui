@@ -13,6 +13,7 @@ export default class Button extends Component {
     this.state = {
       label: ensure(writable)(props['store-label'], props.label),
       title: ensure(writable)(props['store-title'], props.title),
+      icon: ensure(writable)(props['store-icon'], props.icon),
 
       active: ensure(writable)(props['store-active'], props.active),
       disabled: ensure(writable)(props['store-disabled'], props.disabled),
@@ -28,6 +29,7 @@ export default class Button extends Component {
         id={props.id}
         class={classnames(style.button, props.class)}
         store-title={state.title}
+        store-class-has-icon={state.icon}
         store-class-is-active={state.active}
         store-class-is-disabled={state.disabled}
         store-class-is-hidden={state.hidden}
@@ -36,13 +38,11 @@ export default class Button extends Component {
         event-mouseenter={e => (props['event-mouseenter'] ?? noop)(e, this)}
         event-mouseleave={e => (props['event-mouseleave'] ?? noop)(e, this)}
       >
-        {props.icon && (
-          <span
-            ref={this.ref('icon')}
-            class={style.button__icon}
-            innerHTML={props.icon}
-          />
-        )}
+        <span
+          ref={this.ref('icon')}
+          class={style.button__icon}
+          store-innerHTML={state.icon}
+        />
         <label class={style.button__label} store-text={state.label} />
       </button>
     )

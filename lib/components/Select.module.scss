@@ -8,9 +8,7 @@
 
   select {
     @include reset-button;
-    padding: var(--ui-padding-container);
     padding-right: calc(1.5em + var(--ui-gap));
-    padding-left: 0;
     cursor: pointer;
   }
 
@@ -19,6 +17,7 @@
     position: absolute;
     right: 0;
     padding: var(--ui-padding-container);
+    padding-top: 0;
     pointer-events: none;
   }
 }

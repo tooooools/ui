@@ -1,0 +1,15 @@
+.tabs {
+  @include export;
+
+  &__toggles {
+    @include export;
+  }
+
+  &__panels {
+    @include export;
+  }
+
+  &__panel.is-hidden {
+    display: none;
+  }
+}

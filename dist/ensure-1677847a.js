@@ -1,10 +1,10 @@
-function u(i, t, e, s) {
+function c(i, t, e, s) {
   this.fn = t, this.ctx = e || null, this.owner = i, this.once = !!s;
 }
-function l(i, t) {
+function u(i, t) {
   t.prev && (t.prev.next = t.next), t.next && (t.next.prev = t.prev), t.ctx = t.fn = t.owner = null, t === i._first && (i._first = t.next), t === i._last && (i._last = t.prev);
 }
-class h {
+class l {
   constructor() {
     this._first = this._last = null;
   }
@@ -14,30 +14,30 @@ class h {
       n.fn.call(n.ctx, t, e, s, r, a), n.once && this.unsubscribe(n), n = n.next;
   }
   subscribe(t, e, s) {
-    const r = new u(this, t, e, s);
+    const r = new c(this, t, e, s);
     return this._first ? (this._last.next = r, r.prev = this._last, this._last = r) : (this._first = r, this._last = r), r;
   }
   subscribeOnce(t, e) {
     return this.subscribe(t, e, !0);
   }
   unsubscribe(t, e) {
-    if (t instanceof u)
-      return l(this, t);
+    if (t instanceof c)
+      return u(this, t);
     e || (e = null);
     let s = this._first;
     for (; s; )
-      s.fn === t && s.ctx === e && l(this, s), s = s.next;
+      s.fn === t && s.ctx === e && u(this, s), s = s.next;
   }
   unsubscribeAll() {
     let t = this._first;
     for (this._first = this._last = null; t; )
-      l(this, t), t = t.next;
+      u(this, t), t = t.next;
   }
 }
-function b() {
-  return new h();
+function o() {
+  return new l();
 }
-class c extends h {
+class h extends l {
   constructor(t) {
     super(), this.current = t;
   }
@@ -48,10 +48,10 @@ class c extends h {
     return this.current;
   }
 }
-function _(i) {
-  return new c(i);
+function b(i) {
+  return new h(i);
 }
-class f extends c {
+class f extends h {
   set(t, e) {
     if (!e && this.current === t)
       return;
@@ -65,12 +65,22 @@ class f extends c {
     this.set(s !== void 0 ? s : this.current, e);
   }
 }
-function o(i) {
+function _(i) {
   return new f(i);
 }
+const x = (i) => (...t) => {
+  for (const e of t) {
+    if (e instanceof l)
+      return e;
+    if (e !== void 0)
+      return i(e);
+  }
+  return i(null);
+};
 export {
   f as W,
-  _ as r,
-  b as s,
-  o as w
+  x as e,
+  b as r,
+  o as s,
+  _ as w
 };

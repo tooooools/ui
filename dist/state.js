@@ -1,35 +1,36 @@
-import { W as o } from "./writable-e21d6212.js";
-import { r as A, r as g, s as m, w as p, w as x } from "./writable-e21d6212.js";
-function f(n, i) {
+import { W as o } from "./ensure-1677847a.js";
+import { e as A, r as g, r as m, s as p, w as x, w as W } from "./ensure-1677847a.js";
+function f(e, i) {
   const r = new o(), u = r.set.bind(r);
   delete r.set;
-  const c = Array.isArray(n);
-  let e = c ? new Array(n.length) : null;
-  if (c)
-    for (let t = 0, a = n.length; t < a; t++)
-      e[t] = n[t].current, n[t].subscribe(function(l) {
-        e[t] = l, s();
+  const a = Array.isArray(e);
+  let n = a ? new Array(e.length) : null;
+  if (a)
+    for (let t = 0, c = e.length; t < c; t++)
+      n[t] = e[t].current, e[t].subscribe(function(l) {
+        n[t] = l, s();
       });
   else
-    e = n.current, n.subscribe(function(t) {
-      e = t, s();
+    n = e.current, e.subscribe(function(t) {
+      n = t, s();
     });
   s();
   function s() {
-    const t = i(e);
+    const t = i(n);
     t && t.then ? t.then(u) : u(t);
   }
   return r;
 }
-const w = (n) => f(n, (i) => !i);
+const w = (e) => f(e, (i) => !i);
 export {
   f as d,
   f as derived,
+  A as ensure,
   w as n,
   w as not,
-  A as r,
-  g as readable,
-  m as signal,
-  p as w,
-  x as writable
+  g as r,
+  m as readable,
+  p as signal,
+  x as w,
+  W as writable
 };

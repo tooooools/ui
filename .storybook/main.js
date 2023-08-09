@@ -8,7 +8,6 @@ export default {
   },
   addons: [
     '@storybook/addon-essentials',
-    '@storybook/addon-actions',
     '@storybook/addon-console'
   ],
   framework: {
@@ -16,6 +15,7 @@ export default {
     options: {},
   },
   docs: {
-    autodocs: true
+    autodocs: true,
+    defaultName: 'Documentation'
   }
 }

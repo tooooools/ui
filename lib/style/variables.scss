@@ -1,6 +1,11 @@
 :root {
+  // Typography
+
   --ui-font-family: system-ui, sans-serif, apple color emoji, segoe ui emoji, segoe ui symbol;
   --ui-font-size: 1.4rem;
+  --ui-line-height: 1.3;
+
+  // Color
 
   --ui-color-text: #222;
   --ui-color-text-dim: #C1C1C1;
@@ -9,19 +14,32 @@
   --ui-color-accent: #F9EB0B;
   --ui-color-accent-contrast: var(--ui-color);
 
+  // Box model
+
   --ui-gap: 1rem;
-  --ui-button-height: 4rem;
-  --ui-padding: 1rem 1.2rem;
+  --ui-height: 4rem;
+  --ui-padding-container: 1rem 1.2rem;
+  --ui-padding-content: 2rem;
 
   --ui-border: 0;
   --ui-border-radius: 1rem;
 
+  // Animations
+
   --ui-easing-duration: 120ms;
   --ui-easing-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
 
-  --ui-animation-button: none;
+  // State specific
 
   --ui-disabled-color-text: var(--ui-color-text);
   --ui-disabled-color-background: var(--ui-color-background);
   --ui-disabled-opacity: 0.3;
+
+  // Component specific
+
+  --ui-backdrop-background: rgba(0 0 0 / 90%);
+  --ui-backdrop-blur: 10px;
+  --ui-button-animation: none;
+  --ui-modal-width: 70ch;
+  --ui-modal-height: 400px;
 }

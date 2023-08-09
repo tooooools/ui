@@ -1,7 +1,7 @@
 import style from './Button.module.scss'
 
 import { Component } from '../jsx'
-import { writable } from '../state'
+import { ensure, writable } from '../state'
 
 import noop from '../utils/noop'
 import classnames from 'classnames'
@@ -11,13 +11,13 @@ export default class Button extends Component {
     this.handleClick = this.handleClick.bind(this)
 
     this.state = {
-      label: props['store-label'] ?? writable(props.label),
-      title: props['store-title'] ?? writable(props.title),
+      label: ensure(writable)(props['store-label'], props.label),
+      title: ensure(writable)(props['store-title'], props.title),
 
-      active: props['store-active'] ?? writable(props.active),
-      disabled: props['store-disabled'] ?? writable(props.disabled),
-      hidden: props['store-hidden'] ?? writable(props.hidden),
-      waiting: props['store-waiting'] ?? writable(props.waiting)
+      active: ensure(writable)(props['store-active'], props.active),
+      disabled: ensure(writable)(props['store-disabled'], props.disabled),
+      hidden: ensure(writable)(props['store-hidden'], props.hidden),
+      waiting: ensure(writable)(props['store-waiting'], props.waiting)
     }
   }
 
@@ -25,16 +25,16 @@ export default class Button extends Component {
     return (
       <button
         type={props.type}
+        id={props.id}
         class={classnames(style.button, props.class)}
         store-title={state.title}
-        store-class-has-label={state.label}
         store-class-is-active={state.active}
         store-class-is-disabled={state.disabled}
         store-class-is-hidden={state.hidden}
         store-class-is-waiting={state.waiting}
         event-click={this.handleClick}
-        event-mouseenter={props['event-mouseenter'] ?? noop}
-        event-mouseleave={props['event-mouseleave'] ?? noop}
+        event-mouseenter={e => (props['event-mouseenter'] ?? noop)(e, this)}
+        event-mouseleave={e => (props['event-mouseleave'] ?? noop)(e, this)}
       >
         {props.icon && (
           <span
@@ -43,7 +43,7 @@ export default class Button extends Component {
             innerHTML={props.icon}
           />
         )}
-        <span class={style.button__label} store-text={state.label} />
+        <label class={style.button__label} store-text={state.label} />
       </button>
     )
   }
@@ -54,7 +54,7 @@ export default class Button extends Component {
     if (this.state.waiting.get()) return e.preventDefault()
 
     this.state.waiting.set(true)
-    await (this.props['event-click'] ?? noop)(e)
+    await (this.props['event-click'] ?? noop)(e, this)
 
     // Testing for mounted because event-click may have destroyed this component
     if (!this.mounted) return

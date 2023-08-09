@@ -57,6 +57,7 @@ export default defineConfig(async ({ mode }) => {
             @use 'lib/style/_helpers' as *;
             @import 'lib/style/reset';
             @import 'lib/style/variables';
+            @import 'lib/style/mixins';
           `
         }
       },
@@ -68,7 +69,7 @@ export default defineConfig(async ({ mode }) => {
           const i = css.indexOf(`.${name}`)
           const lineNumber = css.substr(0, i).split(/[\r\n]/).length
           const hash = stringHash(css).toString(36).substr(0, 5)
-          return `_${name}_${hash}_${lineNumber}`
+          return `ui-${name}-${hash}${lineNumber}`
         }
       }
     },

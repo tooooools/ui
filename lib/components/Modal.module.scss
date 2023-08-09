@@ -1,0 +1,67 @@
+.modal {
+  @include ui-font;
+
+  max-width: var(--ui-modal-width);
+  overflow: hidden;
+  border: var(--ui-border);
+  border-radius: var(--ui-border-radius);
+
+  &__header {
+    display: flex;
+    padding: var(--ui-gap);
+    justify-content: space-between;
+    background: var(--ui-color-background);
+  }
+
+  &__header &__title {
+    font-weight: bold;
+    pointer-events: none;
+  }
+
+  &__content {
+    @include invisible-scroll(y);
+
+    max-height: var(--ui-modal-height);
+    padding: var(--ui-padding-content);
+    line-height: var(--ui-line-height);
+    background: var(--ui-color-background-dim);
+  }
+
+  // Target <Tabs> inside <Modal>
+  &__content:has(> [class^='ui-tabs-']) {
+    max-height: unset;
+    padding: 0;
+    overflow: visible;
+    background: var(--ui-color-background);
+
+    & > [class^='ui-tabs-'] > [class^='ui-toggles-'] {
+      width: unset;
+      margin: var(--ui-gap);
+      margin-top: 0;
+      border: var(--border, 1px solid var(--ui-color-background-dim));
+
+      & > * {
+        flex: 1;
+      }
+    }
+
+    & > [class^='ui-tabs-'] > [class^='ui-toggles-'] > [class^='ui-button-']:not(:first-child) {
+      border-left: var(--border, 1px solid var(--ui-color-background-dim));
+    }
+
+    & > [class^='ui-tabs-'] > [class^='ui-tabs__panels-'] > [class^='ui-tabs__panel-'] {
+      @include invisible-scroll(y);
+      max-height: var(--ui-modal-height);
+      padding: var(--ui-padding-content);
+      background: var(--ui-color-background-dim);
+    }
+  }
+
+  &__content > footer {
+    display: flex;
+    padding: var(--ui-gap);
+    justify-content: flex-end;
+    gap: var(--ui-gap);
+    background: var(--ui-color-background-dim);
+  }
+}

@@ -1,25 +1,10 @@
 .button {
   @include reset-button;
-  @include no-select;
+  @include ui-container;
+  @include ui-font;
   @include easing(background, color);
 
-  display: flex;
-  height: var(--ui-button-height);
-  padding: var(--ui-padding);
-  overflow: hidden;
-
-  font-family: var(--ui-font-family);
-  font-size: var(--ui-font-size);
-  color: var(--ui-color-text);
   cursor: pointer;
-
-  gap: var(--ui-gap);
-  align-items: center;
-  justify-content: center;
-
-  background: var(--ui-color-background);
-  border: var(--ui-border);
-  border-radius: var(--ui-border-radius);
 
   &:hover,
   &:focus,
@@ -28,45 +13,29 @@
     background: var(--ui-color-accent);
   }
 
-  &.is-disabled {
-    color: var(--ui-disabled-color-text);
-    pointer-events: none;
-    background: var(--ui-disabled-color-background);
-    opacity: var(--ui-disabled-opacity);
-  }
-
-  &.is-hidden {
-    display: none;
-  }
-
   &.is-waiting {
     cursor: wait;
   }
 
   &__icon {
-    animation: var(--ui-animation-button);
-
-    svg {
-      width: auto;
-      height: 1.5em;
-    }
-
-    svg * {
-      stroke: currentcolor;
-    }
+    @include ui-icon;
   }
 
   &.is-waiting &__icon {
     position: relative;
     color: transparent;
-    animation: var(--ui-animation-button);
+    animation: var(--ui-button-animation);
 
     &::before {
       @include loader(1em, 2px, var(--ui-color-text));
     }
   }
 
-  &:not(.has-label) &__label {
+  &__label {
+    cursor: pointer;
+  }
+
+  &:has(label:empty) &__label {
     display: none;
   }
 }

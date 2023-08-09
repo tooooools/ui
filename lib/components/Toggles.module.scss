@@ -1,0 +1,10 @@
+.toggles {
+  @include ui-container(false);
+
+  gap: 0;
+  border-radius: var(--ui-border-radius);
+
+  & > * {
+    border-radius: 0 !important;
+  }
+}

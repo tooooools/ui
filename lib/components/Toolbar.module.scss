@@ -1,0 +1,32 @@
+.toolbar {
+  @include ui-container(false);
+
+  hr {
+    border: 0;
+    border-left: 1px solid var(--ui-color-background-dim);
+  }
+
+  &:not(.is-compact) > hr {
+    display: none;
+
+    & + * {
+      margin-left: var(--ui-gap);
+    }
+  }
+
+  &.is-compact {
+    gap: 0;
+    overflow: hidden;
+    border-radius: var(--ui-border-radius);
+
+    & > * {
+      border-radius: 0;
+    }
+  }
+
+  // Add borders to nested <Toolbar>
+  &.is-compact > & {
+    border-right: 1px solid var(--ui-color-background-dim);
+    border-left: 1px solid var(--ui-color-background-dim);
+  }
+}

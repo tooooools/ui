@@ -1,0 +1,62 @@
+@mixin export {
+  // Used to force CSS-modules to export names for empty blocks
+  box-sizing: inherit;
+}
+
+@mixin ui-font {
+  font-family: var(--ui-font-family);
+  font-size: var(--ui-font-size);
+  line-height: var(--ui-line-height);
+  color: var(--ui-color-text);
+}
+
+@mixin ui-container ($visual: true) {
+  @include no-select;
+
+  position: relative;
+
+  display: flex;
+  width: fit-content;
+  overflow: hidden;
+
+  align-items: center;
+  gap: var(--ui-gap);
+  justify-content: center;
+
+  box-sizing: border-box;
+
+  @if $visual {
+    height: var(--ui-height);
+    padding: var(--ui-padding-container);
+    background: var(--ui-color-background);
+    border: var(--ui-border);
+    border-radius: var(--ui-border-radius);
+  }
+
+  &.is-hidden {
+    display: none;
+  }
+
+  &.is-disabled {
+    pointer-events: none;
+    opacity: var(--ui-disabled-opacity);
+
+    @if $visual {
+      color: var(--ui-disabled-color-text);
+      background: var(--ui-disabled-color-background);
+    }
+  }
+}
+
+@mixin ui-icon {
+  animation: var(--ui-button-animation);
+
+  svg {
+    width: auto;
+    height: 1.5em;
+  }
+
+  svg * {
+    stroke: currentcolor;
+  }
+}

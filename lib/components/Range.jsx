@@ -1,7 +1,7 @@
 import style from './Range.module.scss'
 
 import { Component } from '../jsx'
-import { writable } from '../state'
+import { ensure, writable } from '../state'
 
 import noop from '../utils/noop'
 import classnames from 'classnames'
@@ -14,27 +14,28 @@ export default class Range extends Component {
       : this.handleInput.bind(this)
 
     this.state = {
-      label: props['store-label'] ?? writable(props.label),
-      title: props['store-title'] ?? writable(props.title),
-      value: props['store-value'] ?? writable(props.value),
-      min: props['store-min'] ?? writable(props.min),
-      max: props['store-max'] ?? writable(props.max),
-      step: props['store-step'] ?? writable(props.step),
+      label: ensure(writable)(props['store-label'], props.label),
+      title: ensure(writable)(props['store-title'], props.title),
 
-      disabled: props['store-disabled'] ?? writable(props.disabled),
-      hidden: props['store-hidden'] ?? writable(props.hidden)
+      value: ensure(writable)(props['store-value'], props.value),
+      min: ensure(writable)(props['store-min'], props.min),
+      max: ensure(writable)(props['store-max'], props.max),
+      step: ensure(writable)(props['store-step'], props.step),
+
+      disabled: ensure(writable)(props['store-disabled'], props.disabled),
+      hidden: ensure(writable)(props['store-hidden'], props.hidden)
     }
   }
 
   template (props, state) {
     return (
       <div
+        id={props.id}
         class={classnames(style.range, props.class)}
-        store-class-has-label={state.label}
         store-class-is-disabled={state.disabled}
         store-class-is-hidden={state.hidden}
-        event-mouseenter={props['event-mouseenter'] ?? noop}
-        event-mouseleave={props['event-mouseleave'] ?? noop}
+        event-mouseenter={e => (props['event-mouseenter'] ?? noop)(e, this)}
+        event-mouseleave={e => (props['event-mouseleave'] ?? noop)(e, this)}
       >
         {props.icon && (
           <span
@@ -54,13 +55,13 @@ export default class Range extends Component {
           store-disabled={state.disabled}
           event-input={this.handleInput}
         />
-        <span class={style.range__text} store-text={state.label} />
+        <label class={style.range__label} store-text={state.label} />
       </div>
     )
   }
 
   async handleInput (e) {
-    await (this.props['event-input'] ?? noop)(e)
+    await (this.props['event-input'] ?? noop)(e, this)
     this.state.value.set(+this.refs.input.value)
   }
 }

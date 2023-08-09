@@ -1,55 +1,25 @@
 .range {
-  @include no-select;
-
-  display: flex;
-  height: var(--ui-button-height);
-  padding: var(--ui-padding);
-  overflow: hidden;
-
-  font-family: var(--ui-font-family);
-  font-size: var(--ui-font-size);
-  color: var(--ui-color-text);
-
-  gap: var(--ui-gap);
-  align-items: center;
-  justify-content: center;
-
-  background: var(--ui-color-background);
-  border: var(--ui-border);
-  border-radius: var(--ui-border-radius);
-
-  &.is-disabled {
-    color: var(--ui-disabled-color-text);
-    pointer-events: none;
-    background: var(--ui-disabled-color-background);
-    opacity: var(--ui-disabled-opacity);
-  }
+  @include ui-container;
+  @include ui-font;
 
   &__icon {
-    animation: var(--ui-animation-button);
-
-    svg {
-      width: auto;
-      height: 1.5em;
-    }
-
-    svg * {
-      stroke: currentcolor;
-    }
+    @include ui-icon;
   }
 
   input {
+    flex: 1;
     display: block;
     cursor: pointer;
     background: none;
     accent-color: var(--ui-color-text);
-
-    &[disabled] {
-      pointer-events: none;
-    }
   }
 
-  &:not(.has-label) &__label {
+  &__label {
+    // In case we want to use store-value in store-label
+    font-variant-numeric: tabular-nums;
+  }
+
+  &:has(label:empty) &__label {
     display: none;
   }
 }

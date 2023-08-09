@@ -56,7 +56,15 @@ const p = [
 ]);
 let g;
 const f = (e, t) => e.substr(0, t.length) === t, D = (e) => (t, n) => n.classList.toggle(e, t || !1), y = (e = "textContent", t) => (n, s) => {
-  t && e !== (e = e.replace(/^xlink:?/, "")) ? s.setAttributeNS("http://www.w3.org/1999/xlink", e.toLowerCase(), n) : (g = n ?? "", t || (s[e] = g), (t || m.has(e) || f(e, "data-")) && s.setAttribute(e, g));
+  if (t && e !== (e = e.replace(/^xlink:?/, "")))
+    s.setAttributeNS("http://www.w3.org/1999/xlink", e.toLowerCase(), n);
+  else {
+    if (n === void 0) {
+      s.removeAttribute(e);
+      return;
+    }
+    g = n ?? "", t || (s[e] = g), (t || m.has(e) || f(e, "data-")) && s.setAttribute(e, g);
+  }
 };
 function k(e, t, n, s, o) {
   if (n !== void 0 && !(t === "__self" || t === "__source")) {

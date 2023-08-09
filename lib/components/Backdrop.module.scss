@@ -1,0 +1,15 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+
+  display: grid;
+
+  place-items: center;
+  backdrop-filter: blur(var(--ui-backdrop-blur));
+
+  background: var(--ui-backdrop-background);
+
+  & ~ & {
+    background: transparent;
+  }
+}

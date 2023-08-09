@@ -1,7 +1,45 @@
 .button {
-  background: var(--ui-color-accent);
+  @include reset-button;
+  @include ui-container;
+  @include ui-font;
+  @include easing(background, color);
 
-  &__content {
-    color: white;
+  cursor: pointer;
+
+  &:hover,
+  &:focus,
+  &.is-active {
+    color: var(--ui-color-accent-contrast);
+    background: var(--ui-color-accent);
+  }
+
+  &.is-waiting {
+    cursor: wait;
+  }
+
+  &__icon {
+    @include ui-icon;
+  }
+
+  &:not(.has-icon) &__icon {
+    display: none;
+  }
+
+  &.is-waiting &__icon {
+    position: relative;
+    color: transparent;
+    animation: var(--ui-button-animation);
+
+    &::before {
+      @include loader(1em, 2px, var(--ui-color-text));
+    }
+  }
+
+  &__label {
+    cursor: pointer;
+  }
+
+  &:has(label:empty) &__label {
+    display: none;
   }
 }

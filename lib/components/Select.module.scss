@@ -1,0 +1,23 @@
+.select {
+  @include ui-container;
+  @include ui-font;
+
+  &__icon {
+    @include ui-icon;
+  }
+
+  select {
+    @include reset-button;
+    padding-right: calc(1.5em + var(--ui-gap));
+    cursor: pointer;
+  }
+
+  &__arrow {
+    @include ui-icon;
+    position: absolute;
+    right: 0;
+    padding: var(--ui-padding-container);
+    padding-top: 0;
+    pointer-events: none;
+  }
+}

@@ -1,0 +1,25 @@
+.range {
+  @include ui-container;
+  @include ui-font;
+
+  &__icon {
+    @include ui-icon;
+  }
+
+  input {
+    flex: 1;
+    display: block;
+    cursor: pointer;
+    background: none;
+    accent-color: var(--ui-color-text);
+  }
+
+  &__label {
+    // In case we want to use store-value in store-label
+    font-variant-numeric: tabular-nums;
+  }
+
+  &:has(label:empty) &__label {
+    display: none;
+  }
+}

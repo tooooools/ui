@@ -5,6 +5,7 @@
     "stylelint-order"
   ],
   "rules": {
+    "block-no-empty": false,
     "selector-class-pattern": false,
     "no-descending-specificity": false,
     "no-extra-semicolons": true,
@@ -60,7 +61,7 @@
       {
         "unspecified": "ignore",
         "emptyLineBeforeUnspecified": "threshold",
-        "emptyLineMinimumPropertyThreshold": 5
+        "emptyLineMinimumPropertyThreshold": 6
       }
     ]
   }

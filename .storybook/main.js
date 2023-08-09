@@ -1,5 +1,4 @@
-/** @type { import('@storybook/html-vite').StorybookConfig } */
-const config = {
+export default {
   stories: [
     '../lib/**/*.mdx',
     '../lib/**/*.stories.@(js|jsx|mjs|ts|tsx)'
@@ -7,14 +6,16 @@ const config = {
   core: {
     disableTelemetry: true
   },
-  addons: ['@storybook/addon-essentials',],
+  addons: [
+    '@storybook/addon-essentials',
+    '@storybook/addon-console'
+  ],
   framework: {
     name: '@storybook/html-vite',
     options: {},
   },
   docs: {
-    autodocs: true
+    autodocs: true,
+    defaultName: 'Documentation'
   }
 }
-
-export default config

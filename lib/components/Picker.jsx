@@ -85,7 +85,7 @@ export default class Picker extends Component {
         this.refs.buttons[index].state.active.set(index === i)
       }
 
-      this.state.open.set(false)
+      if (this.props.autoClose) this.state.open.set(false)
       ;(this.props['event-change'] ?? noop)(null, this)
 
       await callback(e, this.refs.buttons[i])

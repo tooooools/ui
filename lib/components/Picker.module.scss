@@ -6,7 +6,6 @@
   border-radius: var(--ui-border-radius);
 
   &__toolbar {
-    @include debug;
     border-top-right-radius: 0 !important;
     border-bottom-right-radius: 0 !important;
   }

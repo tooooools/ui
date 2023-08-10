@@ -15,6 +15,7 @@ export default defineConfig(async ({ mode }) => {
   return {
     build: {
       watch,
+      sourcemap: true,
       lib: {
         entry: {
           components,

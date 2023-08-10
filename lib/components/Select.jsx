@@ -1,22 +1,16 @@
 import style from './Select.module.scss'
 
 import { Component } from '../jsx'
-import { ensure, writable } from '../state'
+import { ensure, derived, writable } from '../state'
 
 import noop from '../utils/noop'
 import classnames from 'classnames'
 
 import IconDown from 'iconoir/icons/nav-arrow-down.svg?raw'
 
-const PLACEHOLDER_VALUE = Symbol('select-placeholder-value')
-
 export default class Select extends Component {
   static get separator () {
-    return { value: Symbol('separator'), label: '', disabled: true }
-  }
-
-  static placeholder (label = 'select') {
-    return { value: PLACEHOLDER_VALUE, label, disabled: true }
+    return { label: '', disabled: true }
   }
 
   beforeRender (props) {
@@ -26,12 +20,18 @@ export default class Select extends Component {
     this.state = {
       title: ensure(writable)(props['store-title'], props.title),
 
-      value: ensure(writable)(props['store-value'], props.value ?? PLACEHOLDER_VALUE),
+      value: ensure(writable)(props['store-value'], props.value),
       options: ensure(writable)(props['store-options'], props.options),
 
       disabled: ensure(writable)(props['store-disabled'], props.disabled),
       hidden: ensure(writable)(props['store-hidden'], props.hidden)
     }
+
+    // Infer the selected option index from state.value and state.options
+    this.state.selectedIndex = derived([this.state.value, this.state.options], () => {
+      const options = this.state.options.get()
+      return options.findIndex(({ value }) => value === this.state.value.current)
+    })
   }
 
   template (props, state) {
@@ -78,21 +78,38 @@ export default class Select extends Component {
     const options = this.state.options.get()
     if (!options) return
 
-    this.render((
-      options.map(({ value, label, disabled } = {}) => (
+    const selectedIndex = this.state.selectedIndex.get()
+
+    if (this.props.placeholder) {
+      this.render((
         <option
-          value={value}
-          disabled={disabled}
-          selected={value === this.state.value.current}
+          disabled
+          selected={this.state.value.current === undefined || selectedIndex < 0}
         >
-          {label ?? value}
+          {this.props.placeholder}
+        </option>
+      ), this.refs.select)
+    }
+
+    this.render((
+      options.map(({ label, disabled } = {}, index) => (
+        <option
+          value={index}
+          disabled={disabled}
+          selected={index === selectedIndex}
+        >
+          {label}
         </option>
       ))
     ), this.refs.select)
   }
 
   handleChange (e) {
-    this.state.value.set(e.target.value)
+    const index = +e.target.value
+    this.state.selectedIndex.set(index)
+
+    this.state.value.set((this.state.options.get() || [])[index]?.value)
+
     ;(this.props['event-change'] || noop)(e, this)
   }
 

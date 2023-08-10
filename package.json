@@ -8,7 +8,7 @@
     "build": "vite build",
     "build:watch": "vite build --mode dev",
     "build:docs": "storybook build -o docs && touch ./docs/.nojekyll",
-    "preversion": "npm run build && npm run build:docs && git add dist",
+    "preversion": "npm run build && npm run build:docs && git add -f dist",
     "postversion": "git push && git push --tags && ghp docs -f && npm publish --access public"
   },
   "author": "Arnaud Juracek",

@@ -53,9 +53,6 @@
   svg {
     width: auto;
     height: 1.5em;
-  }
-
-  svg * {
-    stroke: currentcolor;
+    color: inherit;
   }
 }

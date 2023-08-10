@@ -6,8 +6,6 @@ import { derived, ensure, writable } from '../state'
 import noop from '../utils/noop'
 import classnames from 'classnames'
 
-import IconOpen from 'iconoir/icons/nav-arrow-right.svg?raw'
-import IconClose from 'iconoir/icons/nav-arrow-left.svg?raw'
 import Button from './Button'
 import Toolbar from './Toolbar'
 
@@ -26,6 +24,9 @@ export default class Picker extends Component {
     }
 
     this.state = {
+      iconOpen: ensure(writable)(props['store-iconOpen'], props.iconOpen),
+      iconClose: ensure(writable)(props['store-iconClose'], props.iconClose),
+
       label: ensure(writable)(props['store-label'], props.label),
       title: ensure(writable)(props['store-title'], props.title),
 
@@ -34,9 +35,14 @@ export default class Picker extends Component {
       hidden: ensure(writable)(props['store-hidden'], props.hidden)
     }
 
-    this.state.toggleIcon = derived(this.state.open, () => {
-      return this.state.open.current ? IconOpen : IconClose
-    })
+    this.state.toggleIcon = derived([
+      this.state.open,
+      this.state.iconClose,
+      this.state.iconOpen
+    ], () => this.state.open.current
+      ? this.state.iconClose.current
+      : this.state.iconOpen.current
+    )
   }
 
   template (props, state) {

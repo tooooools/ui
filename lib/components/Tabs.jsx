@@ -8,8 +8,8 @@ import classnames from 'classnames'
 import Toggles from './Toggles'
 
 export default class Tabs extends Component {
-  static panel (children, props) {
-    return <div class={style.tabs__panel} {...props}>{children}</div>
+  static panel (children, props = {}) {
+    return <div {...props} class={classnames(style.tabs__panel, props.class)}>{children}</div>
   }
 
   beforeRender (props) {

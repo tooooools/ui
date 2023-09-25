@@ -39,10 +39,11 @@
       margin: var(--ui-gap);
       margin-top: 0;
       border: var(--border, 1px solid var(--ui-color-background-dim));
+    }
 
-      & > * {
-        flex: 1;
-      }
+    & > [class^='ui-tabs-'] > [class^='ui-toggles-'] > [class^='ui-button-'] {
+      flex: 1;
+      min-width: fit-content;
     }
 
     & > [class^='ui-tabs-'] > [class^='ui-toggles-'] > [class^='ui-button-']:not(:first-child) {

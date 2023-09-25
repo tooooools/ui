@@ -1,13 +1,13 @@
-import { C as h, h as a, n as o } from "./Component-91875d4d.js";
-import { e as i, w as n, d as L } from "./ensure-7ccabe2f.js";
-const I = "ui-backdrop-1epgy106", M = {
-  backdrop: I,
+import { C as r, h as a, n as o } from "./Component-91875d4d.js";
+import { e as i, w as n, d as E } from "./ensure-b6793424.js";
+const j = "ui-backdrop-1epgy106", T = {
+  backdrop: j,
   "loader-spin": "ui-loader-spin-1epgy1"
 };
-function T(d) {
+function I(d) {
   return d && d.__esModule && Object.prototype.hasOwnProperty.call(d, "default") ? d.default : d;
 }
-var E = { exports: {} };
+var O = { exports: {} };
 /*!
 	Copyright (c) 2018 Jed Watson.
 	Licensed under the MIT License (MIT), see
@@ -25,8 +25,8 @@ var E = { exports: {} };
             s.push(l);
           else if (Array.isArray(l)) {
             if (l.length) {
-              var r = t.apply(null, l);
-              r && s.push(r);
+              var h = t.apply(null, l);
+              h && s.push(h);
             }
           } else if (b === "object") {
             if (l.toString !== Object.prototype.toString && !l.toString.toString().includes("[native code]")) {
@@ -42,10 +42,10 @@ var E = { exports: {} };
     }
     d.exports ? (t.default = t, d.exports = t) : window.classNames = t;
   })();
-})(E);
-var R = E.exports;
-const u = /* @__PURE__ */ T(R);
-class z extends h {
+})(O);
+var L = O.exports;
+const u = /* @__PURE__ */ I(L);
+class R extends r {
   beforeRender(e) {
     this.close = this.close.bind(this), this.captureEscapeKey = this.captureEscapeKey.bind(this), this.state = {
       lastActiveElement: document.activeElement
@@ -56,7 +56,7 @@ class z extends h {
       "div",
       {
         id: e.id,
-        class: u(M.backdrop, e.class),
+        class: u(T.backdrop, e.class),
         "event-click": (s) => (e["event-click"] ?? o)(s, this)
       },
       e.children
@@ -78,18 +78,18 @@ class z extends h {
     }
   }
 }
-const $ = "ui-button-abb5k106", j = "ui-button__icon-abb5k167", A = "ui-button__label-abb5k199", k = {
-  button: $,
+const M = "ui-button-1ogpj106", D = "ui-button__icon-1ogpj167", A = "ui-button__label-1ogpj197", y = {
+  button: M,
   "is-hidden": "is-hidden",
   "is-disabled": "is-disabled",
   "is-active": "is-active",
   "is-waiting": "is-waiting",
-  button__icon: j,
+  button__icon: D,
   "has-icon": "has-icon",
-  "loader-spin": "ui-loader-spin-abb5k1",
+  "loader-spin": "ui-loader-spin-1ogpj1",
   button__label: A
 };
-class _ extends h {
+class m extends r {
   beforeRender(e) {
     this.handleClick = this.handleClick.bind(this), this.state = {
       label: i(n)(e["store-label"], e.label),
@@ -107,7 +107,7 @@ class _ extends h {
       {
         type: e.type,
         id: e.id,
-        class: u(k.button, e.class),
+        class: u(y.button, e.class),
         "store-title": t.title,
         "store-class-has-icon": t.icon,
         "store-class-is-active": t.active,
@@ -122,11 +122,11 @@ class _ extends h {
         "span",
         {
           ref: this.ref("icon"),
-          class: k.button__icon,
+          class: y.button__icon,
           "store-innerHTML": t.icon
         }
       ),
-      /* @__PURE__ */ a("label", { class: k.button__label, "store-text": t.label })
+      /* @__PURE__ */ a("label", { class: y.button__label, "store-text": t.label })
     );
   }
   async handleClick(e) {
@@ -135,17 +135,17 @@ class _ extends h {
     this.state.waiting.set(!0), await (this.props["event-click"] ?? o)(e, this), this.mounted && (this.state.waiting.set(!1), this && this.refs && this.refs.icon && (this.refs.icon.style.animation = "none", this.refs.icon.offsetHeight, this.refs.icon.style.animation = null));
   }
 }
-const D = "ui-modal-6zzd4106", O = "ui-modal__header-6zzd4116", B = "ui-modal__title-6zzd4122", H = "ui-modal__content-6zzd4126", g = {
-  modal: D,
-  modal__header: O,
-  modal__title: B,
-  modal__content: H,
-  "loader-spin": "ui-loader-spin-6zzd41"
-}, S = `<svg width="24" height="24" stroke-width="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+const $ = "ui-modal-sn8mh106", H = "ui-modal__header-sn8mh116", S = "ui-modal__title-sn8mh122", K = "ui-modal__content-sn8mh126", _ = {
+  modal: $,
+  modal__header: H,
+  modal__title: S,
+  modal__content: K,
+  "loader-spin": "ui-loader-spin-sn8mh1"
+}, B = `<svg width="24" height="24" stroke-width="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M6.75827 17.2426L12.0009 12M17.2435 6.75736L12.0009 12M12.0009 12L6.75827 6.75736M12.0009 12L17.2435 17.2426" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
 `;
-class he extends h {
+class ce extends r {
   beforeRender(e) {
     this.handleClose = this.handleClose.bind(this), this.state = {
       title: i(n)(e["store-title"], e.title),
@@ -155,7 +155,7 @@ class he extends h {
   }
   template(e, t) {
     return /* @__PURE__ */ a(
-      z,
+      R,
       {
         ref: this.ref("backdrop"),
         "event-open": e["event-open"],
@@ -165,27 +165,27 @@ class he extends h {
         "div",
         {
           id: e.id,
-          class: u(g.modal, e.class),
+          class: u(_.modal, e.class),
           "event-mouseenter": (s) => (e["event-mouseenter"] ?? o)(s, this),
           "event-mouseleave": (s) => (e["event-mouseleave"] ?? o)(s, this)
         },
-        /* @__PURE__ */ a("header", { class: g.modal__header }, /* @__PURE__ */ a(
-          _,
+        /* @__PURE__ */ a("header", { class: _.modal__header }, /* @__PURE__ */ a(
+          m,
           {
-            class: g.modal__title,
+            class: _.modal__title,
             icon: e.icon,
             "store-label": t.title
           }
         ), /* @__PURE__ */ a(
-          _,
+          m,
           {
-            class: g.modal__close,
-            icon: S,
+            class: _.modal__close,
+            icon: B,
             "store-hidden": t.locked,
             "event-click": this.handleClose
           }
         )),
-        /* @__PURE__ */ a("div", { class: g.modal__content }, e.children)
+        /* @__PURE__ */ a("div", { class: _.modal__content }, e.children)
       )
     );
   }
@@ -193,29 +193,23 @@ class he extends h {
     this.state.locked.get() || this.refs.backdrop.close();
   }
 }
-const K = "ui-picker-1w9rr106", N = "ui-picker__toolbar-1w9rr127", P = "ui-picker__toggle-1w9rr140", y = {
-  picker: K,
+const N = "ui-picker-1jv6h106", P = "ui-picker__toolbar-1jv6h127", q = "ui-picker__toggle-1jv6h138", w = {
+  picker: N,
   "is-hidden": "is-hidden",
   "is-disabled": "is-disabled",
-  picker__toolbar: N,
+  picker__toolbar: P,
   "is-open": "is-open",
   "is-active": "is-active",
-  picker__toggle: P,
-  "loader-spin": "ui-loader-spin-1w9rr1"
-}, q = `<svg width="24" height="24" stroke-width="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M9 6L15 12L9 18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
-`, F = `<svg width="24" height="24" stroke-width="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M15 6L9 12L15 18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
-`, G = "ui-toolbar-1fqit106", J = {
-  toolbar: G,
+  picker__toggle: q,
+  "loader-spin": "ui-loader-spin-1jv6h1"
+}, F = "ui-toolbar-1fqit106", z = {
+  toolbar: F,
   "is-hidden": "is-hidden",
   "is-disabled": "is-disabled",
   "is-compact": "is-compact",
   "loader-spin": "ui-loader-spin-1fqit1"
 };
-class Q extends h {
+class G extends r {
   beforeRender(e) {
     this.state = {
       compact: i(n)(e["store-compact"], e.compact),
@@ -228,7 +222,7 @@ class Q extends h {
       "div",
       {
         id: e.id,
-        class: u(J.toolbar, e.class),
+        class: u(z.toolbar, e.class),
         "store-class-is-compact": t.compact,
         "store-class-is-disabled": t.disabled,
         "store-class-is-hidden": t.hidden,
@@ -239,29 +233,38 @@ class Q extends h {
     );
   }
 }
-class ue extends h {
+class he extends r {
   beforeRender(e) {
-    this.handleToggle = this.handleToggle.bind(this);
-    const t = e.children.filter((s) => s.type === _);
+    this.handleToggle = this.handleToggle.bind(this), this.handleOpen = this.handleOpen.bind(this);
+    const t = e.children.filter((s) => s.type === m);
     for (const s of t)
       s.props.ref = this.refArray("buttons"), s.props["event-click"] = this.handleChange(
         t.indexOf(s),
         s.props["event-click"] || o
       );
     this.state = {
+      iconOpen: i(n)(e["store-iconOpen"], e.iconOpen),
+      iconClose: i(n)(e["store-iconClose"], e.iconClose),
       label: i(n)(e["store-label"], e.label),
       title: i(n)(e["store-title"], e.title),
       open: i(n)(e["store-open"], e.open),
       disabled: i(n)(e["store-disabled"], e.disabled),
       hidden: i(n)(e["store-hidden"], e.hidden)
-    }, this.state.toggleIcon = L(this.state.open, () => this.state.open.current ? q : F);
+    }, this.state.toggleIcon = E(
+      [
+        this.state.open,
+        this.state.iconClose,
+        this.state.iconOpen
+      ],
+      () => this.state.open.current ? this.state.iconClose.current : this.state.iconOpen.current
+    );
   }
   template(e, t) {
     return /* @__PURE__ */ a(
       "div",
       {
         id: e.id,
-        class: u(y.picker, e.class),
+        class: u(w.picker, e.class),
         "store-class-is-open": t.open,
         "store-class-is-disabled": t.disabled,
         "store-class-is-hidden": t.hidden,
@@ -269,17 +272,17 @@ class ue extends h {
         "event-mouseleave": (s) => (e["event-mouseleave"] ?? o)(s, this)
       },
       /* @__PURE__ */ a(
-        Q,
+        G,
         {
-          class: y.picker__toolbar,
+          class: w.picker__toolbar,
           compact: !0
         },
         e.children
       ),
       /* @__PURE__ */ a(
-        _,
+        m,
         {
-          class: y.picker__toggle,
+          class: w.picker__toggle,
           "store-icon": t.toggleIcon,
           "store-label": t.label,
           "store-title": t.title,
@@ -288,6 +291,12 @@ class ue extends h {
       )
     );
   }
+  afterRender() {
+    this.state.open.subscribe(this.handleOpen);
+  }
+  handleOpen() {
+    this.state.open.get() ? (this.props["event-open"] ?? o)(null, this) : (this.props["event-close"] ?? o)(null, this);
+  }
   handleToggle() {
     this.state.open.update((e) => !e);
   }
@@ -295,41 +304,44 @@ class ue extends h {
     return async (s) => {
       for (let c = 0; c < this.refs.buttons.length; c++)
         this.refs.buttons[c].state.active.set(c === e);
-      this.state.open.set(!1), (this.props["event-change"] ?? o)(null, this), await t(s, this.refs.buttons[e]);
+      this.props.autoClose && this.state.open.set(!1), (this.props["event-change"] ?? o)(null, this), await t(s, this.refs.buttons[e]);
     };
   }
+  beforeDestroy() {
+    this.state.open.unsubscribe(this.handleOpen);
+  }
 }
-const U = "ui-range-1eiot106", V = "ui-range__icon-1eiot135", W = "ui-range__label-1eiot152", x = {
-  range: U,
+const J = "ui-range-o141k106", Q = "ui-range__icon-o141k135", U = "ui-range__label-o141k150", p = {
+  range: J,
   "is-hidden": "is-hidden",
   "is-disabled": "is-disabled",
-  range__icon: V,
-  range__label: W,
-  "loader-spin": "ui-loader-spin-1eiot1"
+  range__icon: Q,
+  range__label: U,
+  "loader-spin": "ui-loader-spin-o141k1"
 };
-function p(d, e, t) {
-  var s, c, l, b, r;
+function C(d, e, t) {
+  var s, c, l, b, h;
   e == null && (e = 100);
   function v() {
     var f = Date.now() - b;
-    f < e && f >= 0 ? s = setTimeout(v, e - f) : (s = null, t || (r = d.apply(l, c), l = c = null));
+    f < e && f >= 0 ? s = setTimeout(v, e - f) : (s = null, t || (h = d.apply(l, c), l = c = null));
   }
-  var w = function() {
+  var k = function() {
     l = this, c = arguments, b = Date.now();
     var f = t && !s;
-    return s || (s = setTimeout(v, e)), f && (r = d.apply(l, c), l = c = null), r;
+    return s || (s = setTimeout(v, e)), f && (h = d.apply(l, c), l = c = null), h;
   };
-  return w.clear = function() {
+  return k.clear = function() {
     s && (clearTimeout(s), s = null);
-  }, w.flush = function() {
-    s && (r = d.apply(l, c), l = c = null, clearTimeout(s), s = null);
-  }, w;
+  }, k.flush = function() {
+    s && (h = d.apply(l, c), l = c = null, clearTimeout(s), s = null);
+  }, k;
 }
-p.debounce = p;
-var X = p;
-class be extends h {
+C.debounce = C;
+var V = C;
+class re extends r {
   beforeRender(e) {
-    this.handleInput = e.debounce ? X.debounce(this.handleInput.bind(this), e.debounce) : this.handleInput.bind(this), this.state = {
+    this.handleInput = e.debounce ? V.debounce(this.handleInput.bind(this), e.debounce) : this.handleInput.bind(this), this.state = {
       label: i(n)(e["store-label"], e.label),
       title: i(n)(e["store-title"], e.title),
       value: i(n)(e["store-value"], e.value),
@@ -345,7 +357,7 @@ class be extends h {
       "div",
       {
         id: e.id,
-        class: u(x.range, e.class),
+        class: u(p.range, e.class),
         "store-class-is-disabled": t.disabled,
         "store-class-is-hidden": t.hidden,
         "event-mouseenter": (s) => (e["event-mouseenter"] ?? o)(s, this),
@@ -355,7 +367,7 @@ class be extends h {
         "span",
         {
           ref: this.ref("icon"),
-          class: x.range__icon,
+          class: p.range__icon,
           innerHTML: e.icon
         }
       ),
@@ -373,25 +385,25 @@ class be extends h {
           "event-input": this.handleInput
         }
       ),
-      /* @__PURE__ */ a("label", { class: x.range__label, "store-text": t.label })
+      /* @__PURE__ */ a("label", { class: p.range__label, "store-text": t.label })
     );
   }
   async handleInput(e) {
     await (this.props["event-input"] ?? o)(e, this), this.state.value.set(+this.refs.input.value);
   }
 }
-const Y = "ui-select-1p5rg106", Z = "ui-select__icon-1p5rg135", ee = "ui-select__arrow-1p5rg170", C = {
-  select: Y,
+const W = "ui-select-1kd8i106", X = "ui-select__icon-1kd8i135", Y = "ui-select__arrow-1kd8i168", x = {
+  select: W,
   "is-hidden": "is-hidden",
   "is-disabled": "is-disabled",
-  select__icon: Z,
-  select__arrow: ee,
-  "loader-spin": "ui-loader-spin-1p5rg1"
-}, te = `<svg width="24" height="24" stroke-width="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  select__icon: X,
+  select__arrow: Y,
+  "loader-spin": "ui-loader-spin-1kd8i1"
+}, Z = `<svg width="24" height="24" stroke-width="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
 `;
-class ve extends h {
+class ue extends r {
   static get separator() {
     return { label: "", disabled: !0 };
   }
@@ -402,14 +414,14 @@ class ve extends h {
       options: i(n)(e["store-options"], e.options),
       disabled: i(n)(e["store-disabled"], e.disabled),
       hidden: i(n)(e["store-hidden"], e.hidden)
-    }, this.state.selectedIndex = L([this.state.value, this.state.options], () => this.state.options.get().findIndex(({ value: s }) => s === this.state.value.current));
+    }, this.state.selectedIndex = E([this.state.value, this.state.options], () => this.state.options.get().findIndex(({ value: s }) => s === this.state.value.current));
   }
   template(e, t) {
     return /* @__PURE__ */ a(
       "div",
       {
         id: e.id,
-        class: u(C.select, e.class),
+        class: u(x.select, e.class),
         "store-class-is-disabled": t.disabled,
         "store-class-is-hidden": t.hidden,
         "event-mouseenter": (s) => (e["event-mouseenter"] ?? o)(s, this),
@@ -419,7 +431,7 @@ class ve extends h {
         "span",
         {
           ref: this.ref("icon"),
-          class: C.select__icon,
+          class: x.select__icon,
           innerHTML: e.icon
         }
       ),
@@ -432,7 +444,7 @@ class ve extends h {
           "event-change": this.handleChange
         }
       ),
-      /* @__PURE__ */ a("span", { class: C.select__arrow, innerHTML: te })
+      /* @__PURE__ */ a("span", { class: x.select__arrow, innerHTML: Z })
     );
   }
   afterRender() {
@@ -473,20 +485,20 @@ class ve extends h {
     this.state.value.unsubscribe(this.update), this.state.options.unsubscribe(this.update);
   }
 }
-const se = "ui-tabs-17euv106", ie = "ui-tabs__toggles-17euv109", ne = "ui-tabs__panels-17euv112", ae = "ui-tabs__panel-17euv112", m = {
-  tabs: se,
-  tabs__toggles: ie,
-  tabs__panels: ne,
-  tabs__panel: ae,
+const ee = "ui-tabs-17euv106", te = "ui-tabs__toggles-17euv109", se = "ui-tabs__panels-17euv112", ie = "ui-tabs__panel-17euv112", g = {
+  tabs: ee,
+  tabs__toggles: te,
+  tabs__panels: se,
+  tabs__panel: ie,
   "is-hidden": "is-hidden",
   "loader-spin": "ui-loader-spin-17euv1"
-}, le = "ui-toggles-1ibi8106", oe = {
-  toggles: le,
+}, ne = "ui-toggles-1ibi8106", ae = {
+  toggles: ne,
   "is-hidden": "is-hidden",
   "is-disabled": "is-disabled",
   "loader-spin": "ui-loader-spin-1ibi81"
 };
-class de extends h {
+class le extends r {
   beforeRender(e) {
     this.update = this.update.bind(this), this.handleChange = this.handleChange.bind(this), this.state = {
       title: i(n)(e["store-title"], e.title),
@@ -501,7 +513,7 @@ class de extends h {
       "div",
       {
         id: e.id,
-        class: u(oe.toggles, e.class),
+        class: u(ae.toggles, e.class),
         "store-title": t.title,
         "store-class-is-disabled": t.disabled,
         "store-class-is-hidden": t.hidden,
@@ -519,16 +531,16 @@ class de extends h {
   update() {
     this.clear();
     const e = this.state.options.get();
-    e && this.render(e.map(({ icon: t, value: s, label: c, disabled: l, hidden: b } = {}, r) => /* @__PURE__ */ a(
-      _,
+    e && this.render(e.map(({ icon: t, value: s, label: c, disabled: l, hidden: b } = {}, h) => /* @__PURE__ */ a(
+      m,
       {
         ref: this.refArray("buttons"),
         icon: t,
-        "store-label": c ?? s ?? r,
-        "store-active": (s ?? r) === this.state.value.current,
+        "store-label": c ?? s ?? h,
+        "store-active": (s ?? h) === this.state.value.current,
         "store-disabled": l,
         "store-hidden": b,
-        "event-click": this.handleChange(s ?? r)
+        "event-click": this.handleChange(s ?? h)
       }
     )), this.base);
   }
@@ -541,9 +553,9 @@ class de extends h {
     this.state.value.unsubscribe(this.update), this.state.options.unsubscribe(this.update);
   }
 }
-class fe extends h {
+class be extends r {
   static panel(e, t) {
-    return /* @__PURE__ */ a("div", { class: m.tabs__panel, ...t }, e);
+    return /* @__PURE__ */ a("div", { class: g.tabs__panel, ...t }, e);
   }
   beforeRender(e) {
     this.update = this.update.bind(this), this.state = {
@@ -556,12 +568,12 @@ class fe extends h {
       "div",
       {
         id: e.id,
-        class: u(m.tabs, e.class)
+        class: u(g.tabs, e.class)
       },
       /* @__PURE__ */ a(
-        de,
+        le,
         {
-          class: m.tabs__toggles,
+          class: g.tabs__toggles,
           "store-value": t.value,
           "store-options": t.tabs,
           "event-change": e["event-change"]
@@ -571,7 +583,7 @@ class fe extends h {
         "div",
         {
           ref: this.ref("panels"),
-          class: m.tabs__panels
+          class: g.tabs__panels
         },
         e.children
       )
@@ -592,14 +604,14 @@ class fe extends h {
   }
 }
 export {
-  z as Backdrop,
-  _ as Button,
-  he as Modal,
-  ue as Picker,
-  be as Range,
-  ve as Select,
-  fe as Tabs,
-  de as Toggles,
-  Q as Toolbar
+  R as Backdrop,
+  m as Button,
+  ce as Modal,
+  he as Picker,
+  re as Range,
+  ue as Select,
+  be as Tabs,
+  le as Toggles,
+  G as Toolbar
 };
 //# sourceMappingURL=components.js.map

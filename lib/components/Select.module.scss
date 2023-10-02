@@ -2,6 +2,11 @@
   @include ui-container;
   @include ui-font;
 
+  &:focus-within,
+  &:has(select:hover) {
+    background: var(--ui-color-accent);
+  }
+
   &__icon {
     @include ui-icon;
   }

@@ -108,6 +108,7 @@ export default class Select extends Component {
     const index = +e.target.value
     this.state.selectedIndex.set(index)
 
+    this.refs.select.blur()
     this.state.value.set((this.state.options.get() || [])[index]?.value)
 
     ;(this.props['event-change'] || noop)(e, this)

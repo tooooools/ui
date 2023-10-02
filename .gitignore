@@ -1,5 +1,5 @@
 docs/
-dist/
+dist/*
 
 ####### NODE ########
 .tmp

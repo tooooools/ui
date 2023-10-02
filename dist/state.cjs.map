@@ -1,1 +1,0 @@
-{"version":3,"file":"state.cjs","sources":["../lib/state/not.js"],"sourcesContent":["import { derived } from '.'\nexport default signal => derived(signal, value => !value)\n"],"names":["not","signal","derived","value"],"mappings":"yHACeA,EAAAC,GAAUC,EAAO,QAACD,EAAQE,GAAS,CAACA,CAAK"}

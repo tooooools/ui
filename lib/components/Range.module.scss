@@ -2,16 +2,61 @@
   @include ui-container;
   @include ui-font;
 
+  &:focus-within,
+  &:hover {
+    background: var(--ui-color-accent);
+  }
+
   &__icon {
     @include ui-icon;
   }
 
   input {
     flex: 1;
+
     display: block;
+
     cursor: pointer;
+
     background: none;
+
     accent-color: var(--ui-color-text);
+
+    outline: 0;
+    appearance: none;
+  }
+
+  input::-webkit-slider-runnable-track {
+    height: 2px;
+    background: var(--ui-color-text);
+  }
+
+  input::-webkit-slider-thumb {
+    width: var(--ui-gap);
+    height: var(--ui-gap);
+    margin-top: calc(-1 * (var(--ui-gap) - 2px) / 2);
+
+    background: var(--ui-color-background);
+    border-radius: 100%;
+    outline: 2px solid var(--ui-color-text);
+    appearance: none;
+  }
+
+  input::-moz-range-track {
+    height: 2px;
+    background: var(--ui-color-text);
+  }
+
+  input::-moz-range-thumb {
+    width: var(--ui-gap);
+    height: var(--ui-gap);
+    margin-top: calc(-1 * (1em - 2px) / 2);
+
+    background: var(--ui-color-background);
+    border: none;
+    border-radius: 100%;
+    outline: 2px solid var(--ui-color-text);
+    appearance: none;
   }
 
   &__label {

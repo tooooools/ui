@@ -51,8 +51,10 @@
   animation: var(--ui-button-animation);
 
   svg {
-    width: auto;
-    height: 1.5em;
+    width: var(--ui-icon-size);
+    height: var(--ui-icon-size);
+    min-width: var(--ui-icon-size);
+    min-height: var(--ui-icon-size);
     color: inherit;
   }
 }

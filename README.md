@@ -36,6 +36,8 @@ import { render } from '@tooooools/ui'
 import { Button } from '@tooooools/ui/components'
 
 render(<Button label='Hello world' />)
+render(<Button label='Hello world' />, parent)
+render(<Button label='Hello world' />, { insertBefore: el })
 ```
 
 ###### Using signals

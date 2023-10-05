@@ -1,6 +1,7 @@
 .select {
   @include ui-container;
   @include ui-font;
+  @include easing(background, color);
 
   &:focus-within,
   &:has(select:hover) {

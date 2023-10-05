@@ -1,5 +1,10 @@
 .toolbar {
   @include ui-container(false);
+  @include invisible-scroll(x);
+
+  & > * {
+    flex-shrink: 0;
+  }
 
   hr {
     border: 0;

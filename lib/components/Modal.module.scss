@@ -44,6 +44,7 @@
     & > [class^='ui-tabs-'] > [class^='ui-toggles-'] > [class^='ui-button-'] {
       flex: 1;
       min-width: fit-content;
+      justify-content: center;
     }
 
     & > [class^='ui-tabs-'] > [class^='ui-toggles-'] > [class^='ui-button-']:not(:first-child) {

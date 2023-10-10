@@ -8,6 +8,7 @@
   font-size: var(--ui-font-size);
   line-height: var(--ui-line-height);
   color: var(--ui-color-text);
+  font-variant-numeric: tabular-nums;
 }
 
 @mixin ui-container ($visual: true) {

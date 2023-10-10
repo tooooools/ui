@@ -56,7 +56,7 @@ export default class Range extends Component {
           store-disabled={state.disabled}
           event-input={this.handleInput}
         />
-        <label class={style.range__label} store-text={state.label} />
+        <label class={style.range__label} store-innerHTML={state.label} />
       </div>
     )
   }

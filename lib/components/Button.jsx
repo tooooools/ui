@@ -44,7 +44,7 @@ export default class Button extends Component {
           class={style.button__icon}
           store-innerHTML={state.icon}
         />
-        <label class={style.button__label} store-text={state.label} />
+        <label class={style.button__label} store-innerHTML={state.label} />
       </button>
     )
   }

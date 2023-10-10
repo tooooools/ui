@@ -46,6 +46,7 @@ export default class Range extends Component {
         )}
         <input
           ref={this.ref('input')}
+          tabIndex={props.tabindex}
           type='range'
           store-min={state.min}
           store-max={state.max}

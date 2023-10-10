@@ -53,6 +53,7 @@ export default class Select extends Component {
         )}
         <select
           ref={this.ref('select')}
+          tabIndex={props.tabindex}
           store-title={state.title}
           store-disabled={state.disabled}
           event-change={this.handleChange}

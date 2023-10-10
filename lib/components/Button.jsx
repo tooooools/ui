@@ -27,6 +27,7 @@ export default class Button extends Component {
       <button
         type={props.type}
         id={props.id}
+        tabIndex={props.tabindex}
         class={classnames(style.button, props.class)}
         store-title={state.title}
         store-class-has-icon={state.icon}

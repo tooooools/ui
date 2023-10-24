@@ -20,6 +20,10 @@
     background: var(--ui-color-background);
   }
 
+  &__toggle {
+    flex-direction: row-reverse;
+  }
+
   & > * {
     border-radius: 0 !important;
   }

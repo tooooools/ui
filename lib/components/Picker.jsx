@@ -57,20 +57,21 @@ export default class Picker extends Component {
         event-mouseenter={e => (props['event-mouseenter'] ?? noop)(e, this)}
         event-mouseleave={e => (props['event-mouseleave'] ?? noop)(e, this)}
       >
+        <Button
+          class={style.picker__toggle}
+          store-icon={state.toggleIcon}
+          store-label={state.label}
+          store-title={state.title}
+          store-active={state.open}
+          event-click={this.handleToggle}
+        />
+
         <Toolbar
           class={style.picker__toolbar}
           compact
         >
           {props.children}
         </Toolbar>
-
-        <Button
-          class={style.picker__toggle}
-          store-icon={state.toggleIcon}
-          store-label={state.label}
-          store-title={state.title}
-          event-click={this.handleToggle}
-        />
       </div>
     )
   }

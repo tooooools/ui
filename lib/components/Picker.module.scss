@@ -14,12 +14,6 @@
     display: none;
   }
 
-  // Disable active feedback on active button when <Picker> is not open
-  &:not(.is-open) .is-active:not(:hover, :focus) {
-    color: var(--ui-color-text);
-    background: var(--ui-color-background);
-  }
-
   &__toggle {
     flex-direction: row-reverse;
   }

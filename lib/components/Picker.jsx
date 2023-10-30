@@ -51,7 +51,7 @@ export default class Picker extends Component {
     return (
       <div
         id={props.id}
-        class={classnames(style.picker, props.class)}
+        class={classnames(style.picker, props.class, { 'has-auto-order': props.autoOrder })}
         store-class-is-open={state.open}
         store-class-is-disabled={state.disabled}
         store-class-is-hidden={state.hidden}

@@ -14,7 +14,7 @@
     display: none;
   }
 
-  &__toolbar .is-active {
+  &.has-auto-order &__toolbar .is-active {
     order: -1;
   }
 

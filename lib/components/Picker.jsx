@@ -11,14 +11,15 @@ import Toolbar from './Toolbar'
 
 export default class Picker extends Component {
   beforeRender (props) {
-    this.handleToggle = this.handleToggle.bind(this)
+    this.handleClick = this.handleClick.bind(this)
     this.handleOpen = this.handleOpen.bind(this)
+    this.handleToggle = this.handleToggle.bind(this)
 
     // Setup a ref for all children <Button> and decorate their event-click
     const buttons = props.children.filter(child => child.type === Button)
     for (const button of buttons) {
       button.props.ref = this.refArray('buttons')
-      button.props['event-click'] = this.handleChange(
+      button.props['event-click'] = this.handleClick(
         buttons.indexOf(button),
         button.props['event-click'] || noop
       )
@@ -85,12 +86,20 @@ export default class Picker extends Component {
     else (this.props['event-close'] ?? noop)(null, this)
   }
 
-  handleToggle () {
+  handleToggle (e) {
+    e.stopPropagation()
     this.state.open.update(s => !s)
   }
 
-  handleChange (i, callback) {
+  handleClick (i, callback) {
     return async e => {
+      // Only open Picker if closed
+      if (!this.state.open.get()) {
+        e.stopPropagation()
+        this.state.open.set(true)
+        return
+      }
+
       // Update all buttons active state
       for (let index = 0; index < this.refs.buttons.length; index++) {
         this.refs.buttons[index].state.active.set(index === i)

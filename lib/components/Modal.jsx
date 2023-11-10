@@ -27,6 +27,7 @@ export default class Modal extends Component {
         ref={this.ref('backdrop')}
         event-open={props['event-open']}
         event-close={props['event-close']}
+        store-locked={state.locked}
       >
         <div
           id={props.id}

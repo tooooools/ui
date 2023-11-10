@@ -1,6 +1,7 @@
 import style from './Backdrop.module.scss'
 
 import { Component } from '../jsx'
+import { ensure, writable } from '../state'
 
 import noop from '../utils/noop'
 import classnames from 'classnames'
@@ -11,7 +12,8 @@ export default class Backdrop extends Component {
     this.captureEscapeKey = this.captureEscapeKey.bind(this)
 
     this.state = {
-      lastActiveElement: document.activeElement
+      lastActiveElement: document.activeElement,
+      locked: ensure(writable)(props['store-locked'], props.locked)
     }
   }
 
@@ -39,6 +41,7 @@ export default class Backdrop extends Component {
   }
 
   close () {
+    if (this.state.locked.get()) return
     ;(this.props['event-close'] || noop)(null, this)
     this.destroy()
   }

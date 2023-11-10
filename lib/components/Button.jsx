@@ -51,21 +51,23 @@ export default class Button extends Component {
 
   async handleClick (e) {
     this.base.blur()
-
     if (this.state.waiting.get()) return e.preventDefault()
-
     this.state.waiting.set(true)
-    await (this.props['event-click'] ?? noop)(e, this)
 
-    // Testing for mounted because event-click may have destroyed this component
-    if (!this.mounted) return
-    this.state.waiting.set(false)
+    try {
+      await (this.props['event-click'] ?? noop)(e, this)
+    } finally {
+      // Testing for mounted because event-click may have destroyed this component
+      if (this.mounted) {
+        this.state.waiting.set(false)
 
-    // Trigger animation on .button__icon if any
-    if (this && this.refs && this.refs.icon) {
-      this.refs.icon.style.animation = 'none'
-      void this.refs.icon.offsetHeight // eslint-disable-line no-void
-      this.refs.icon.style.animation = null
+        // Trigger animation on .button__icon if any
+        if (this && this.refs && this.refs.icon) {
+          this.refs.icon.style.animation = 'none'
+          void this.refs.icon.offsetHeight // eslint-disable-line no-void
+          this.refs.icon.style.animation = null
+        }
+      }
     }
   }
 }

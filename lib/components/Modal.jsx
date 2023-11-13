@@ -12,6 +12,7 @@ import IconClose from 'iconoir/icons/cancel.svg?raw'
 
 export default class Modal extends Component {
   beforeRender (props) {
+    this.handleClick = this.handleClick.bind(this)
     this.handleClose = this.handleClose.bind(this)
 
     this.state = {
@@ -28,7 +29,7 @@ export default class Modal extends Component {
         store-locked={state.locked}
         event-open={props['event-open']}
         event-close={props['event-close']}
-        event-click={this.handleClose}
+        event-click={this.handleClick}
       >
         <div
           id={props.id}
@@ -56,6 +57,10 @@ export default class Modal extends Component {
         </div>
       </Backdrop>
     )
+  }
+
+  handleClick (e) {
+    if (e.target === this.base) this.handleClose()
   }
 
   handleClose () {

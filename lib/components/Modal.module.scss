@@ -36,9 +36,12 @@
 
     & > [class^='ui-tabs-'] > [class^='ui-toggles-'] {
       width: unset;
-      margin: var(--ui-gap);
+      margin: 0;
       margin-top: 0;
+
       border: var(--border, 1px solid var(--ui-color-background-dim));
+      border-bottom: 0;
+      border-radius: 0;
     }
 
     & > [class^='ui-tabs-'] > [class^='ui-toggles-'] > [class^='ui-button-'] {

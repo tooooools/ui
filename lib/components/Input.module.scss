@@ -60,4 +60,14 @@
       appearance: none;
     }
   }
+
+  &[data-type='file'] {
+    &, * {
+      cursor: pointer;
+    }
+
+    input[type='file'] {
+      display: none;
+    }
+  }
 }

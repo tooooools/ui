@@ -42,6 +42,7 @@
 
   input {
     @include reset-button;
+    margin-top: -0.1em;
   }
 
   input + label {

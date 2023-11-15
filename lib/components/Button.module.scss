@@ -4,10 +4,13 @@
   @include ui-font;
   @include easing(background, color);
 
-  cursor: pointer;
+  &.has-click,
+  &.has-click &__label {
+    cursor: pointer;
+  }
 
-  &:hover,
-  &:focus,
+  &.has-click:hover,
+  &.has-click:focus,
   &.is-active {
     color: var(--ui-color-accent-contrast);
     background: var(--ui-color-accent);
@@ -37,7 +40,6 @@
 
   &__label {
     white-space: nowrap;
-    cursor: pointer;
   }
 
   &:has(label:empty) &__label {

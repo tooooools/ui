@@ -28,7 +28,7 @@ export default class Button extends Component {
         type={props.type}
         id={props.id}
         tabIndex={props.tabindex}
-        class={classnames(style.button, props.class)}
+        class={classnames(style.button, props.class, { 'has-click': this.props['event-click'] })}
         store-title={state.title}
         store-class-has-icon={state.icon}
         store-class-is-active={state.active}
@@ -50,12 +50,14 @@ export default class Button extends Component {
   }
 
   async handleClick (e) {
+    if (!this.props['event-click']) return
+
     this.base.blur()
     if (this.state.waiting.get()) return e.preventDefault()
     this.state.waiting.set(true)
 
     try {
-      await (this.props['event-click'] ?? noop)(e, this)
+      await this.props['event-click'](e, this)
     } finally {
       // Testing for mounted because event-click may have destroyed this component
       if (this.mounted) {

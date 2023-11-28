@@ -28,9 +28,10 @@ export default class Select extends Component {
     }
 
     // Infer the selected option index from state.value and state.options
+    const compare = props.compare ?? ((a, b) => a === b)
     this.state.selectedIndex = derived([this.state.value, this.state.options], () => {
       const options = this.state.options.get()
-      return options.findIndex(({ value }) => value === this.state.value.current)
+      return options.findIndex(({ value }) => compare(value, this.state.value.current))
     })
   }
 

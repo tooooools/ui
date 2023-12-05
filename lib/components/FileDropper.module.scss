@@ -1,0 +1,25 @@
+.file-dropper {
+  @include easing(opacity);
+
+  position: absolute;
+  z-index: 999;
+  inset: 0;
+
+  display: grid;
+
+  place-items: center;
+
+  pointer-events: none;
+
+  &:not(.is-dragged-over) {
+    opacity: 0;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--ui-color-accent);
+    opacity: 0.9;
+  }
+}

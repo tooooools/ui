@@ -62,7 +62,7 @@ export default class Range extends Component {
   }
 
   async handleInput (e) {
-    await (this.props['event-input'] ?? noop)(e, this)
     this.state.value.set(+this.refs.input.value)
+    await (this.props['event-input'] ?? noop)(e, this)
   }
 }

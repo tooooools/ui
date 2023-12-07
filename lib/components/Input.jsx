@@ -66,6 +66,9 @@ export default class Input extends Component {
         <input
           ref={this.ref('input')}
           type={props.type}
+          name={props.name}
+          autofocus={props.autofocus}
+          autocomplete={props.autocomplete ?? 'off'}
           store-min={props.type === 'number' ? state.min : undefined}
           store-max={props.type === 'number' ? state.max : undefined}
           store-step={props.type === 'number' ? state.step : undefined}

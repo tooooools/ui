@@ -4,6 +4,7 @@ import { Component } from '../jsx'
 import { ensure, derived, writable } from '../state'
 
 import noop from '../utils/noop'
+import groupBy from '../utils/array-group-by'
 import classnames from 'classnames'
 
 import IconDown from 'iconoir/icons/nav-arrow-down.svg?raw'
@@ -54,6 +55,8 @@ export default class Select extends Component {
         )}
         <select
           ref={this.ref('select')}
+          name={props.name}
+          required={props.required}
           tabIndex={props.tabindex}
           store-title={state.title}
           store-disabled={state.disabled}
@@ -85,25 +88,29 @@ export default class Select extends Component {
     if (this.props.placeholder) {
       this.render((
         <option
+          value=''
           disabled
-          selected={this.state.value.current === undefined || selectedIndex < 0}
+          {...(this.state.value.current === undefined || selectedIndex < 0 ? { selected: true } : {})}
         >
           {this.props.placeholder}
         </option>
       ), this.refs.select)
     }
 
-    this.render((
-      options.map(({ label, disabled } = {}, index) => (
+    for (const [label, entries] of Object.entries(groupBy(options, 'group'))) {
+      const children = entries.map(option => (
         <option
-          value={index}
-          disabled={disabled}
-          selected={index === selectedIndex}
+          value={options.indexOf(option)}
+          {...(option.disabled ? { disabled: true } : {})}
+          {...(options.indexOf(option) === selectedIndex ? { selected: true } : {})}
         >
-          {label}
+          {option.label}
         </option>
       ))
-    ), this.refs.select)
+
+      if (label !== 'undefined') this.render(<optgroup label={label}>{children}</optgroup>, this.refs.select)
+      else this.render(children, this.refs.select)
+    }
   }
 
   handleChange (e) {

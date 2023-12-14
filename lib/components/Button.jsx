@@ -30,6 +30,7 @@ export default class Button extends Component {
         tabIndex={props.tabindex}
         class={classnames(style.button, props.class, { 'has-click': this.props['event-click'] })}
         store-title={state.title}
+        store-disabled={state.disabled}
         store-class-has-icon={state.icon}
         store-class-is-active={state.active}
         store-class-is-disabled={state.disabled}
@@ -51,6 +52,7 @@ export default class Button extends Component {
 
   async handleClick (e) {
     if (!this.props['event-click']) return
+    if (this.state.disabled.get()) return
 
     this.base.blur()
     if (this.state.waiting.get()) return e.preventDefault()

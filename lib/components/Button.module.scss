@@ -10,7 +10,7 @@
   }
 
   &.has-click:hover,
-  &.has-click:focus,
+  &.has-click:focus:not(.is-disabled),
   &.is-active {
     color: var(--ui-color-accent-contrast);
     background: var(--ui-color-accent);

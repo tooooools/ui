@@ -39,6 +39,7 @@ export default class Select extends Component {
   template (props, state) {
     return (
       <div
+        {...this.dataProps}
         id={props.id}
         class={classnames(style.select, props.class)}
         store-class-is-disabled={state.disabled}

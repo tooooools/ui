@@ -30,6 +30,7 @@ export default class Range extends Component {
   template (props, state) {
     return (
       <div
+        {...this.dataProps}
         id={props.id}
         class={classnames(style.range, props.class)}
         store-class-is-disabled={state.disabled}

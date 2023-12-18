@@ -18,6 +18,7 @@ export default class Toolbar extends Component {
   template (props, state) {
     return (
       <div
+        {...this.dataProps}
         id={props.id}
         class={classnames(style.toolbar, props.class)}
         store-class-is-compact={state.compact}

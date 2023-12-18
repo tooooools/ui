@@ -25,6 +25,7 @@ export default class FileDropper extends Component {
   template (props, state) {
     return (
       <div
+        {...this.dataProps}
         id={props.id}
         class={classnames(style['file-dropper'], props.class)}
         store-class-is-dragged-over={state.draggedOver}

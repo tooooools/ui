@@ -24,6 +24,7 @@ export default class Tabs extends Component {
   template (props, state) {
     return (
       <div
+        {...this.dataProps}
         id={props.id}
         class={classnames(style.tabs, props.class)}
       >

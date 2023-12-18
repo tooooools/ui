@@ -25,6 +25,7 @@ export default class Button extends Component {
   template (props, state) {
     return (
       <button
+        {...this.dataProps}
         type={props.type}
         id={props.id}
         tabIndex={props.tabindex}

@@ -32,6 +32,7 @@ export default class Modal extends Component {
         event-click={this.handleClick}
       >
         <div
+          {...this.dataProps}
           id={props.id}
           class={classnames(style.modal, props.class)}
           event-mouseenter={e => (props['event-mouseenter'] ?? noop)(e, this)}

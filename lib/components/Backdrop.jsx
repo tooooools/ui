@@ -20,6 +20,7 @@ export default class Backdrop extends Component {
   template (props, state) {
     return (
       <div
+        {...this.dataProps}
         id={props.id}
         class={classnames(style.backdrop, props.class)}
         event-click={e => (props['event-click'] ?? noop)(e, this)}

@@ -39,6 +39,7 @@ export default class Input extends Component {
   template (props, state) {
     return (
       <div
+        {...this.dataProps}
         id={props.id}
         tabIndex={props.tabindex}
         class={classnames(style.input, props.class)}

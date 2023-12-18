@@ -27,6 +27,7 @@ export default class Toggles extends Component {
   template (props, state) {
     return (
       <div
+        {...this.dataProps}
         id={props.id}
         class={classnames(style.toggles, props.class)}
         store-title={state.title}

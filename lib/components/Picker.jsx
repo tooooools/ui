@@ -50,6 +50,7 @@ export default class Picker extends Component {
   template (props, state) {
     return (
       <div
+        {...this.dataProps}
         id={props.id}
         class={classnames(style.picker, props.class, { 'has-auto-order': props.autoOrder })}
         store-class-is-open={state.open}

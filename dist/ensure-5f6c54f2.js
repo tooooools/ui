@@ -52,6 +52,9 @@ function d(i) {
   return new a(i);
 }
 class o extends a {
+  constructor(t) {
+    super(t), this.toggle = this.toggle.bind(this), this.reset = this.reset.bind(this);
+  }
   set(t, s) {
     if (!s && this.current === t)
       return;
@@ -71,10 +74,10 @@ class o extends a {
     this.set(e !== void 0 ? e : this.current, s);
   }
 }
-function w(i) {
+function p(i) {
   return new o(i);
 }
-function p(i, t) {
+function w(i, t) {
   const s = new o(), e = s.set.bind(s);
   delete s.set;
   const r = Array.isArray(i);
@@ -95,7 +98,7 @@ function p(i, t) {
   }
   return s;
 }
-const v = (i) => (...t) => {
+const g = (i) => (...t) => {
   for (const s of t) {
     if (s instanceof h)
       return s;
@@ -105,10 +108,10 @@ const v = (i) => (...t) => {
   return i(null);
 };
 export {
-  p as d,
-  v as e,
+  w as d,
+  g as e,
   d as r,
   b as s,
-  w
+  p as w
 };
-//# sourceMappingURL=ensure-8ee56c7e.js.map
+//# sourceMappingURL=ensure-5f6c54f2.js.map

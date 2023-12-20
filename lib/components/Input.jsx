@@ -77,6 +77,7 @@ export default class Input extends Component {
           store-accept={props.type === 'file' ? state.accept : undefined}
           store-multiple={props.type === 'file' ? state.multiple : undefined}
           store-disabled={state.disabled}
+          event-click={e => e.stopPropagation()}
           event-input={this.handleInput}
           event-focus={this.handleFocus}
           event-blur={e => (props['event-blur'] ?? noop)(e, this)}
@@ -116,20 +117,16 @@ export default class Input extends Component {
     }
   }
 
-  async handleClick (e) {
-    await (this.props['event-click'] ?? noop)(e, this)
-
-    if (this.props.editOnDblClick) return
-
+  handleClick (e) {
     if (this.props.type === 'file') this.refs.input.click()
-    else this.refs.input.focus()
+    else if (!this.props.editOnDblClick) this.refs.input.focus()
+
+    ;(this.props['event-click'] ?? noop)(e, this)
   }
 
   async handleDblClick (e) {
+    this.refs.input.focus()
     await (this.props['event-dblclick'] ?? noop)(e, this)
-
-    if (this.props.type === 'file') this.refs.input.click()
-    else this.refs.input.focus()
   }
 
   async handleInput (e) {

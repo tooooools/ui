@@ -9,6 +9,8 @@ import classnames from 'classnames'
 export default class Input extends Component {
   beforeRender (props) {
     this.update = this.update.bind(this)
+    this.handleClick = this.handleClick.bind(this)
+    this.handleDblClick = this.handleDblClick.bind(this)
     this.handleInput = this.handleInput.bind(this)
     this.handleFocus = this.handleFocus.bind(this)
 
@@ -42,7 +44,7 @@ export default class Input extends Component {
         {...this.dataProps}
         id={props.id}
         tabIndex={props.tabindex}
-        class={classnames(style.input, props.class)}
+        class={classnames(style.input, props.class, { 'is-edited-on-dblclick': props.editOnDblClick })}
         data-type={props.type}
         store-title={state.title}
         store-class-has-icon={state.icon}
@@ -50,10 +52,8 @@ export default class Input extends Component {
         store-class-is-disabled={state.disabled}
         store-class-is-hidden={state.hidden}
         store-class-is-waiting={state.waiting}
-        event-click={e => {
-          if (props.type === 'file') this.refs.input.click()
-          else this.refs.input.focus()
-        }}
+        event-click={this.handleClick}
+        event-dblclick={this.handleDblClick}
         event-mouseenter={e => (props['event-mouseenter'] ?? noop)(e, this)}
         event-mouseleave={e => (props['event-mouseleave'] ?? noop)(e, this)}
       >
@@ -79,6 +79,7 @@ export default class Input extends Component {
           store-disabled={state.disabled}
           event-input={this.handleInput}
           event-focus={this.handleFocus}
+          event-blur={e => (props['event-blur'] ?? noop)(e, this)}
         />
         <label class={style.input__after} store-innerHTML={state.after} />
       </div>
@@ -115,6 +116,22 @@ export default class Input extends Component {
     }
   }
 
+  async handleClick (e) {
+    await (this.props['event-click'] ?? noop)(e, this)
+
+    if (this.props.editOnDblClick) return
+
+    if (this.props.type === 'file') this.refs.input.click()
+    else this.refs.input.focus()
+  }
+
+  async handleDblClick (e) {
+    await (this.props['event-dblclick'] ?? noop)(e, this)
+
+    if (this.props.type === 'file') this.refs.input.click()
+    else this.refs.input.focus()
+  }
+
   async handleInput (e) {
     if (this.state.waiting.get()) return e.preventDefault()
 
@@ -133,8 +150,9 @@ export default class Input extends Component {
     this.state.waiting.set(false)
   }
 
-  handleFocus () {
+  handleFocus (e) {
     if (this.props.autoSelectAll) this.refs.input.select()
+    ;(this.props['event-focus'] ?? noop)(e, this)
   }
 
   beforeDestroy () {

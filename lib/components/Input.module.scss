@@ -14,6 +14,10 @@
     cursor: wait;
   }
 
+  &.is-edited-on-dblclick input:not(:focus) {
+    pointer-events: none;
+  }
+
   &__icon {
     @include ui-icon;
   }

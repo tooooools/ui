@@ -13,17 +13,23 @@
   }
 
   &__label {
-    position: absolute;
-    margin-top: 1px;
+    padding-right: calc(1.5em + var(--ui-gap));
+    white-space: nowrap;
     pointer-events: none;
-  }
 
-  &__icon + &__label {
-    left: calc(var(--ui-icon-size) + 1.5em + 1px);
+    &:empty {
+      display: none;
+    }
   }
 
   &__label:not(:empty) + select {
+    position: absolute;
+    right: 0;
     opacity: 0;
+  }
+
+  &__icon + &__label + select {
+    left: calc(var(--ui-icon-size) + 1.5em + 1px);
   }
 
   select {

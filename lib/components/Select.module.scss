@@ -12,6 +12,20 @@
     @include ui-icon;
   }
 
+  &__label {
+    position: absolute;
+    margin-top: 1px;
+    pointer-events: none;
+  }
+
+  &__icon + &__label {
+    left: calc(var(--ui-icon-size) + 1.5em + 1px);
+  }
+
+  &__label:not(:empty) + select {
+    opacity: 0;
+  }
+
   select {
     @include reset-button;
     padding-right: calc(1.5em + var(--ui-gap));

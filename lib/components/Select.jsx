@@ -20,6 +20,7 @@ export default class Select extends Component {
 
     this.state = {
       title: ensure(writable)(props['store-title'], props.title),
+      label: ensure(writable)(props['store-label'], props.label),
 
       value: ensure(writable)(props['store-value'], props.value),
       options: ensure(writable)(props['store-options'], props.options),
@@ -54,6 +55,9 @@ export default class Select extends Component {
             innerHTML={props.icon}
           />
         )}
+
+        <div class={style.select__label} store-innerHTML={state.label} />
+
         <select
           ref={this.ref('select')}
           name={props.name}

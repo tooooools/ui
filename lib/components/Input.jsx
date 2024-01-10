@@ -70,6 +70,7 @@ export default class Input extends Component {
           name={props.name}
           autofocus={props.autofocus}
           autocomplete={props.autocomplete ?? 'off'}
+          size={props.size === 'auto' ? '' : props.size}
           store-min={props.type === 'number' ? state.min : undefined}
           store-max={props.type === 'number' ? state.max : undefined}
           store-step={props.type === 'number' ? state.step : undefined}
@@ -111,9 +112,9 @@ export default class Input extends Component {
       }
     }
 
-    if (this.props.autoSize) {
+    if (this.props.size === 'auto') {
       const length = (String(this.refs.input.value) ?? '').length || (this.state.placeholder.current ?? '').length || 1
-      this.refs.input.style.width = (length + 1) + 'ch'
+      this.refs.input.size = Math.max(1, length)
     }
   }
 

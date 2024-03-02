@@ -89,7 +89,7 @@ function k(t, e, s, n, r) {
       } else if (f(e, "store-class-")) {
         const o = e.substring(12), i = D(o);
         n.append({ storeEvents: [{ store: s, init: !0, fn: i, el: t }] });
-      } else if (f(e, "store-") || String(s._symbol) === "Symbol(signal)") {
+      } else if (f(e, "store-") || String((s || {})._symbol) === "Symbol(signal)") {
         let o = f(e, "store-") ? e.substring(6) : e;
         o === "text" && (o = "textContent");
         const i = _(o, r);
@@ -105,7 +105,7 @@ function k(t, e, s, n, r) {
             const i = (c) => {
               o.startsWith("--") ? t.style.setProperty(o, c) : t.style[o] = c;
             };
-            String(s[o]._symbol) === "Symbol(signal)" ? n.append({ storeEvents: [{ store: s[o], init: !0, fn: i, el: t }] }) : i(s);
+            String((s || [])[o]._symbol) === "Symbol(signal)" ? n.append({ storeEvents: [{ store: s[o], init: !0, fn: i, el: t }] }) : i(s);
           }
         else
           typeof s == "string" && (t.style.cssText = s);
@@ -368,4 +368,4 @@ export {
   g as n,
   U as r
 };
-//# sourceMappingURL=Component-3c2cf064.js.map
+//# sourceMappingURL=Component-54dc367e.js.map

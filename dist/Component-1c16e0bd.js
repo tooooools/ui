@@ -115,7 +115,7 @@ function x(e, t, s, n, i) {
             const r = (c) => {
               o.startsWith("--") ? e.style.setProperty(o, c) : e.style[o] = c;
             };
-            y((s ?? [])[o]) ? n.append({ storeEvents: [{ store: s[o], init: !0, fn: r, el: e }] }) : r(s);
+            y((s ?? [])[o]) ? n.append({ storeEvents: [{ store: s[o], init: !0, fn: r, el: e }] }) : r(s[o]);
           }
         else
           typeof s == "string" && (e.style.cssText = s);
@@ -378,4 +378,4 @@ export {
   g as n,
   Y as r
 };
-//# sourceMappingURL=Component-764a6c9b.js.map
+//# sourceMappingURL=Component-1c16e0bd.js.map

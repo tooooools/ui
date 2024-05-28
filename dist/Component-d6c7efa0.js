@@ -244,7 +244,8 @@ function S(e) {
 const U = /* @__PURE__ */ new Set([
   "g",
   "svg",
-  "defs"
+  "defs",
+  "mask"
 ]);
 function Y(e, t = document.body, s) {
   let n = 0;
@@ -378,4 +379,4 @@ export {
   g as n,
   Y as r
 };
-//# sourceMappingURL=Component-1c16e0bd.js.map
+//# sourceMappingURL=Component-d6c7efa0.js.map

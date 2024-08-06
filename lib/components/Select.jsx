@@ -67,7 +67,7 @@ export default class Select extends Component {
           store-disabled={state.disabled}
           event-change={this.handleChange}
         />
-        <span class={style.select__arrow} innerHTML={IconDown} />
+        <span class={style.select__arrow} innerHTML={props.dropdown ?? IconDown} />
       </div>
     )
   }

@@ -4,7 +4,6 @@ import { Component } from '../jsx'
 import { ensure, writable } from '../state'
 
 import noop from '../utils/noop'
-import classnames from 'classnames'
 import { debounce } from 'debounce'
 
 export default class Range extends Component {
@@ -32,9 +31,14 @@ export default class Range extends Component {
       <div
         {...this.dataProps}
         id={props.id}
-        class={classnames(style.range, props.class)}
-        store-class-is-disabled={state.disabled}
-        store-class-is-hidden={state.hidden}
+        class={[
+          style.range,
+          {
+            'is-disabled': state.disabled,
+            'is-hidden': state.hidden
+          },
+          ...(Array.isArray(props.class) ? props.class : [props.class])
+        ]}
         event-mouseenter={e => (props['event-mouseenter'] ?? noop)(e, this)}
         event-mouseleave={e => (props['event-mouseleave'] ?? noop)(e, this)}
       >

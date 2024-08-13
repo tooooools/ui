@@ -3,13 +3,21 @@ import style from './Tabs.module.scss'
 import { Component } from '../jsx'
 import { ensure, writable } from '../state'
 
-import classnames from 'classnames'
-
 import Toggles from './Toggles'
 
 export default class Tabs extends Component {
   static panel (children, props = {}) {
-    return <div {...props} class={classnames(style.tabs__panel, props.class)}>{children}</div>
+    return (
+      <div
+        {...props}
+        class={[
+          style.tabs__panel,
+          ...(Array.isArray(props.class) ? props.class : [props.class])
+        ]}
+      >
+        {children}
+      </div>
+    )
   }
 
   beforeRender (props) {
@@ -26,7 +34,10 @@ export default class Tabs extends Component {
       <div
         {...this.dataProps}
         id={props.id}
-        class={classnames(style.tabs, props.class)}
+        class={[
+          style.tabs,
+          ...(Array.isArray(props.class) ? props.class : [props.class])
+        ]}
       >
         <Toggles
           class={style.tabs__toggles}

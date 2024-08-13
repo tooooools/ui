@@ -4,7 +4,6 @@ import { Component } from '../jsx'
 import { ensure, writable } from '../state'
 
 import noop from '../utils/noop'
-import classnames from 'classnames'
 
 export default class Input extends Component {
   beforeRender (props) {
@@ -44,14 +43,20 @@ export default class Input extends Component {
         {...this.dataProps}
         id={props.id}
         tabIndex={props.tabindex}
-        class={classnames(style.input, props.class, { 'is-edited-on-dblclick': props.editOnDblClick })}
+        class={[
+          style.input,
+          {
+            'is-edited-on-dblclick': Boolean(props.editOnDblClick),
+            'has-icon': state.icon,
+            'is-active': state.active,
+            'is-disabled': state.disabled,
+            'is-hidden': state.hidden,
+            'is-waiting': state.waiting
+          },
+          ...(Array.isArray(props.class) ? props.class : [props.class])
+        ]}
         data-type={props.type}
         store-title={state.title}
-        store-class-has-icon={state.icon}
-        store-class-is-active={state.active}
-        store-class-is-disabled={state.disabled}
-        store-class-is-hidden={state.hidden}
-        store-class-is-waiting={state.waiting}
         event-click={this.handleClick}
         event-dblclick={this.handleDblClick}
         event-mouseenter={e => (props['event-mouseenter'] ?? noop)(e, this)}

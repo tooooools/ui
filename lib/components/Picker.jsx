@@ -4,7 +4,6 @@ import { Component } from '../jsx'
 import { derived, ensure, writable } from '../state'
 
 import noop from '../utils/noop'
-import classnames from 'classnames'
 
 import Button from './Button'
 import Toolbar from './Toolbar'
@@ -52,10 +51,16 @@ export default class Picker extends Component {
       <div
         {...this.dataProps}
         id={props.id}
-        class={classnames(style.picker, props.class, { 'has-auto-order': props.autoOrder })}
-        store-class-is-open={state.open}
-        store-class-is-disabled={state.disabled}
-        store-class-is-hidden={state.hidden}
+        class={[
+          style.picker,
+          {
+            'has-auto-order': props.autoOrder,
+            'is-open': state.open,
+            'is-disabled': state.disabled,
+            'is-hidden': state.hidden
+          },
+          ...(Array.isArray(props.class) ? props.class : [props.class])
+        ]}
         event-mouseenter={e => (props['event-mouseenter'] ?? noop)(e, this)}
         event-mouseleave={e => (props['event-mouseleave'] ?? noop)(e, this)}
       >

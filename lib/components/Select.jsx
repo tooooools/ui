@@ -5,7 +5,6 @@ import { ensure, derived, writable } from '../state'
 
 import noop from '../utils/noop'
 import groupBy from '../utils/array-group-by'
-import classnames from 'classnames'
 
 import IconDown from 'iconoir/icons/nav-arrow-down.svg?raw'
 
@@ -42,9 +41,14 @@ export default class Select extends Component {
       <div
         {...this.dataProps}
         id={props.id}
-        class={classnames(style.select, props.class)}
-        store-class-is-disabled={state.disabled}
-        store-class-is-hidden={state.hidden}
+        class={[
+          style.select,
+          {
+            'is-disabled': state.disabled,
+            'is-hidden': state.hidden
+          },
+          ...(Array.isArray(props.class) ? props.class : [props.class])
+        ]}
         event-mouseenter={e => (props['event-mouseenter'] ?? noop)(e, this)}
         event-mouseleave={e => (props['event-mouseleave'] ?? noop)(e, this)}
       >

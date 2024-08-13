@@ -4,7 +4,6 @@ import { Component } from '../jsx'
 import { ensure, writable } from '../state'
 
 import noop from '../utils/noop'
-import classnames from 'classnames'
 
 import Button from './Button'
 
@@ -29,10 +28,15 @@ export default class Toggles extends Component {
       <div
         {...this.dataProps}
         id={props.id}
-        class={classnames(style.toggles, props.class)}
+        class={[
+          style.toggles,
+          {
+            'is-disabled': state.disabled,
+            'is-hidden': state.hidden
+          },
+          ...(Array.isArray(props.class) ? props.class : [props.class])
+        ]}
         store-title={state.title}
-        store-class-is-disabled={state.disabled}
-        store-class-is-hidden={state.hidden}
         event-mouseenter={e => (props['event-mouseenter'] ?? noop)(e, this)}
         event-mouseleave={e => (props['event-mouseleave'] ?? noop)(e, this)}
       />

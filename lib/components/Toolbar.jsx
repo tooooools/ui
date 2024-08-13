@@ -4,7 +4,6 @@ import { Component } from '../jsx'
 import { ensure, writable } from '../state'
 
 import noop from '../utils/noop'
-import classnames from 'classnames'
 
 export default class Toolbar extends Component {
   beforeRender (props) {
@@ -20,10 +19,15 @@ export default class Toolbar extends Component {
       <div
         {...this.dataProps}
         id={props.id}
-        class={classnames(style.toolbar, props.class)}
-        store-class-is-compact={state.compact}
-        store-class-is-disabled={state.disabled}
-        store-class-is-hidden={state.hidden}
+        class={[
+          style.toolbar,
+          {
+            'is-compact': state.compact,
+            'is-disabled': state.disabled,
+            'is-hidden': state.hidden
+          },
+          ...(Array.isArray(props.class) ? props.class : [props.class])
+        ]}
         event-mouseenter={e => (props['event-mouseenter'] ?? noop)(e, this)}
         event-mouseleave={e => (props['event-mouseleave'] ?? noop)(e, this)}
       >

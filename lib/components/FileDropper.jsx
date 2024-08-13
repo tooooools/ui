@@ -6,7 +6,6 @@ import { writable } from '../state'
 import Button from './Button'
 
 import noop from '../utils/noop'
-import classnames from 'classnames'
 
 export default class FileDropper extends Component {
   beforeRender (props) {
@@ -27,8 +26,13 @@ export default class FileDropper extends Component {
       <div
         {...this.dataProps}
         id={props.id}
-        class={classnames(style['file-dropper'], props.class)}
-        store-class-is-dragged-over={state.draggedOver}
+        class={[
+          style['file-dropper'],
+          {
+            'is-dragged-over': state.draggedOver
+          },
+          ...(Array.isArray(props.class) ? props.class : [props.class])
+        ]}
       >
         {props.children.length > 0
           ? props.children

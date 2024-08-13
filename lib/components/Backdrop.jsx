@@ -4,7 +4,6 @@ import { Component } from '../jsx'
 import { ensure, writable } from '../state'
 
 import noop from '../utils/noop'
-import classnames from 'classnames'
 
 export default class Backdrop extends Component {
   beforeRender (props) {
@@ -22,7 +21,10 @@ export default class Backdrop extends Component {
       <div
         {...this.dataProps}
         id={props.id}
-        class={classnames(style.backdrop, props.class)}
+        class={[
+          style.backdrop,
+          ...(Array.isArray(props.class) ? props.class : [props.class])
+        ]}
         event-click={e => (props['event-click'] ?? noop)(e, this)}
       >
         {props.children}

@@ -4,7 +4,6 @@ import { Component } from '../jsx'
 import { ensure, writable } from '../state'
 
 import noop from '../utils/noop'
-import classnames from 'classnames'
 
 export default class Button extends Component {
   beforeRender (props) {
@@ -29,14 +28,20 @@ export default class Button extends Component {
         type={props.type}
         id={props.id}
         tabIndex={props.tabindex}
-        class={classnames(style.button, props.class, { 'has-click': this.props['event-click'] })}
+        class={[
+          style.button,
+          {
+            'has-click': Boolean(this.props['event-click']),
+            'has-icon': state.icon,
+            'is-active': state.active,
+            'is-disabled': state.disabled,
+            'is-hidden': state.hidden,
+            'is-waiting': state.waiting
+          },
+          ...(Array.isArray(props.class) ? props.class : [props.class])
+        ]}
         store-title={state.title}
         store-disabled={state.disabled}
-        store-class-has-icon={state.icon}
-        store-class-is-active={state.active}
-        store-class-is-disabled={state.disabled}
-        store-class-is-hidden={state.hidden}
-        store-class-is-waiting={state.waiting}
         event-click={this.handleClick}
         event-mouseenter={e => (props['event-mouseenter'] ?? noop)(e, this)}
         event-mouseleave={e => (props['event-mouseleave'] ?? noop)(e, this)}

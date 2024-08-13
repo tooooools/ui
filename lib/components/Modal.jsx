@@ -4,7 +4,6 @@ import { Component } from '../jsx'
 import { ensure, writable } from '../state'
 
 import noop from '../utils/noop'
-import classnames from 'classnames'
 
 import Button from './Button'
 import Backdrop from './Backdrop'
@@ -34,7 +33,10 @@ export default class Modal extends Component {
         <div
           {...this.dataProps}
           id={props.id}
-          class={classnames(style.modal, props.class)}
+          class={[
+            style.modal,
+            ...(Array.isArray(props.class) ? props.class : [props.class])
+          ]}
           event-mouseenter={e => (props['event-mouseenter'] ?? noop)(e, this)}
           event-mouseleave={e => (props['event-mouseleave'] ?? noop)(e, this)}
         >

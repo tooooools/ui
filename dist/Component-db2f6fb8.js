@@ -101,7 +101,7 @@ function x(e, t, s, n, i) {
         if (typeof s == "string" && (e.className = s || ""), typeof s == "object")
           for (const o in s) {
             const r = s[o];
-            if (typeof r == "string" && e.classList.add(r), typeof s == "object") {
+            if (typeof r == "string" && e.classList.add(...r.split(" ")), typeof s == "object") {
               for (const c in r)
                 if (typeof r[c] == "boolean" && e.classList.toggle(c, r[c]), y(r[c])) {
                   const f = A(c);
@@ -379,4 +379,4 @@ export {
   g as n,
   Y as r
 };
-//# sourceMappingURL=Component-d6c7efa0.js.map
+//# sourceMappingURL=Component-db2f6fb8.js.map

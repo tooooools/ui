@@ -1,7 +1,7 @@
 import style from './Range.module.scss'
 
 import { Component } from '../jsx'
-import { ensure, writable } from '../state'
+import { ensure, derived, writable } from '../state'
 
 import noop from '../utils/noop'
 import { debounce } from 'debounce'
@@ -34,6 +34,7 @@ export default class Range extends Component {
         class={[
           style.range,
           {
+            'is-dual': props.dual,
             'is-disabled': state.disabled,
             'is-hidden': state.hidden
           },
@@ -49,25 +50,43 @@ export default class Range extends Component {
             innerHTML={props.icon}
           />
         )}
-        <input
-          ref={this.ref('input')}
-          tabIndex={props.tabindex}
-          type='range'
-          store-min={state.min}
-          store-max={state.max}
-          store-step={state.step}
-          store-title={state.title}
-          store-value={state.value}
-          store-disabled={state.disabled}
-          event-input={this.handleInput}
-        />
+        <div class={style.range__inputs}>
+          <input
+            ref={this.refArray('inputs')}
+            tabIndex={props.tabindex}
+            type='range'
+            store-min={state.min}
+            store-max={state.max}
+            store-step={state.step}
+            store-title={state.title}
+            store-value={derived(state.value, value => props.dual ? (value ?? [])[0] : value)}
+            store-disabled={state.disabled}
+            event-input={this.handleInput}
+          />
+          {props.dual && (
+            <input
+              ref={this.refArray('inputs')}
+              tabIndex={props.tabindex}
+              type='range'
+              store-min={state.min}
+              store-max={state.max}
+              store-step={state.step}
+              store-title={state.title}
+              store-value={derived(state.value, value => props.dual ? (value ?? [])[1] : value)}
+              store-disabled={state.disabled}
+              event-input={this.handleInput}
+            />
+          )}
+        </div>
         <label class={style.range__label} store-innerHTML={state.label} />
       </div>
     )
   }
 
   async handleInput (e) {
-    this.state.value.set(+this.refs.input.value)
+    if (this.props.dual) this.state.value.set([+this.refs.inputs[0].value, +this.refs.inputs[1].value])
+    else this.state.value.set(+this.refs.inputs[0].value)
+
     await (this.props['event-input'] ?? noop)(e, this)
   }
 }

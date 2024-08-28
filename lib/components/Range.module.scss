@@ -11,6 +11,13 @@
     @include ui-icon;
   }
 
+  &__inputs {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex: 1;
+  }
+
   input {
     flex: 1;
 
@@ -57,6 +64,19 @@
     border-radius: 100%;
     outline: 2px solid var(--ui-color-text);
     appearance: none;
+  }
+
+  &.is-dual {
+    input { pointer-events: none; }
+    input::-webkit-slider-thumb { pointer-events: all; }
+    input::-moz-range-thumb { pointer-events: all; }
+
+    input:nth-child(2) {
+      position: absolute;
+
+      &::-webkit-slider-runnable-track { background: transparent; }
+      &::-moz-range-track { background: transparent; }
+    }
   }
 
   &__label {

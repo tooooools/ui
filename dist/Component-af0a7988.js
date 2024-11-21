@@ -1,22 +1,22 @@
-function k(e, t) {
-  const s = {};
-  return s.vnode = !0, s.type = e, s.props = t || {}, s.children = [].concat.apply([], [].slice.call(arguments, 2)), s.isInstance = e && e.template && typeof e.template == "function", s.isComponent = typeof e == "function" && e.prototype && typeof e.prototype.render == "function", s.isStateless = typeof e == "function" && !s.isComponent, s.isDom = typeof e == "string", s;
+function m(s, t) {
+  const e = {};
+  return e.vnode = !0, e.type = s, e.props = t || {}, e.children = [].concat.apply([], [].slice.call(arguments, 2)), e.isInstance = s && s.template && typeof s.template == "function", e.isComponent = typeof s == "function" && s.prototype && typeof s.prototype.render == "function", e.isStateless = typeof s == "function" && !e.isComponent, e.isDom = typeof s == "string", e;
 }
-k.f = (e) => e.children;
-function w(e, t) {
-  for (const s in t)
-    e[s] = t[s];
-  return e;
+m.f = (s) => s.children;
+function w(s, t) {
+  for (const e in t)
+    s[e] = t[e];
+  return s;
 }
 function g() {
 }
-function m(e, t, s, n) {
+function D(s, t, e, n) {
   if (n)
     return { log: g, warn: g, error: g };
   const i = [];
-  e = e.toUpperCase(), i.push(`%c ${e} `);
+  s = s.toUpperCase(), i.push(`%c ${s} `);
   let o = "font-weight:bold;";
-  return t && (o += `color:${t};`), s && (o += `background-color:${s}`), i.push(o), {
+  return t && (o += `color:${t};`), e && (o += `background-color:${e}`), i.push(o), {
     log: console.log.bind(console, ...i),
     warn: console.warn.bind(console, ...i),
     error: console.error.bind(console, ...i)
@@ -30,12 +30,12 @@ class a {
       this.data[C[t]] = [];
   }
   append(t) {
-    for (const s in t)
-      this.data[s] = this.data[s].concat(t[s]);
+    for (const e in t)
+      this.data[e] = this.data[e].concat(t[e]);
   }
   set(t) {
-    for (const s in t)
-      this.data[s] = t[s];
+    for (const e in t)
+      this.data[e] = t[e];
   }
   get() {
     return this.data;
@@ -45,7 +45,7 @@ const h = [
   "xlink",
   "xmlns",
   "xml"
-], D = /* @__PURE__ */ new Set([
+], x = /* @__PURE__ */ new Set([
   "placeholder",
   "autoplay",
   "muted",
@@ -53,21 +53,21 @@ const h = [
   "webkit-playsinline",
   "playsinline",
   "selected"
-]), y = (e) => e && String(e._symbol) === "Symbol(signal)";
+]), y = (s) => s && String(s._symbol) === "Symbol(signal)";
 let _;
-const l = (e, t) => e.substr(0, t.length) === t, A = (e) => (t, s) => s.classList.toggle(e, t || !1), b = (e = "textContent", t) => (s, n) => {
-  if (t && e !== (e = e.replace(/^xlink:?/, "")))
-    n.setAttributeNS("http://www.w3.org/1999/xlink", e.toLowerCase(), s);
+const l = (s, t) => s.substr(0, t.length) === t, A = (s) => (t, e) => e.classList.toggle(s, t || !1), b = (s = "textContent", t) => (e, n) => {
+  if (t && s !== (s = s.replace(/^xlink:?/, "")))
+    n.setAttributeNS("http://www.w3.org/1999/xlink", s.toLowerCase(), e);
   else {
-    if (s === void 0) {
-      n.removeAttribute(e);
+    if (e === void 0) {
+      n.removeAttribute(s);
       return;
     }
-    _ = s ?? "", t || (n[e] = _), (t || D.has(e) || l(e, "data-")) && n.setAttribute(e, _);
+    _ = e ?? "", t || (n[s] = _), (t || x.has(s) || l(s, "data-")) && n.setAttribute(s, _);
   }
 };
-function x(e, t, s, n, i) {
-  if (s !== void 0 && !(t === "__self" || t === "__source")) {
+function M(s, t, e, n, i) {
+  if (e !== void 0 && !(t === "__self" || t === "__source")) {
     t === "className" && (t = "class");
     for (let o = 0; o < h.length; o++)
       if (l(t, h[o])) {
@@ -78,96 +78,96 @@ function x(e, t, s, n, i) {
     if (t !== "ref")
       if (l(t, "event-")) {
         const o = t.toLowerCase().substring(6);
-        n.append({ domEvents: [{ el: e, evt: o, fn: s }] });
+        n.append({ domEvents: [{ el: s, evt: o, fn: e }] });
       } else if (t === "store") {
-        const o = Array.isArray(s) ? s : [s], r = [];
+        const o = Array.isArray(e) ? e : [e], r = [];
         for (let c = 0, f = o.length; c < f; c++) {
-          const u = Array.isArray(o[c]) ? o[c] : [o[c]], E = u[0], N = u[1], R = u[2] !== void 0 ? u[2] : !0;
-          E && r.push({ store: E, fn: N, init: R, el: e });
+          const u = Array.isArray(o[c]) ? o[c] : [o[c]], E = u[0], R = u[1], k = u[2] !== void 0 ? u[2] : !0;
+          E && r.push({ store: E, fn: R, init: k, el: s });
         }
         n.append({ storeEvents: r });
       } else if (l(t, "store-class-")) {
         const o = t.substring(12), r = A(o);
-        n.append({ storeEvents: [{ store: s, init: !0, fn: r, el: e }] });
-      } else if (l(t, "store-") || y(s)) {
+        n.append({ storeEvents: [{ store: e, init: !0, fn: r, el: s }] });
+      } else if (l(t, "store-") || y(e)) {
         let o = l(t, "store-") ? t.substring(6) : t;
         o === "text" && (o = "textContent");
         const r = b(o, i);
-        n.append({ storeEvents: [{ store: s, init: !0, fn: r, el: e }] });
-      } else if (typeof s == "function" && l(t, "on")) {
+        n.append({ storeEvents: [{ store: e, init: !0, fn: r, el: s }] });
+      } else if (typeof e == "function" && l(t, "on")) {
         const o = t.toLowerCase();
-        e[o] = s;
+        s[o] = e;
       } else if (t === "class" && !i) {
-        if (typeof s == "string" && (e.className = s || ""), typeof s == "object")
-          for (const o in s) {
-            const r = s[o];
-            if (typeof r == "string" && e.classList.add(...r.split(" ")), typeof s == "object") {
+        if (typeof e == "string" && (s.className = e || ""), typeof e == "object")
+          for (const o in e) {
+            const r = e[o];
+            if (typeof r == "string" && s.classList.add(...r.split(" ")), typeof e == "object") {
               for (const c in r)
-                if (typeof r[c] == "boolean" && e.classList.toggle(c, r[c]), y(r[c])) {
+                if (typeof r[c] == "boolean" && s.classList.toggle(c, r[c]), y(r[c])) {
                   const f = A(c);
-                  n.append({ storeEvents: [{ store: r[c], init: !0, fn: f, el: e }] });
+                  n.append({ storeEvents: [{ store: r[c], init: !0, fn: f, el: s }] });
                 }
             }
           }
       } else if (t === "style")
-        if (typeof s == "object")
-          for (const o in s) {
+        if (typeof e == "object")
+          for (const o in e) {
             const r = (c) => {
-              o.startsWith("--") ? e.style.setProperty(o, c) : e.style[o] = c;
+              o.startsWith("--") ? s.style.setProperty(o, c) : s.style[o] = c;
             };
-            y((s ?? [])[o]) ? n.append({ storeEvents: [{ store: s[o], init: !0, fn: r, el: e }] }) : r(s[o]);
+            y((e ?? [])[o]) ? n.append({ storeEvents: [{ store: e[o], init: !0, fn: r, el: s }] }) : r(e[o]);
           }
         else
-          typeof s == "string" && (e.style.cssText = s);
-      else if (t !== "list" && t !== "type" && !i && t in e)
+          typeof e == "string" && (s.style.cssText = e);
+      else if (t !== "list" && t !== "type" && !i && t in s)
         try {
-          b(t, i)(s, e);
+          b(t, i)(e, s);
         } catch {
         }
       else
-        typeof s != "object" && typeof s != "function" && b(t, i)(s, e);
+        typeof e != "object" && typeof e != "function" && b(t, i)(e, s);
   }
 }
-function M(e) {
-  return Array.isArray(e) ? e : [e];
+function P(s) {
+  return Array.isArray(s) ? s : [s];
 }
-function p(e, t) {
-  if (Array.isArray(e))
-    return P(e, t);
-  if (e instanceof window.Element)
-    return j(e);
-  if (e === null || typeof e != "object" || !e.vnode)
-    return T(e);
-  const s = w(
-    w({}, e.props),
-    { children: [].concat.apply([], e.children || []) }
+function p(s, t) {
+  if (Array.isArray(s))
+    return T(s, t);
+  if (s instanceof window.Element)
+    return W(s);
+  if (s === null || typeof s != "object" || !s.vnode)
+    return B(s);
+  const e = w(
+    w({}, s.props),
+    { children: [].concat.apply([], s.children || []) }
   );
-  if (e.isDom)
-    return B(e, s, t);
-  if (e.isInstance)
-    return L(e, s, t, !0);
-  if (e.isStateless)
-    return W(e, s, t);
-  if (e.isComponent)
-    return L(e, s, t);
+  if (s.isDom)
+    return j(s, e, t);
+  if (s.isInstance)
+    return L(s, e, t, !0);
+  if (s.isStateless)
+    return $(s, e, t);
+  if (s.isComponent)
+    return L(s, e, t);
 }
-function P(e, t) {
-  e = M(e);
-  const s = new a();
-  for (let n = 0; n < e.length; n++)
-    s.append(p(e[n], t));
-  return s.get();
+function T(s, t) {
+  s = P(s);
+  const e = new a();
+  for (let n = 0; n < s.length; n++)
+    e.append(p(s[n], t));
+  return e.get();
 }
-function T(e) {
+function B(s) {
   const t = new a();
-  return e == null || e === !1 || t.append({ nodes: document.createTextNode(e + "") }), t.get();
+  return s == null || s === !1 || t.append({ nodes: document.createTextNode(s + "") }), t.get();
 }
-function B(e, t, s) {
+function j(s, t, e) {
   const n = new a();
   let i = [];
-  e.type === "svg" && (s = !0);
+  s.type === "svg" && (e = !0);
   for (let r = 0; r < t.children.length; r++) {
-    const c = p(t.children[r], s);
+    const c = p(t.children[r], e);
     c.nodes && (i = i.concat(c.nodes), n.append({
       components: c.components,
       refs: c.refs,
@@ -175,26 +175,26 @@ function B(e, t, s) {
       storeEvents: c.storeEvents
     }));
   }
-  const o = s ? document.createElementNS("http://www.w3.org/2000/svg", e.type) : document.createElement(e.type);
-  for (const r in e.props)
-    x(o, r, e.props[r], n, s);
+  const o = e ? document.createElementNS("http://www.w3.org/2000/svg", s.type) : document.createElement(s.type);
+  for (const r in s.props)
+    M(o, r, s.props[r], n, e);
   for (let r = 0; r < i.length; r++)
     o.appendChild(i[r]);
   return t.ref && n.append({ refs: { ref: o, fn: t.ref } }), n.append({ nodes: o }), n.get();
 }
-function j(e) {
+function W(s) {
   const t = new a();
-  return t.append({ nodes: e }), t.get();
+  return t.append({ nodes: s }), t.get();
 }
-function W(e, t, s) {
-  const n = new a(), i = e.type(t);
-  return n.append(p(i, s)), n.get();
+function $(s, t, e) {
+  const n = new a(), i = s.type(t);
+  return n.append(p(i, e)), n.get();
 }
-function L(e, t, s, n = !1) {
-  const i = new a(), o = n ? e.type : new e.type(t);
+function L(s, t, e, n = !1) {
+  const i = new a(), o = n ? s.type : new s.type(t);
   n && (t = o.props), o.beforeRender(t);
   const r = o.template(t, o.state || {}) || t.children;
-  t.ref && i.append({ refs: { ref: o, fn: t.ref } }), i.append(p(r, s));
+  t.ref && i.append({ refs: { ref: o, fn: t.ref } }), i.append(p(r, e));
   const c = i.data.nodes;
   o.base = c.length > 1 ? c : c[0];
   for (const f in i.data)
@@ -209,49 +209,49 @@ function L(e, t, s, n = !1) {
     o._collector.components[f]._parent = o;
   return i.get();
 }
-function d(e, t, s) {
-  const n = e._collector && e._collector.components;
-  if (s && t(e), n)
+function d(s, t, e) {
+  const n = s._collector && s._collector.components;
+  if (e && t(s), n)
     for (let i = 0; i < n.length; i++)
       d(n[i], t);
-  s || t(e);
+  e || t(s);
 }
-function $(e) {
-  for (let t = 0; t < e._collector.refs.length; t++)
-    e._collector.refs[t].fn(e._collector.refs[t].ref), e._collector.refs[t].ref = null;
+function H(s) {
+  for (let t = 0; t < s._collector.refs.length; t++)
+    s._collector.refs[t].fn(s._collector.refs[t].ref), s._collector.refs[t].ref = null;
 }
-function H(e) {
-  for (let t = 0; t < e._collector.storeEvents.length; t++) {
-    const s = e._collector.storeEvents[t], n = s.fn;
-    s.fn = function(i) {
-      n(i, s.el);
-    }, s.store.subscribe(s.fn), s.init && s.fn(s.store.current);
+function I(s) {
+  for (let t = 0; t < s._collector.storeEvents.length; t++) {
+    const e = s._collector.storeEvents[t], n = e.fn;
+    e.fn = function(i) {
+      n(i, e.el);
+    }, e.store.subscribe(e.fn), e.init && e.fn(e.store.current);
   }
 }
-function I(e) {
-  e.test && console.log("call dom listeners", e._collector.domEvents);
-  for (let t = 0; t < e._collector.domEvents.length; t++) {
-    const s = e._collector.domEvents[t];
-    s.el.addEventListener(s.evt, s.fn);
+function O(s) {
+  s.test && console.log("call dom listeners", s._collector.domEvents);
+  for (let t = 0; t < s._collector.domEvents.length; t++) {
+    const e = s._collector.domEvents[t];
+    e.el.addEventListener(e.evt, e.fn);
   }
 }
-function O(e) {
-  d(e, $);
+function S(s) {
+  d(s, H);
 }
-function S(e) {
-  d(e, I), d(e, H);
+function U(s) {
+  d(s, O), d(s, I);
 }
-const U = /* @__PURE__ */ new Set([
+const Y = /* @__PURE__ */ new Set([
   "g",
   "svg",
   "defs",
   "mask"
 ]);
-function Y(e, t = document.body, s) {
+function q(s, t = document.body, e) {
   let n = 0;
-  const i = p(e, t && U.has(t.tagName));
+  const i = p(s, t && Y.has(t.tagName));
   let o = { _collector: i };
-  if (O(o), d(o, function(r) {
+  if (S(o), d(o, function(r) {
     r.afterRender && r.afterRender(r.props);
   }), typeof t == "function") {
     const r = i.nodes.length < 2 ? i.nodes[0] : i.nodes;
@@ -262,21 +262,27 @@ function Y(e, t = document.body, s) {
   else if (typeof t == "object" && t !== null && t.insertBefore)
     for (n = 0; n < i.nodes.length; n++)
       t.insertBefore.parentNode.insertBefore(i.nodes[n], t.insertBefore);
-  if ((!s || s.mounted) && (S(o), d(o, function(r) {
+  if ((!e || e.mounted) && (U(o), d(o, function(r) {
     r.mounted = !0, r.afterMount && r.afterMount(r.props);
-  })), s && s._collector) {
-    const r = s._collector;
+  })), e && e._collector) {
+    const r = e._collector;
     for (n = 0; n < i.components.length; n++)
-      i.components[n]._parent = s;
+      i.components[n]._parent = e;
     r.refs && (r.refs = r.refs.concat(i.refs)), r.components && (r.components = r.components.concat(i.components)), r.domEvents && (r.domEvents = r.domEvents.concat(i.domEvents)), r.storeEvents && (r.storeEvents = r.storeEvents.concat(i.storeEvents));
   }
   return o = void 0, i;
 }
-class q {
+class N {
+  static flatten(t) {
+    let e = [];
+    for (const n of t.children)
+      e = e.concat(n, N.flatten(n));
+    return e;
+  }
   constructor(t = {}) {
     this._parent = null, this._collector = { refs: [], components: [], domEvents: [], storeEvents: [] }, this._storeListeners = [], this.refs = {}, this.state = {}, this.store = {}, this.props = t || {}, this.base = null, this.mounted = !1, this.destroyed = !1;
-    const s = t.name || this.constructor.name || "Component", { log: n, warn: i, error: o } = m(
-      s,
+    const e = t.name || this.constructor.name || "Component", { log: n, warn: i, error: o } = D(
+      e,
       "white",
       "#000",
       t.disableLog
@@ -284,10 +290,10 @@ class q {
     this.log = n, this.warn = i, this.error = o;
   }
   get dataProps() {
-    return Object.entries(this.props).filter(([t]) => t.startsWith("data-")).reduce((t, [s, n]) => ({ ...t, [s]: n }), {});
+    return Object.entries(this.props).filter(([t]) => t.startsWith("data-")).reduce((t, [e, n]) => ({ ...t, [e]: n }), {});
   }
-  storeSubscribe(t, s, n, i = !0) {
-    t.subscribe(s, n), this._storeListeners.push([t, s, n]), i && s.call(n, t.current);
+  storeSubscribe(t, e, n, i = !0) {
+    t.subscribe(e, n), this._storeListeners.push([t, e, n]), i && e.call(n, t.current);
   }
   // `component.template` will be called during the component
   // initial rendering to create the `component.base` node
@@ -312,22 +318,22 @@ class q {
   }
   // Quickly add ref to component
   ref(t) {
-    const s = this;
+    const e = this;
     return function(i) {
-      s.refs[t] = i;
+      e.refs[t] = i;
     };
   }
   // Quickly add ref to an array of component refs
-  refArray(t, s = !1) {
+  refArray(t, e = !1) {
     const n = this.refs[t] || (this.refs[t] = []);
     let i = n.length, o, r;
-    return s && (o = this.refs.__pools || (this.refs.__pools = {}), r = o[t] || (o[t] = []), r.length && (i = r.pop())), n[i] = null, function(f) {
-      n[i] = f, s && r.push(i);
+    return e && (o = this.refs.__pools || (this.refs.__pools = {}), r = o[t] || (o[t] = []), r.length && (i = r.pop())), n[i] = null, function(f) {
+      n[i] = f, e && r.push(i);
     };
   }
   // Quickly add ref to a hashmap of component refs
-  refMap(t, s) {
-    const n = this.refs[s] || (this.refs[s] = /* @__PURE__ */ new Map());
+  refMap(t, e) {
+    const n = this.refs[e] || (this.refs[e] = /* @__PURE__ */ new Map());
     return function(o) {
       o ? n.set(t, o) : n.delete(t);
     };
@@ -337,8 +343,8 @@ class q {
   // Use this method when you want to add content to the component
   // after the initial rendering. This ensures new items will be
   // correctly unmount when the component is destroyed.
-  render(t, s) {
-    return Y(t, s, this);
+  render(t, e) {
+    return q(t, e, this);
   }
   // Destroy the component and its children components.
   // - This also removes component props and de-reference it from its parent.
@@ -366,17 +372,17 @@ class q {
     }
     for (t = this._collector.refs.length - 1; t >= 0; t--)
       this._collector.refs[t].fn(null), this._collector.refs.splice(t, 1);
-    let s = Array.isArray(this.base) ? this.base : [this.base];
-    for (t = 0; t < s.length; t++)
-      s[t] && s[t].parentNode && s[t].parentNode.removeChild(s[t]);
-    this.base = s = null, this.props = null, this.state = null, this.store = null, this.refs = null, this._storeListeners = null;
+    let e = Array.isArray(this.base) ? this.base : [this.base];
+    for (t = 0; t < e.length; t++)
+      e[t] && e[t].parentNode && e[t].parentNode.removeChild(e[t]);
+    this.base = e = null, this.props = null, this.state = null, this.store = null, this.refs = null, this._storeListeners = null;
   }
 }
 export {
-  q as C,
+  N as C,
   w as e,
-  k as h,
+  m as h,
   g as n,
-  Y as r
+  q as r
 };
-//# sourceMappingURL=Component-db2f6fb8.js.map
+//# sourceMappingURL=Component-af0a7988.js.map

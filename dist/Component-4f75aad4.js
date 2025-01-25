@@ -97,8 +97,8 @@ function M(s, t, e, n, i) {
       } else if (typeof e == "function" && l(t, "on")) {
         const o = t.toLowerCase();
         s[o] = e;
-      } else if (t === "class" && !i) {
-        if (typeof e == "string" && (s.className = e || ""), typeof e == "object")
+      } else if (t === "class") {
+        if (typeof e == "string" && (i ? s.setAttribute("class", e || "") : s.className = e || ""), typeof e == "object")
           for (const o in e) {
             const r = e[o];
             if (typeof r == "string" && s.classList.add(...r.split(" ")), typeof e == "object") {
@@ -385,4 +385,4 @@ export {
   y as n,
   q as r
 };
-//# sourceMappingURL=Component-7ec09343.js.map
+//# sourceMappingURL=Component-4f75aad4.js.map

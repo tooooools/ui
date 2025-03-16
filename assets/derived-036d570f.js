@@ -1,0 +1,2 @@
+import{W as d}from"./ensure-4e62e800.js";function a(n,l){const r=new d,u=r.set.bind(r);delete r.set;const c=Array.isArray(n);let e=c?new Array(n.length):null;if(c)for(let t=0,f=n.length;t<f;t++)e[t]=n[t].current,n[t].subscribe(function(s){e[t]=s,i()});else e=n.current,n.subscribe(function(t){e=t,i()});i();function i(){const t=l(e);t&&t.then?t.then(u):u(t)}return r}export{a as d};
+//# sourceMappingURL=derived-036d570f.js.map

@@ -51,7 +51,7 @@ const label = writable('Click me')
 
 render((
   <Button 
-    store-label={label} 
+    label={label} 
     event-click={e => {
       label.set('Thank you')
     }}
@@ -79,7 +79,7 @@ class MyComponent extends Component {
           state.count.update(count => count++)
         }}
       >
-        {props.text}: <span store-text={state.count} />
+        {props.text}: <span text={state.count} />
       </div>
     )
   }

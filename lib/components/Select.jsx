@@ -32,7 +32,7 @@ export default class Select extends Component {
     const compare = props.compare ?? ((a, b) => a === b)
     this.state.selectedIndex = derived([this.state.value, this.state.options], () => {
       const options = this.state.options.get()
-      return options.findIndex(({ value }) => compare(value, this.state.value.current))
+      return options.findIndex(option => compare(option.value ?? option, this.state.value.current))
     })
   }
 
@@ -124,10 +124,10 @@ export default class Select extends Component {
 
   handleChange (e) {
     const index = +e.target.value
-    this.state.selectedIndex.set(index)
+    const selected = (this.state.options.get() ?? [])[index]
 
     this.refs.select.blur()
-    this.state.value.set((this.state.options.get() || [])[index]?.value)
+    this.state.value.set(selected ? (selected.value ?? selected) : null)
 
     ;(this.props['event-change'] || noop)(e, this)
   }

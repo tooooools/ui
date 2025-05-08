@@ -2,10 +2,13 @@
   @include ui-font;
 
   position: relative;
+
   max-width: var(--ui-modal-width);
   overflow: hidden;
-  border: var(--ui-border);
+
   border-radius: var(--ui-border-radius);
+  outline: var(--ui-outline);
+  outline-offset: var(--ui-outline-offset);
 
   &__header {
     display: flex;

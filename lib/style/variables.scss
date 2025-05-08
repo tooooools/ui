@@ -22,8 +22,12 @@
   --ui-padding-content: 2rem;
   --ui-icon-size: 2rem;
 
-  --ui-border: 0;
+  // Box style
+
+  --ui-outline: 0;
+  --ui-outline-offset: 0;
   --ui-border-radius: 1rem;
+  --ui-toolbar-hr: 1px solid var(--ui-color-background-dim);
 
   // Animations
 

@@ -8,7 +8,7 @@
 
   hr {
     border: 0;
-    border-left: 1px solid var(--ui-color-background-dim);
+    border-left: var(--ui-toolbar-hr);
   }
 
   &:not(.is-compact) > hr {
@@ -24,14 +24,33 @@
     overflow: hidden;
     border-radius: var(--ui-border-radius);
 
+    &::after {
+      content: '';
+
+      position: absolute;
+      inset: 0;
+
+      pointer-events: none;
+
+      border-radius: var(--ui-border-radius);
+      outline: var(--ui-outline);
+      outline-offset: -1px;
+    }
+
     & > * {
       border-radius: 0;
+      outline: 0;
+
+      &:not(:first-child) {
+        border-left: var(--ui-outline);
+      }
     }
   }
 
   // Add borders to nested <Toolbar>
   &.is-compact > & {
-    border-right: 1px solid var(--ui-color-background-dim);
-    border-left: 1px solid var(--ui-color-background-dim);
+    border-right: var(--ui-toolbar-hr);
+    border-left: var(--ui-toolbar-hr);
+    &::after { outline: 0; }
   }
 }

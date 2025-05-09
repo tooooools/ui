@@ -32,17 +32,16 @@
 
       pointer-events: none;
 
+      border: var(--ui-border);
       border-radius: var(--ui-border-radius);
-      outline: var(--ui-outline);
-      outline-offset: -1px;
     }
 
     & > * {
+      border: 0;
       border-radius: 0;
-      outline: 0;
 
       &:not(:first-child) {
-        border-left: var(--ui-outline);
+        border-left: var(--ui-border);
       }
     }
   }
@@ -51,6 +50,6 @@
   &.is-compact > & {
     border-right: var(--ui-toolbar-hr);
     border-left: var(--ui-toolbar-hr);
-    &::after { outline: 0; }
+    &::after { border: 0; }
   }
 }

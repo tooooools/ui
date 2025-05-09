@@ -2,7 +2,7 @@
   @include reset-button;
   @include ui-container;
   @include ui-font;
-  @include easing(background, color);
+  @include easing(background, color, border-color);
 
   &.has-click,
   &.has-click &__label {
@@ -14,6 +14,7 @@
   &.is-active {
     color: var(--ui-color-accent-contrast);
     background: var(--ui-color-accent);
+    border-color: var(--ui-color-accent);
   }
 
   &.is-waiting {

@@ -28,11 +28,9 @@
   @if $visual {
     height: var(--ui-height);
     padding: var(--ui-padding-container);
-
     background: var(--ui-color-background);
+    border: var(--ui-border);
     border-radius: var(--ui-border-radius);
-    outline: var(--ui-outline);
-    outline-offset: var(--ui-outline-offset);
   }
 
   &.is-hidden {

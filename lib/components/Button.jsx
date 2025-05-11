@@ -52,6 +52,7 @@ export default class Button extends Component {
           store-innerHTML={state.icon}
         />
         <label class={style.button__label} store-innerHTML={state.label} />
+        {props.children}
       </button>
     )
   }

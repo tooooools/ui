@@ -46,6 +46,7 @@ export default class Backdrop extends Component {
   close () {
     if (this.state.locked.get()) return
     ;(this.props['event-close'] || noop)(null, this)
+    if (this.destroyed) return
     this.destroy()
   }
 

@@ -9,7 +9,7 @@
 .toast-container {
   @include invisible-scroll(y);
   position: fixed;
-  z-index: 99;
+  z-index: var(--ui-toast-z-index);
   right: 0;
   bottom: 0;
 
@@ -31,9 +31,15 @@
   @include easing(background, color, border-color);
 
   position: relative;
+  z-index: var(--ui-toast-z-index);
+
   height: auto;
   min-width: 30rem;
-  box-shadow: var(--shadow);
+
+  pointer-events: auto;
+
+  border: 0;
+  box-shadow: var(--ui-toast-shadow);
   animation: toast-appears 300ms ease-in-out forwards;
 
   &[data-tone=''],
@@ -90,6 +96,7 @@
   }
 
   [class^='ui-button-'] {
+    --ui-border: 0;
     --ui-color-background: none;
     --ui-color-accent: none;
     flex-shrink: 0;

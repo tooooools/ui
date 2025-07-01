@@ -3,6 +3,8 @@
   @include ui-font;
   @include easing(background, color);
 
+  padding-right: calc(var(--ui-icon-size) + var(--ui-gap) * 2);
+
   &:focus-within,
   &:has(select:hover) {
     background: var(--ui-color-accent);
@@ -13,7 +15,8 @@
   }
 
   &__label {
-    padding-right: calc(1.5em + var(--ui-gap));
+    overflow: hidden;
+    text-overflow: ellipsis;
     white-space: nowrap;
     pointer-events: none;
 
@@ -35,7 +38,8 @@
   select {
     @include reset-button;
     flex: 1;
-    padding-right: calc(1.5em + var(--ui-gap));
+    max-width: 100%;
+    text-overflow: ellipsis;
     cursor: pointer;
   }
 

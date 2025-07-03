@@ -39,6 +39,7 @@
   pointer-events: auto;
 
   border: 0;
+  border-radius: var(--ui-border-radius);
   box-shadow: var(--ui-toast-shadow);
   animation: toast-appears 300ms ease-in-out forwards;
 

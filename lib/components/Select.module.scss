@@ -27,7 +27,7 @@
 
   &__label:not(:empty) + select {
     position: absolute;
-    right: 0;
+    inset: 0;
     opacity: 0;
   }
 

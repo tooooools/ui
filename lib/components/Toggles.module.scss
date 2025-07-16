@@ -1,5 +1,7 @@
+@use '/lib/style/mixins' as ui;
+
 .toggles {
-  @include ui-container(false);
+  @include ui.container(false);
 
   gap: 0;
   border-radius: var(--ui-border-radius);

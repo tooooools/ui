@@ -6,16 +6,11 @@ export default {
   core: {
     disableTelemetry: true
   },
-  addons: [
-    '@storybook/addon-essentials',
-    '@storybook/addon-console'
-  ],
   framework: {
     name: '@storybook/html-vite',
     options: {},
   },
   docs: {
-    autodocs: true,
     defaultName: 'Documentation'
   }
 }

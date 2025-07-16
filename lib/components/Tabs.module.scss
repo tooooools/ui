@@ -1,12 +1,14 @@
+@use '/lib/style/mixins' as ui;
+
 .tabs {
-  @include export;
+  @include ui.export;
 
   &__toggles {
-    @include export;
+    @include ui.export;
   }
 
   &__panels {
-    @include export;
+    @include ui.export;
   }
 
   &__panel.is-hidden {

@@ -1,3 +1,5 @@
+@use '/lib/style/mixins' as ui;
+
 @keyframes toast-appears {
   from {
     opacity: 0;
@@ -14,20 +16,17 @@
   bottom: 0;
 
   display: flex;
-
-  gap: var(--ui-gap);
   flex-direction: column-reverse;
   align-items: flex-end;
-
+  gap: var(--ui-gap);
   max-height: 100vh;
   padding: var(--ui-gap);
-
   pointer-events: none;
 }
 
 .toast {
-  @include ui-container;
-  @include ui-font;
+  @include ui.container;
+  @include ui.font;
   @include easing(background, color, border-color);
 
   position: relative;
@@ -35,7 +34,6 @@
 
   height: auto;
   min-width: 30rem;
-
   pointer-events: auto;
 
   border: 0;
@@ -49,7 +47,7 @@
   &[data-tone='error'] { background: var(--ui-toast-color-error); }
 
   &__icon {
-    @include ui-icon;
+    @include ui.icon;
     display: flex;
     gap: var(--ui-gap);
     padding: var(--ui-gap);

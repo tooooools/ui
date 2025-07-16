@@ -1,5 +1,7 @@
+@use '/lib/style/mixins' as ui;
+
 .toolbar {
-  @include ui-container(false);
+  @include ui.container(false);
   @include invisible-scroll(x);
 
   & > * {

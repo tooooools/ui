@@ -82,7 +82,8 @@ export default defineConfig(async ({ mode }) => {
     esbuild: {
       jsxInject: "import { h, Fragment } from '/lib/jsx'",
       jsxFactory: 'h',
-      jsxFragment: 'Fragment'
+      jsxFragment: 'Fragment',
+      minifyIdentifiers: false
     }
   }
 })

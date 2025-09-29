@@ -1,6 +1,6 @@
 import style from './Modal.module.scss'
 
-import { Component } from '../jsx'
+import { Component, render } from '../jsx'
 import { ensure, writable } from '../state'
 
 import noop from '../utils/noop'
@@ -10,6 +10,50 @@ import Backdrop from './Backdrop'
 import IconClose from 'iconoir/icons/cancel.svg?raw'
 
 export default class Modal extends Component {
+  /**
+   * Display a Modal in a functional way
+   * @param  {Object} props - Modal jsx props
+   * @param  {Element} [parent=document.body] - Element to render the Modal
+   * @return {Promise} resolve when the Modal is closed
+   */
+  static async display (props, parent = document.body) {
+    return new Promise(resolve => {
+      const onClose = (...args) => {
+        ;(props['event-close'] ?? noop)(...args)
+        resolve(...args)
+      }
+
+      render(<Modal event-close={onClose} {...props} />, parent)
+    })
+  }
+
+  /**
+   * WIP
+   * @param  {Function} callback [description]
+   * @param  {[type]}   message  [description]
+   * @param  {[type]}   props    [description]
+   * @param  {[type]}   parent   [description]
+   * @return {[type]}            [description]
+   */
+  static async confirm (callback, message, props, parent = document.body) {
+    return new Promise(resolve => {
+      const onClose = (...args) => {
+        ;(props['event-close'] ?? noop)(...args)
+        resolve(...args)
+      }
+      this.display({
+        ...props,
+        'event-close': onClose,
+        children: [
+          typeof props.message === 'string'
+            ? <div innerHTML={props.message} />
+            : props.message,
+          ...(props.children ?? [])
+        ]
+      }, parent)
+    })
+  }
+
   beforeRender (props) {
     this.handleClick = this.handleClick.bind(this)
     this.handleClose = this.handleClose.bind(this)

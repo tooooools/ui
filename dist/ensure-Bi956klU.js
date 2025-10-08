@@ -123,12 +123,18 @@ class Derived extends Writable {
   set value(v) {
     throw new Error("Cannot set value of a derived Signal");
   }
+  get previous() {
+    return this.#previous;
+  }
+  set previous(value) {
+    throw new Error("Cannot manually set previous value");
+  }
   #connect = (signal2) => signal2.subscribe(this.#derive);
   #derive = () => {
     if (!this.#listening) return;
     const value = Array.isArray(this.#source) ? this.#source.map((signal2) => signal2.value) : this.#source.value, setValue = (v) => {
-      this.#value = v, this.dispatch(this.value, this.previous);
-    }, result = this.#callback(value);
+      this.#previous = v, this.#value = v, this.dispatch(this.value, this.previous);
+    }, result = this.#callback(value, this.previous);
     result?.then ? result.then(setValue) : setValue(result);
   };
   // Wait for the callback to finish before applying derivation
@@ -150,10 +156,11 @@ const ensure = (signal2) => (...values) => {
   return signal2(null);
 };
 export {
+  Derived as D,
   Writable as W,
   derived as d,
   ensure as e,
   signal as s,
   writable as w
 };
-//# sourceMappingURL=ensure-CLtWgQ60.js.map
+//# sourceMappingURL=ensure-Bi956klU.js.map

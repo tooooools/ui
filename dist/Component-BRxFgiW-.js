@@ -329,6 +329,9 @@ class Component {
   get dataProps() {
     return Object.entries(this.props).filter(([attr]) => attr.startsWith("data-")).reduce((acc, [attr, value]) => ({ ...acc, [attr]: value }), {});
   }
+  get eventProps() {
+    return Object.entries(this.props).filter(([attr]) => attr.startsWith("event-")).reduce((acc, [attr, value]) => ({ ...acc, [attr]: value }), {});
+  }
   template() {
   }
   beforeRender() {
@@ -407,4 +410,4 @@ export {
   h,
   render as r
 };
-//# sourceMappingURL=Component-C-CA-hl9.js.map
+//# sourceMappingURL=Component-BRxFgiW-.js.map

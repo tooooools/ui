@@ -1,6 +1,6 @@
 {
   "name": "@tooooools/ui",
-  "version": "2.0.0-alpha.0",
+  "version": "2.0.0-alpha.1",
   "description": "JSX ui kit built for Toools™",
   "type": "module",
   "scripts": {

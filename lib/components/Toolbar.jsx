@@ -1,20 +1,24 @@
 import style from './Toolbar.module.scss'
 
 import { Component } from '../jsx'
-import { ensure, writable } from '../state'
+import { $ } from '../state'
+import Props from '../jsx/Props'
 
 import noop from '../utils/noop'
 
 export default class Toolbar extends Component {
-  beforeRender (props) {
-    this.state = {
-      compact: ensure(writable)(props['store-compact'], props.compact),
-      disabled: ensure(writable)(props['store-disabled'], props.disabled),
-      hidden: ensure(writable)(props['store-hidden'], props.hidden)
-    }
+  static props = {
+    compact: [Props.boolean, Props.Signal],
+    disabled: [Props.boolean, Props.Signal],
+    hidden: [Props.boolean, Props.Signal],
+    id: Props.string
   }
 
-  template (props, state) {
+  $compact = $(this.props.compact)
+  $disabled = $(this.props.disabled)
+  $hidden = $(this.props.hidden)
+
+  template (props) {
     return (
       <div
         {...this.dataProps}
@@ -22,9 +26,9 @@ export default class Toolbar extends Component {
         class={[
           style.toolbar,
           {
-            'is-compact': state.compact,
-            'is-disabled': state.disabled,
-            'is-hidden': state.hidden
+            'is-compact': this.$compact,
+            'is-disabled': this.$disabled,
+            'is-hidden': this.$hidden
           },
           ...(Array.isArray(props.class) ? props.class : [props.class])
         ]}

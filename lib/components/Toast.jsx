@@ -1,35 +1,56 @@
 import style from './Toast.module.scss'
 
 import { Component, render } from '../jsx'
-import { ensure, derived, writable } from '../state'
+import { $ } from '../state'
+import Props from '../jsx/Props'
+
+import noop from '../utils/noop'
 
 import Button from './Button'
 import IconClose from 'iconoir/icons/cancel.svg?raw'
 
-import noop from '../utils/noop'
-
 export default class Toast extends Component {
+  static props = {
+    label: [Props.string, Props.Signal],
+    title: [Props.string, Props.Signal],
+    icon: [Props.string, Props.Signal],
+    tone: [Props.string, Props.Signal],
+    count: [Props.number, Props.Signal],
+    duration: Props.number,
+    id: Props.string
+  }
+
   static display (message, { parent = Toast.container, ...props } = {}) {
-    render(<Toast {...props} >{message}</Toast>, parent)
+    render(<Toast {...props}>{message}</Toast>, parent)
   }
 
   static get container () {
     return document.querySelector('.' + style['toast-container']) ?? render(<div class={style['toast-container']} />, document.body).nodes[0]
   }
 
-  beforeRender (props) {
-    this.handleClose = this.handleClose.bind(this)
+  $label = $(this.props.label)
+  $title = $(this.props.title)
+  $icon = $(this.props.icon)
+  $tone = $(this.props.tone)
+  $count = $(this.props.count)
 
-    this.state = {
-      label: ensure(writable)(props['store-label'], props.label),
-      title: ensure(writable)(props['store-title'], props.title),
-      icon: ensure(writable)(props['store-icon'], props.icon),
-      tone: ensure(writable)(props['store-tone'], props.tone),
-      count: ensure(writable)(props['store-count'], props.count)
+  handleClose = e => {
+    e.stopPropagation()
+    this.destroy()
+  }
+
+  afterMount () {
+    if (this.props.duration) {
+      this.refs.timer = window.setTimeout(() => this.destroy(), this.props.duration)
     }
   }
 
-  template (props, state) {
+  beforeDestroy () {
+    ;(this.props['event-close'] || noop)()
+    if (this.refs.timer) window.clearTimeout(this.refs.timer)
+  }
+
+  template (props) {
     return (
       <div
         {...this.dataProps}
@@ -37,24 +58,22 @@ export default class Toast extends Component {
         class={[
           style.toast,
           {
-            'has-icon': state.icon,
+            'has-icon': this.$icon,
             'has-duration': props.duration
           },
           ...(Array.isArray(props.class) ? props.class : [props.class])
         ]}
         event-mouseenter={e => (props['event-mouseenter'] ?? noop)(e, this)}
         event-mouseleave={e => (props['event-mouseleave'] ?? noop)(e, this)}
-        store-data-count={state.count}
-        data-tone={state.tone}
-        style={{
-          '--toast-duration': (props.duration ?? -1) + 'ms'
-        }}
+        data-count={this.$count}
+        data-tone={this.$tone}
+        style={{ '--toast-duration': (props.duration ?? -1) + 'ms' }}
       >
         <span
           ref={this.ref('icon')}
           class={style.toast__icon}
-          store-data-count={state.count}
-          store-innerHTML={state.icon}
+          data-count={this.$count}
+          innerHTML={this.$icon}
         />
 
         <div class={style.toast__content}>
@@ -69,21 +88,5 @@ export default class Toast extends Component {
         />
       </div>
     )
-  }
-
-  afterMount () {
-    if (this.props.duration) {
-      this.refs.timer = window.setTimeout(() => this.destroy(), this.props.duration)
-    }
-  }
-
-  handleClose (e) {
-    e.stopPropagation()
-    this.destroy()
-  }
-
-  beforeDestroy () {
-    ;(this.props['event-close'] || noop)()
-    if (this.refs.timer) window.clearTimeout(this.refs.timer)
   }
 }

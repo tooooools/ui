@@ -1,27 +1,59 @@
 import style from './Button.module.scss'
 
 import { Component } from '../jsx'
-import { ensure, writable } from '../state'
+import { $ } from '../state'
+import Props from '../jsx/Props'
 
 import noop from '../utils/noop'
 
 export default class Button extends Component {
-  beforeRender (props) {
-    this.handleClick = this.handleClick.bind(this)
+  static props = {
+    label: [Props.string, Props.Signal],
+    title: [Props.string, Props.Signal],
+    icon: [Props.string, Props.Signal],
+    active: [Props.boolean, Props.Signal],
+    disabled: [Props.boolean, Props.Signal],
+    hidden: [Props.boolean, Props.Signal],
+    waiting: [Props.boolean, Props.Signal],
+    type: Props.string,
+    id: Props.string,
+    tabindex: Props.number
+  }
 
-    this.state = {
-      label: ensure(writable)(props['store-label'], props.label),
-      title: ensure(writable)(props['store-title'], props.title),
-      icon: ensure(writable)(props['store-icon'], props.icon),
+  $label = $(this.props.label)
+  $title = $(this.props.title)
+  $icon = $(this.props.icon)
+  $active = $(this.props.active)
+  $disabled = $(this.props.disabled)
+  $hidden = $(this.props.hidden)
+  $waiting = $(this.props.waiting)
 
-      active: ensure(writable)(props['store-active'], props.active),
-      disabled: ensure(writable)(props['store-disabled'], props.disabled),
-      hidden: ensure(writable)(props['store-hidden'], props.hidden),
-      waiting: ensure(writable)(props['store-waiting'], props.waiting)
+  handleClick = async e => {
+    if (!this.props['event-click']) return
+    if (this.$disabled.value) return
+
+    this.base.blur()
+    if (this.$waiting.value) return e.preventDefault()
+    this.$waiting.value = true
+
+    try {
+      await this.props['event-click'](e, this)
+    } finally {
+      // Testing for mounted because event-click may have destroyed this component
+      if (this.mounted) {
+        this.$waiting.value = false
+
+        // Trigger animation on .button__icon if any
+        if (this.refs?.icon) {
+          this.refs.icon.style.animation = 'none'
+          void this.refs.icon.offsetHeight // eslint-disable-line no-void
+          this.refs.icon.style.animation = null
+        }
+      }
     }
   }
 
-  template (props, state) {
+  template (props) {
     return (
       <button
         {...this.dataProps}
@@ -31,17 +63,17 @@ export default class Button extends Component {
         class={[
           style.button,
           {
-            'has-click': Boolean(this.props['event-click']),
-            'has-icon': state.icon,
-            'is-active': state.active,
-            'is-disabled': state.disabled,
-            'is-hidden': state.hidden,
-            'is-waiting': state.waiting
+            'has-click': Boolean(props['event-click']),
+            'has-icon': this.$icon,
+            'is-active': this.$active,
+            'is-disabled': this.$disabled,
+            'is-hidden': this.$hidden,
+            'is-waiting': this.$waiting
           },
           ...(Array.isArray(props.class) ? props.class : [props.class])
         ]}
-        store-title={state.title}
-        store-disabled={state.disabled}
+        title={this.$title}
+        disabled={this.$disabled}
         event-click={this.handleClick}
         event-mouseenter={e => (props['event-mouseenter'] ?? noop)(e, this)}
         event-mouseleave={e => (props['event-mouseleave'] ?? noop)(e, this)}
@@ -49,36 +81,11 @@ export default class Button extends Component {
         <span
           ref={this.ref('icon')}
           class={style.button__icon}
-          store-innerHTML={state.icon}
+          innerHTML={this.$icon}
         />
-        <label class={style.button__label} store-innerHTML={state.label} />
+        <label class={style.button__label} innerHTML={this.$label} />
         {props.children}
       </button>
     )
-  }
-
-  async handleClick (e) {
-    if (!this.props['event-click']) return
-    if (this.state.disabled.get()) return
-
-    this.base.blur()
-    if (this.state.waiting.get()) return e.preventDefault()
-    this.state.waiting.set(true)
-
-    try {
-      await this.props['event-click'](e, this)
-    } finally {
-      // Testing for mounted because event-click may have destroyed this component
-      if (this.mounted) {
-        this.state.waiting.set(false)
-
-        // Trigger animation on .button__icon if any
-        if (this && this.refs && this.refs.icon) {
-          this.refs.icon.style.animation = 'none'
-          void this.refs.icon.offsetHeight // eslint-disable-line no-void
-          this.refs.icon.style.animation = null
-        }
-      }
-    }
   }
 }

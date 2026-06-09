@@ -19,7 +19,7 @@ export default class Tabs extends Component {
         {...props}
         class={[
           style.tabs__panel,
-          ...(Array.isArray(props.class) ? props.class : [props.class])
+          props.class
         ]}
       >
         {children}
@@ -53,7 +53,7 @@ export default class Tabs extends Component {
         id={props.id}
         class={[
           style.tabs,
-          ...(Array.isArray(props.class) ? props.class : [props.class])
+          props.class
         ]}
       >
         <Toggles

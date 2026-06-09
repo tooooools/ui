@@ -88,7 +88,7 @@ export default class FileDropper extends Component {
         class={[
           style['file-dropper'],
           { 'is-dragged-over': this.$draggedOver },
-          ...(Array.isArray(props.class) ? props.class : [props.class])
+          props.class
         ]}
       >
         {props.children.length > 0

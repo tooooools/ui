@@ -128,7 +128,7 @@ export default class Input extends Component {
             'is-hidden': this.$hidden,
             'is-waiting': this.$waiting
           },
-          ...(Array.isArray(props.class) ? props.class : [props.class])
+          props.class
         ]}
         data-type={props.type}
         title={this.$title}

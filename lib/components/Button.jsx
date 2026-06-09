@@ -70,7 +70,7 @@ export default class Button extends Component {
             'is-hidden': this.$hidden,
             'is-waiting': this.$waiting
           },
-          ...(Array.isArray(props.class) ? props.class : [props.class])
+          props.class
         ]}
         title={this.$title}
         disabled={this.$disabled}

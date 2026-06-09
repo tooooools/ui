@@ -52,7 +52,7 @@ export default class Backdrop extends Component {
         id={props.id}
         class={[
           style.backdrop,
-          ...(Array.isArray(props.class) ? props.class : [props.class])
+          props.class
         ]}
         event-click={e => (props['event-click'] ?? noop)(e, this)}
       >

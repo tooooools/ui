@@ -74,7 +74,7 @@ export default class Toggles extends Component {
             'is-disabled': this.$disabled,
             'is-hidden': this.$hidden
           },
-          ...(Array.isArray(props.class) ? props.class : [props.class])
+          props.class
         ]}
         title={this.$title}
         event-mouseenter={e => (props['event-mouseenter'] ?? noop)(e, this)}

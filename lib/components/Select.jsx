@@ -109,7 +109,7 @@ export default class Select extends Component {
             'is-disabled': this.$disabled,
             'is-hidden': this.$hidden
           },
-          ...(Array.isArray(props.class) ? props.class : [props.class])
+          props.class
         ]}
         event-mouseenter={e => (props['event-mouseenter'] ?? noop)(e, this)}
         event-mouseleave={e => (props['event-mouseleave'] ?? noop)(e, this)}

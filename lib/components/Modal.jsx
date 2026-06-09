@@ -82,7 +82,7 @@ export default class Modal extends Component {
           id={props.id}
           class={[
             style.modal,
-            ...(Array.isArray(props.class) ? props.class : [props.class])
+            props.class
           ]}
           event-mouseenter={e => (props['event-mouseenter'] ?? noop)(e, this)}
           event-mouseleave={e => (props['event-mouseleave'] ?? noop)(e, this)}

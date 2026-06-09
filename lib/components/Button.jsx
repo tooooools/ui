@@ -4,8 +4,6 @@ import { Component } from '../jsx'
 import { $ } from '../state'
 import Props from '../jsx/Props'
 
-import noop from '../utils/noop'
-
 export default class Button extends Component {
   static props = {
     label: [Props.string, Props.Signal],
@@ -57,6 +55,7 @@ export default class Button extends Component {
     return (
       <button
         {...this.dataProps}
+        {...this.eventProps}
         type={props.type}
         id={props.id}
         tabIndex={props.tabindex}
@@ -75,8 +74,6 @@ export default class Button extends Component {
         title={this.$title}
         disabled={this.$disabled}
         event-click={this.handleClick}
-        event-mouseenter={e => (props['event-mouseenter'] ?? noop)(e, this)}
-        event-mouseleave={e => (props['event-mouseleave'] ?? noop)(e, this)}
       >
         <span
           ref={this.ref('icon')}

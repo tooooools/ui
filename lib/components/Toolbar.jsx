@@ -4,8 +4,6 @@ import { Component } from '../jsx'
 import { $ } from '../state'
 import Props from '../jsx/Props'
 
-import noop from '../utils/noop'
-
 export default class Toolbar extends Component {
   static props = {
     compact: [Props.boolean, Props.Signal],
@@ -22,6 +20,7 @@ export default class Toolbar extends Component {
     return (
       <div
         {...this.dataProps}
+        {...this.eventProps}
         id={props.id}
         class={[
           style.toolbar,
@@ -32,8 +31,6 @@ export default class Toolbar extends Component {
           },
           props.class
         ]}
-        event-mouseenter={e => (props['event-mouseenter'] ?? noop)(e, this)}
-        event-mouseleave={e => (props['event-mouseleave'] ?? noop)(e, this)}
       >
         {props.children}
       </div>

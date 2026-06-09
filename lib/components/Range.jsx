@@ -47,6 +47,7 @@ export default class Range extends Component {
     return (
       <div
         {...this.dataProps}
+        {...this.eventProps}
         id={props.id}
         class={[
           style.range,
@@ -57,8 +58,6 @@ export default class Range extends Component {
           },
           props.class
         ]}
-        event-mouseenter={e => (props['event-mouseenter'] ?? noop)(e, this)}
-        event-mouseleave={e => (props['event-mouseleave'] ?? noop)(e, this)}
       >
         {props.icon && (
           <span

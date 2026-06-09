@@ -102,6 +102,7 @@ export default class Select extends Component {
     return (
       <div
         {...this.dataProps}
+        {...this.eventProps}
         id={props.id}
         class={[
           style.select,
@@ -111,8 +112,6 @@ export default class Select extends Component {
           },
           props.class
         ]}
-        event-mouseenter={e => (props['event-mouseenter'] ?? noop)(e, this)}
-        event-mouseleave={e => (props['event-mouseleave'] ?? noop)(e, this)}
       >
         {props.icon && (
           <span

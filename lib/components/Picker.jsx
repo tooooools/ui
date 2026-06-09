@@ -84,6 +84,7 @@ export default class Picker extends Component {
     return (
       <div
         {...this.dataProps}
+        {...this.eventProps}
         id={props.id}
         class={[
           style.picker,
@@ -95,8 +96,6 @@ export default class Picker extends Component {
           },
           props.class
         ]}
-        event-mouseenter={e => (props['event-mouseenter'] ?? noop)(e, this)}
-        event-mouseleave={e => (props['event-mouseleave'] ?? noop)(e, this)}
       >
         <Button
           class={style.picker__toggle}

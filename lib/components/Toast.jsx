@@ -54,6 +54,7 @@ export default class Toast extends Component {
     return (
       <div
         {...this.dataProps}
+        {...this.eventProps}
         id={props.id}
         class={[
           style.toast,
@@ -63,8 +64,6 @@ export default class Toast extends Component {
           },
           props.class
         ]}
-        event-mouseenter={e => (props['event-mouseenter'] ?? noop)(e, this)}
-        event-mouseleave={e => (props['event-mouseleave'] ?? noop)(e, this)}
         data-count={this.$count}
         data-tone={this.$tone}
         style={{ '--toast-duration': (props.duration ?? -1) + 'ms' }}

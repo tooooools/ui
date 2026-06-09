@@ -116,6 +116,7 @@ export default class Input extends Component {
     return (
       <div
         {...this.dataProps}
+        {...this.eventProps}
         id={props.id}
         tabIndex={props.tabindex}
         class={[
@@ -134,8 +135,6 @@ export default class Input extends Component {
         title={this.$title}
         event-click={this.handleClick}
         event-dblclick={this.handleDblClick}
-        event-mouseenter={e => (props['event-mouseenter'] ?? noop)(e, this)}
-        event-mouseleave={e => (props['event-mouseleave'] ?? noop)(e, this)}
       >
         <span
           ref={this.ref('icon')}
@@ -161,7 +160,7 @@ export default class Input extends Component {
           event-click={e => e.stopPropagation()}
           event-input={this.handleInput}
           event-focus={this.handleFocus}
-          event-blur={e => (props['event-blur'] ?? noop)(e, this)}
+          event-blur={props['event-blur']}
         />
         <label class={style.input__after} innerHTML={this.$after} />
       </div>

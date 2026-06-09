@@ -67,6 +67,7 @@ export default class Toggles extends Component {
     return (
       <div
         {...this.dataProps}
+        {...this.eventProps}
         id={props.id}
         class={[
           style.toggles,
@@ -77,8 +78,6 @@ export default class Toggles extends Component {
           props.class
         ]}
         title={this.$title}
-        event-mouseenter={e => (props['event-mouseenter'] ?? noop)(e, this)}
-        event-mouseleave={e => (props['event-mouseleave'] ?? noop)(e, this)}
       />
     )
   }

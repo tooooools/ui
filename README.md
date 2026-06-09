@@ -44,20 +44,19 @@ render(<Button label='Hello world' />, { insertBefore: el })
 
 ```jsx
 import { render } from '@tooooools/ui'
-import { writable } from '@tooooools/ui/state'
+import { $ } from '@tooooools/ui/state'
 import { Button } from '@tooooools/ui/components'
 
-const label = writable('Click me')
+const $label = $('Click me')
 
 render((
-  <Button 
-    label={label} 
+  <Button
+    label={$label}
     event-click={e => {
-      label.set('Thank you')
+      $label.value = 'Thank you'
     }}
   />
 ))
-
 ```
 
 ###### Batching signal updates
@@ -88,29 +87,22 @@ batch(() => {
 
 ```jsx
 import { render, Component } from '@tooooools/ui'
-import { writable } from '@tooooools/ui/state'
+import { $ } from '@tooooools/ui/state'
 
 class MyComponent extends Component {
-  beforeRender (props) {
-    this.state = {
-      count: writable(0)
-    }
+  $count = $(0)
+
+  handleClick = () => {
+    this.$count.value++
   }
-  template (props, state) {
+
+  template (props) {
     return (
-      <div 
-        event-click={e => {
-          state.count.update(count => count++)
-        }}
-      >
-        {props.text}: <span text={state.count} />
+      <div event-click={this.handleClick}>
+        {props.text}: <span text={this.$count} />
       </div>
     )
   }
-
-  afterRender () {}
-  afterMount () {}
-  beforeDestroy () {}
 }
 
 render(<MyComponent text='Click count' />)

@@ -1,7 +1,7 @@
 import style from './Range.module.scss'
 
 import { Component } from '../jsx'
-import { $, derived } from '../state'
+import { $ } from '../state'
 import Props from '../jsx/Props'
 
 import noop from '../utils/noop'
@@ -76,7 +76,7 @@ export default class Range extends Component {
             max={this.$max}
             step={this.$step}
             title={this.$title}
-            value={derived(this.$value, value => props.dual ? (value ?? [])[0] : value)}
+            value={$(this.$value, value => props.dual ? (value ?? [])[0] : value)}
             disabled={this.$disabled}
             event-input={this.handleInput}
           />
@@ -89,7 +89,7 @@ export default class Range extends Component {
               max={this.$max}
               step={this.$step}
               title={this.$title}
-              value={derived(this.$value, value => props.dual ? (value ?? [])[1] : value)}
+              value={$(this.$value, value => props.dual ? (value ?? [])[1] : value)}
               disabled={this.$disabled}
               event-input={this.handleInput}
             />

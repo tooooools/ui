@@ -1,7 +1,7 @@
 import style from './Picker.module.scss'
 
 import { Component } from '../jsx'
-import { $, derived } from '../state'
+import { $ } from '../state'
 import Props from '../jsx/Props'
 
 import noop from '../utils/noop'
@@ -31,8 +31,7 @@ export default class Picker extends Component {
   $disabled = $(this.props.disabled)
   $hidden = $(this.props.hidden)
 
-  $toggleIcon = derived(
-    [this.$open, this.$iconClose, this.$iconOpen],
+  $toggleIcon = $([this.$open, this.$iconClose, this.$iconOpen],
     () => this.$open.value ? this.$iconClose.value : this.$iconOpen.value
   )
 

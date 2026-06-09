@@ -1,7 +1,7 @@
 import style from './Select.module.scss'
 
 import { Component } from '../jsx'
-import { $, derived } from '../state'
+import { $ } from '../state'
 import Props from '../jsx/Props'
 
 import noop from '../utils/noop'
@@ -34,8 +34,7 @@ export default class Select extends Component {
   $disabled = $(this.props.disabled)
   $hidden = $(this.props.hidden)
 
-  $selectedIndex = derived(
-    [this.$value, this.$options],
+  $selectedIndex = $([this.$value, this.$options],
     () => {
       const compare = this.props.compare ?? ((a, b) => a === b)
       const options = this.$options.value

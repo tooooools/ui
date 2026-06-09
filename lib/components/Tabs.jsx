@@ -41,9 +41,7 @@ export default class Tabs extends Component {
   }
 
   afterRender () {
-    this.watch(this.$value, this.update)
-    this.watch(this.$tabs, this.update)
-    this.update()
+    this.watch([this.$value, this.$tabs], this.update, { immediate: true })
   }
 
   template (props) {

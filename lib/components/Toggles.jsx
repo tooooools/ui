@@ -52,9 +52,7 @@ export default class Toggles extends Component {
   }
 
   afterRender () {
-    this.watch(this.$value, this.update)
-    this.watch(this.$options, this.update)
-    this.update()
+    this.watch([this.$value, this.$options], this.update, { immediate: true })
   }
 
   clear () {

@@ -108,8 +108,7 @@ export default class Input extends Component {
   }
 
   afterRender () {
-    this.watch(this.$value, this.update)
-    this.update()
+    this.watch(this.$value, this.update, { immediate: true })
   }
 
   template (props) {

@@ -42,7 +42,7 @@ export default class Picker extends Component {
 
   handleToggle = e => {
     e.stopPropagation()
-    this.$open.update(s => !s)
+    this.$open.value = !this.$open.value
   }
 
   handleClick = (i, callback) => async e => {

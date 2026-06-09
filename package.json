@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "storybook dev -p 6006 --no-open",
+    "example": "vite --config example/vite.config.js",
     "build": "vite build",
     "build:watch": "vite build --mode dev",
     "build:docs": "storybook build -o docs && touch ./docs/.nojekyll",

@@ -1,0 +1,59 @@
+@use '/lib/style/mixins' as ui;
+
+.item {
+  @include no-select;
+
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  padding: 1rem 0;
+  cursor: default;
+
+  border-bottom: 1px solid #f0f0f0;
+
+  &__checkbox {
+    @include no-select;
+
+    display: flex;
+    width: 1.8rem;
+    height: 1.8rem;
+
+    flex-shrink: 0;
+
+    cursor: pointer;
+
+    accent-color: #222;
+  }
+
+  &__label {
+    @include easing(color, text-decoration-color);
+
+    flex: 1;
+    font-size: 1.5rem;
+    color: #222;
+    text-decoration: none;
+  }
+
+  &.is-done &__label {
+    color: #bbb;
+    text-decoration: line-through;
+  }
+
+  &__delete {
+    @include reset-button;
+
+    display: flex;
+    padding: 0.4rem 0.6rem;
+    cursor: pointer;
+
+    font-size: 1.2rem;
+    color: #ccc;
+
+    border-radius: 0.4rem;
+
+    &:hover {
+      color: #999;
+    }
+  }
+}

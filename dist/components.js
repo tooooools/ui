@@ -1,17 +1,31 @@
-import { C as Component, h, r as render } from "./Component-BRxFgiW-.js";
-import { e as ensure, w as writable, d as derived } from "./ensure-Bi956klU.js";
+import { C as Component, P as Props, h, r as render } from "./Component-B5YHZfVp.js";
+import { $ } from "./state.js";
 import { n as noop } from "./noop-JwH-KCvh.js";
 const backdrop = "ui-backdrop-136kk114", style$b = {
   backdrop
 };
 class Backdrop extends Component {
-  beforeRender(props) {
-    this.close = this.close.bind(this), this.captureEscapeKey = this.captureEscapeKey.bind(this), this.state = {
-      lastActiveElement: document.activeElement,
-      locked: ensure(writable)(props["store-locked"], props.locked)
-    };
+  static props = {
+    locked: [Props.boolean, Props.Signal]
+  };
+  $locked = $(this.props.locked);
+  #lastActiveElement = document.activeElement;
+  captureEscapeKey = (e) => {
+    e.key === "Escape" && this.close();
+  };
+  afterMount() {
+    this.#lastActiveElement && this.#lastActiveElement.blur(), window.addEventListener("keyup", this.captureEscapeKey), (this.props["event-open"] ?? noop)(null, this);
   }
-  template(props, state) {
+  beforeDestroy() {
+    if (!this.destroyed && (window.removeEventListener("keyup", this.captureEscapeKey), this.#lastActiveElement)) {
+      const el = this.#lastActiveElement;
+      window.setTimeout(() => el.focus(), 0);
+    }
+  }
+  close() {
+    this.$locked.value || ((this.props["event-close"] || noop)(null, this), !this.destroyed && this.destroy());
+  }
+  template(props) {
     return /* @__PURE__ */ h(
       "div",
       {
@@ -19,27 +33,12 @@ class Backdrop extends Component {
         id: props.id,
         class: [
           style$b.backdrop,
-          ...Array.isArray(props.class) ? props.class : [props.class]
+          props.class
         ],
         "event-click": (e) => (props["event-click"] ?? noop)(e, this)
       },
       props.children
     );
-  }
-  afterMount() {
-    this.state.lastActiveElement && this.state.lastActiveElement.blur(), window.addEventListener("keyup", this.captureEscapeKey), (this.props["event-open"] ?? noop)(null, this);
-  }
-  captureEscapeKey(e) {
-    e.key === "Escape" && this.close();
-  }
-  close() {
-    this.state.locked.get() || ((this.props["event-close"] || noop)(null, this), !this.destroyed && this.destroy());
-  }
-  beforeDestroy() {
-    if (!this.destroyed && (window.removeEventListener("keyup", this.captureEscapeKey), this.state && this.state.lastActiveElement)) {
-      const el = this.state.lastActiveElement;
-      window.setTimeout(() => el.focus(), 0);
-    }
   }
 }
 const button = "ui-button-d5yhn114", button__label = "ui-button__label-d5yhn168", button__icon = "ui-button__icon-d5yhn179", style$a = {
@@ -48,79 +47,117 @@ const button = "ui-button-d5yhn114", button__label = "ui-button__label-d5yhn168"
   button__icon
 };
 class Button extends Component {
-  beforeRender(props) {
-    this.handleClick = this.handleClick.bind(this), this.state = {
-      label: ensure(writable)(props["store-label"], props.label),
-      title: ensure(writable)(props["store-title"], props.title),
-      icon: ensure(writable)(props["store-icon"], props.icon),
-      active: ensure(writable)(props["store-active"], props.active),
-      disabled: ensure(writable)(props["store-disabled"], props.disabled),
-      hidden: ensure(writable)(props["store-hidden"], props.hidden),
-      waiting: ensure(writable)(props["store-waiting"], props.waiting)
-    };
-  }
-  template(props, state) {
+  static props = {
+    label: [Props.string, Props.Signal],
+    title: [Props.string, Props.Signal],
+    icon: [Props.string, Props.Signal],
+    active: [Props.boolean, Props.Signal],
+    disabled: [Props.boolean, Props.Signal],
+    hidden: [Props.boolean, Props.Signal],
+    waiting: [Props.boolean, Props.Signal],
+    type: Props.string,
+    id: Props.string,
+    tabindex: Props.number
+  };
+  $label = $(this.props.label);
+  $title = $(this.props.title);
+  $icon = $(this.props.icon);
+  $active = $(this.props.active);
+  $disabled = $(this.props.disabled);
+  $hidden = $(this.props.hidden);
+  $waiting = $(this.props.waiting);
+  handleClick = async (e) => {
+    if (this.props["event-click"] && !this.$disabled.value) {
+      if (this.base.blur(), this.$waiting.value) return e.preventDefault();
+      this.$waiting.value = !0;
+      try {
+        await this.props["event-click"](e, this);
+      } finally {
+        this.mounted && (this.$waiting.value = !1, this.refs?.icon && (this.refs.icon.style.animation = "none", this.refs.icon.offsetHeight, this.refs.icon.style.animation = null));
+      }
+    }
+  };
+  template(props) {
     return /* @__PURE__ */ h(
       "button",
       {
         ...this.dataProps,
+        ...this.eventProps,
         type: props.type,
         id: props.id,
         tabIndex: props.tabindex,
         class: [
           style$a.button,
           {
-            "has-click": !!this.props["event-click"],
-            "has-icon": state.icon,
-            "is-active": state.active,
-            "is-disabled": state.disabled,
-            "is-hidden": state.hidden,
-            "is-waiting": state.waiting
+            "has-click": !!props["event-click"],
+            "has-icon": this.$icon,
+            "is-active": this.$active,
+            "is-disabled": this.$disabled,
+            "is-hidden": this.$hidden,
+            "is-waiting": this.$waiting
           },
-          ...Array.isArray(props.class) ? props.class : [props.class]
+          props.class
         ],
-        "store-title": state.title,
-        "store-disabled": state.disabled,
-        "event-click": this.handleClick,
-        "event-mouseenter": (e) => (props["event-mouseenter"] ?? noop)(e, this),
-        "event-mouseleave": (e) => (props["event-mouseleave"] ?? noop)(e, this)
+        title: this.$title,
+        disabled: this.$disabled,
+        "event-click": this.handleClick
       },
       /* @__PURE__ */ h(
         "span",
         {
           ref: this.ref("icon"),
           class: style$a.button__icon,
-          "store-innerHTML": state.icon
+          innerHTML: this.$icon
         }
       ),
-      /* @__PURE__ */ h("label", { class: style$a.button__label, "store-innerHTML": state.label }),
+      /* @__PURE__ */ h("label", { class: style$a.button__label, innerHTML: this.$label }),
       props.children
     );
-  }
-  async handleClick(e) {
-    if (this.props["event-click"] && !this.state.disabled.get()) {
-      if (this.base.blur(), this.state.waiting.get()) return e.preventDefault();
-      this.state.waiting.set(!0);
-      try {
-        await this.props["event-click"](e, this);
-      } finally {
-        this.mounted && (this.state.waiting.set(!1), this && this.refs && this.refs.icon && (this.refs.icon.style.animation = "none", this.refs.icon.offsetHeight, this.refs.icon.style.animation = null));
-      }
-    }
   }
 }
 const style$9 = {
   "file-dropper": "ui-file-dropper-180gr114"
 };
 class FileDropper extends Component {
-  beforeRender(props) {
-    this.handleDragStart = this.handleDragStart.bind(this), this.handleDragEnd = this.handleDragEnd.bind(this), this.handleDrop = this.handleDrop.bind(this), this.state = {
-      appliedTo: writable(void 0),
-      draggedOver: writable(!1),
-      files: writable(null)
-    };
+  static props = {
+    label: Props.string,
+    icon: Props.string,
+    id: Props.string
+  };
+  $draggedOver = $(!1);
+  $files = $(null);
+  #appliedTo = null;
+  handleDragStart = (e) => {
+    this.isVisible && e.dataTransfer.types.includes("Files") && (e.preventDefault(), e.stopPropagation(), this.$draggedOver.value = !0);
+  };
+  handleDrop = (e) => {
+    if (this.isVisible) {
+      if (!e.dataTransfer.types.includes("Files")) {
+        this.$files.value = null;
+        return;
+      }
+      e.preventDefault(), e.stopPropagation(), this.$files.value = e.dataTransfer.files, (this.props["event-drop"] ?? noop)(e, this), this.handleDragEnd(e);
+    }
+  };
+  handleDragEnd = (e) => {
+    if (this.isVisible) {
+      if (!e.dataTransfer.types.includes("Files")) {
+        this.$files.value = null;
+        return;
+      }
+      e.preventDefault(), e.stopPropagation(), this.$draggedOver.value = !1;
+    }
+  };
+  afterMount() {
+    this.#appliedTo = this.base.offsetParent ?? document.body, this.#appliedTo.addEventListener("dragover", this.handleDragStart), this.#appliedTo.addEventListener("dragenter", this.handleDragStart), this.#appliedTo.addEventListener("dragleave", this.handleDragEnd), this.#appliedTo.addEventListener("dragend", this.handleDragEnd), this.#appliedTo.addEventListener("drop", this.handleDrop);
   }
-  template(props, state) {
+  beforeDestroy() {
+    this.#appliedTo?.removeEventListener("dragover", this.handleDragStart), this.#appliedTo?.removeEventListener("dragenter", this.handleDragStart), this.#appliedTo?.removeEventListener("dragleave", this.handleDragEnd), this.#appliedTo?.removeEventListener("dragend", this.handleDragEnd), this.#appliedTo?.removeEventListener("drop", this.handleDrop);
+  }
+  get isVisible() {
+    return this.base.offsetParent !== null;
+  }
+  template(props) {
     return /* @__PURE__ */ h(
       "div",
       {
@@ -128,44 +165,12 @@ class FileDropper extends Component {
         id: props.id,
         class: [
           style$9["file-dropper"],
-          {
-            "is-dragged-over": state.draggedOver
-          },
-          ...Array.isArray(props.class) ? props.class : [props.class]
+          { "is-dragged-over": this.$draggedOver },
+          props.class
         ]
       },
       props.children.length > 0 ? props.children : props.icon || props.label ? /* @__PURE__ */ h(Button, { icon: props.icon, label: props.label, tabIndex: -1 }) : null
     );
-  }
-  afterMount(props) {
-    this.state.appliedTo = this.base.offsetParent ?? document.body, this.state.appliedTo.addEventListener("dragover", this.handleDragStart), this.state.appliedTo.addEventListener("dragenter", this.handleDragStart), this.state.appliedTo.addEventListener("dragleave", this.handleDragEnd), this.state.appliedTo.addEventListener("dragend", this.handleDragEnd), this.state.appliedTo.addEventListener("drop", this.handleDrop);
-  }
-  get isVisible() {
-    return this.base.offsetParent !== null;
-  }
-  handleDragStart(e) {
-    this.isVisible && e.dataTransfer.types.includes("Files") && (e.preventDefault(), e.stopPropagation(), this.state.draggedOver.set(!0));
-  }
-  handleDrop(e) {
-    if (this.isVisible) {
-      if (!e.dataTransfer.types.includes("Files")) {
-        this.state.files.set(null);
-        return;
-      }
-      e.preventDefault(), e.stopPropagation(), this.state.files.set(e.dataTransfer.files), (this.props["event-drop"] ?? noop)(e, this), this.handleDragEnd(e);
-    }
-  }
-  handleDragEnd(e) {
-    if (this.isVisible) {
-      if (!e.dataTransfer.types.includes("Files")) {
-        this.state.files.set(null);
-        return;
-      }
-      e.preventDefault(), e.stopPropagation(), this.state.draggedOver.set(!1);
-    }
-  }
-  beforeDestroy() {
-    this.state.appliedTo?.removeEventListener("dragover", this.handleDragStart), this.state.appliedTo?.removeEventListener("dragenter", this.handleDragStart), this.state.appliedTo?.removeEventListener("dragleave", this.handleDragEnd), this.state.appliedTo?.removeEventListener("dragend", this.handleDragEnd), this.state.appliedTo?.removeEventListener("drop", this.drop);
   }
 }
 const input = "ui-input-r7lw0114", input__icon = "ui-input__icon-r7lw0157", style$8 = {
@@ -173,93 +178,42 @@ const input = "ui-input-r7lw0114", input__icon = "ui-input__icon-r7lw0157", styl
   input__icon
 };
 class Input extends Component {
-  beforeRender(props) {
-    this.update = this.update.bind(this), this.handleClick = this.handleClick.bind(this), this.handleDblClick = this.handleDblClick.bind(this), this.handleInput = this.handleInput.bind(this), this.handleFocus = this.handleFocus.bind(this), this.state = {
-      value: ensure(writable)(props["store-value"], props.value),
-      files: ensure(writable)(props["store-files"], props.files),
-      placeholder: ensure(writable)(props["store-placeholder"], props.placeholder),
-      title: ensure(writable)(props["store-title"], props.title),
-      label: ensure(writable)(props["store-label"], props.label),
-      before: ensure(writable)(props["store-before"], props.before),
-      after: ensure(writable)(props["store-after"], props.after),
-      icon: ensure(writable)(props["store-icon"], props.icon),
-      accept: ensure(writable)(props["store-accept"], props.accept ?? "*"),
-      multiple: ensure(writable)(props["store-multiple"], props.multiple ?? "*"),
-      min: ensure(writable)(props["store-min"], props.min),
-      max: ensure(writable)(props["store-max"], props.max),
-      step: ensure(writable)(props["store-step"], props.step),
-      active: ensure(writable)(props["store-active"], props.active),
-      disabled: ensure(writable)(props["store-disabled"], props.disabled),
-      hidden: ensure(writable)(props["store-hidden"], props.hidden),
-      waiting: ensure(writable)(props["store-waiting"], props.waiting)
-    };
-  }
-  template(props, state) {
-    return /* @__PURE__ */ h(
-      "div",
-      {
-        ...this.dataProps,
-        id: props.id,
-        tabIndex: props.tabindex,
-        class: [
-          style$8.input,
-          {
-            "is-edited-on-dblclick": !!props.editOnDblClick,
-            "has-icon": state.icon,
-            "is-active": state.active,
-            "is-disabled": state.disabled,
-            "is-hidden": state.hidden,
-            "is-waiting": state.waiting
-          },
-          ...Array.isArray(props.class) ? props.class : [props.class]
-        ],
-        "data-type": props.type,
-        "store-title": state.title,
-        "event-click": this.handleClick,
-        "event-dblclick": this.handleDblClick,
-        "event-mouseenter": (e) => (props["event-mouseenter"] ?? noop)(e, this),
-        "event-mouseleave": (e) => (props["event-mouseleave"] ?? noop)(e, this)
-      },
-      /* @__PURE__ */ h(
-        "span",
-        {
-          ref: this.ref("icon"),
-          class: style$8.input__icon,
-          "store-innerHTML": state.icon
-        }
-      ),
-      /* @__PURE__ */ h("label", { class: style$8.input__label, "store-innerHTML": state.label }),
-      /* @__PURE__ */ h("label", { class: style$8.input__before, "store-innerHTML": state.before }),
-      /* @__PURE__ */ h(
-        "input",
-        {
-          ref: this.ref("input"),
-          type: props.type,
-          name: props.name,
-          autofocus: props.autofocus,
-          autocomplete: props.autocomplete ?? "off",
-          size: props.type !== "number" ? props.size === "auto" ? "" : props.size : void 0,
-          "store-min": props.type === "number" ? state.min : void 0,
-          "store-max": props.type === "number" ? state.max : void 0,
-          "store-step": props.type === "number" ? state.step : void 0,
-          "store-placeholder": state.placeholder,
-          "store-accept": props.type === "file" ? state.accept : void 0,
-          "store-multiple": props.type === "file" ? state.multiple : void 0,
-          "store-disabled": state.disabled,
-          "event-click": (e) => e.stopPropagation(),
-          "event-input": this.handleInput,
-          "event-focus": this.handleFocus,
-          "event-blur": (e) => (props["event-blur"] ?? noop)(e, this)
-        }
-      ),
-      /* @__PURE__ */ h("label", { class: style$8.input__after, "store-innerHTML": state.after })
-    );
-  }
-  afterRender() {
-    this.state.value.subscribe(this.update), this.update();
-  }
-  update() {
-    const value = this.state.value.get();
+  static props = {
+    value: [Props.string, Props.number, Props.Signal],
+    placeholder: [Props.string, Props.Signal],
+    label: [Props.string, Props.Signal],
+    before: [Props.string, Props.Signal],
+    after: [Props.string, Props.Signal],
+    icon: [Props.string, Props.Signal],
+    title: [Props.string, Props.Signal],
+    active: [Props.boolean, Props.Signal],
+    disabled: [Props.boolean, Props.Signal],
+    hidden: [Props.boolean, Props.Signal],
+    waiting: [Props.boolean, Props.Signal],
+    type: Props.string,
+    name: Props.string,
+    id: Props.string,
+    tabindex: Props.number
+  };
+  $value = $(this.props.value);
+  $files = $(this.props.files);
+  $placeholder = $(this.props.placeholder);
+  $title = $(this.props.title);
+  $label = $(this.props.label);
+  $before = $(this.props.before);
+  $after = $(this.props.after);
+  $icon = $(this.props.icon);
+  $accept = $(this.props.accept ?? "*");
+  $multiple = $(this.props.multiple ?? "*");
+  $min = $(this.props.min);
+  $max = $(this.props.max);
+  $step = $(this.props.step);
+  $active = $(this.props.active);
+  $disabled = $(this.props.disabled);
+  $hidden = $(this.props.hidden);
+  $waiting = $(this.props.waiting);
+  update = () => {
+    const value = this.$value.value;
     switch (this.props.type) {
       case "number": {
         this.refs.input.value = +value;
@@ -273,35 +227,95 @@ class Input extends Component {
         this.refs.input.value = value;
     }
     if (this.props.size === "auto") {
-      const length = (String(this.refs.input.value) ?? "").length || (this.state.placeholder.current ?? "").length || 1;
+      const length = (String(this.refs.input.value) ?? "").length || (this.$placeholder.value ?? "").length || 1;
       this.props.type === "number" ? this.refs.input.style.width = length + 1 + "ch" : this.refs.input.size = Math.max(1, length);
     }
-  }
-  handleClick(e) {
+  };
+  handleClick = (e) => {
     this.props.type === "file" ? this.refs.input.click() : this.props.editOnDblClick || this.refs.input.focus(), (this.props["event-click"] ?? noop)(e, this);
-  }
-  async handleDblClick(e) {
+  };
+  handleDblClick = async (e) => {
     this.refs.input.focus(), await (this.props["event-dblclick"] ?? noop)(e, this);
-  }
-  async handleInput(e) {
-    if (this.state.waiting.get()) return e.preventDefault();
-    switch (this.state.waiting.set(!0), this.props.type) {
+  };
+  handleInput = async (e) => {
+    if (this.$waiting.value) return e.preventDefault();
+    switch (this.$waiting.value = !0, this.props.type) {
       case "number":
-        this.state.value.set(+this.refs.input.value);
+        this.$value.value = +this.refs.input.value;
         break;
       case "file":
-        this.state.value.set(this.refs.input.files);
+        this.$value.value = this.refs.input.files;
         break;
       default:
-        this.state.value.set(this.refs.input.value);
+        this.$value.value = this.refs.input.value;
     }
-    await (this.props["event-input"] ?? noop)(e, this), this.mounted && this.state.waiting.set(!1);
-  }
-  handleFocus(e) {
+    await (this.props["event-input"] ?? noop)(e, this), this.mounted && (this.$waiting.value = !1);
+  };
+  handleFocus = (e) => {
     this.props.autoSelectAll && this.refs.input.select(), (this.props["event-focus"] ?? noop)(e, this);
+  };
+  afterRender() {
+    this.watch(this.$value, this.update, { immediate: !0 });
   }
-  beforeDestroy() {
-    this.state.value.unsubscribe(this.update);
+  template(props) {
+    return /* @__PURE__ */ h(
+      "div",
+      {
+        ...this.dataProps,
+        ...this.eventProps,
+        id: props.id,
+        tabIndex: props.tabindex,
+        class: [
+          style$8.input,
+          {
+            "is-edited-on-dblclick": !!props.editOnDblClick,
+            "has-icon": this.$icon,
+            "is-active": this.$active,
+            "is-disabled": this.$disabled,
+            "is-hidden": this.$hidden,
+            "is-waiting": this.$waiting
+          },
+          props.class
+        ],
+        "data-type": props.type,
+        title: this.$title,
+        "event-click": this.handleClick,
+        "event-dblclick": this.handleDblClick
+      },
+      /* @__PURE__ */ h(
+        "span",
+        {
+          ref: this.ref("icon"),
+          class: style$8.input__icon,
+          innerHTML: this.$icon
+        }
+      ),
+      /* @__PURE__ */ h("label", { class: style$8.input__label, innerHTML: this.$label }),
+      /* @__PURE__ */ h("label", { class: style$8.input__before, innerHTML: this.$before }),
+      /* @__PURE__ */ h(
+        "input",
+        {
+          ref: this.ref("input"),
+          type: props.type,
+          name: props.name,
+          autofocus: props.autofocus,
+          autocomplete: props.autocomplete ?? "off",
+          size: props.type !== "number" ? props.size === "auto" ? "" : props.size : void 0,
+          min: props.type === "number" ? this.$min : void 0,
+          max: props.type === "number" ? this.$max : void 0,
+          step: props.type === "number" ? this.$step : void 0,
+          placeholder: this.$placeholder,
+          accept: props.type === "file" ? this.$accept : void 0,
+          multiple: props.type === "file" ? this.$multiple : void 0,
+          disabled: this.$disabled,
+          "event-click": (e) => e.stopPropagation(),
+          "event-input": this.handleInput,
+          "event-focus": this.handleFocus,
+          "event-blur": props["event-blur"]
+        }
+      ),
+      /* @__PURE__ */ h("label", { class: style$8.input__after, innerHTML: this.$after })
+    );
   }
 }
 const modal = "ui-modal-f1wbu114", modal__header = "ui-modal__header-f1wbu126", modal__title = "ui-modal__title-f1wbu132", modal__content = "ui-modal__content-f1wbu136", style$7 = {
@@ -314,6 +328,11 @@ const modal = "ui-modal-f1wbu114", modal__header = "ui-modal__header-f1wbu126", 
 </svg>
 `;
 class Modal extends Component {
+  static props = {
+    title: [Props.string, Props.Signal],
+    locked: [Props.boolean, Props.Signal],
+    id: Props.string
+  };
   /**
    * Display a Modal in a functional way
    * @param  {Object} props - Modal jsx props
@@ -329,11 +348,6 @@ class Modal extends Component {
   }
   /**
    * WIP
-   * @param  {Function} callback [description]
-   * @param  {[type]}   message  [description]
-   * @param  {[type]}   props    [description]
-   * @param  {[type]}   parent   [description]
-   * @return {[type]}            [description]
    */
   static async confirm(callback, message, props, parent = document.body) {
     return new Promise((resolve) => {
@@ -350,19 +364,20 @@ class Modal extends Component {
       }, parent);
     });
   }
-  beforeRender(props) {
-    this.handleClick = this.handleClick.bind(this), this.handleClose = this.handleClose.bind(this), this.state = {
-      title: ensure(writable)(props["store-title"], props.title),
-      tabs: ensure(writable)(props["store-tabs"], props.tabs),
-      locked: ensure(writable)(props["store-locked"], props.locked)
-    };
-  }
-  template(props, state) {
+  $title = $(this.props.title);
+  $locked = $(this.props.locked);
+  handleClick = (e) => {
+    e.target === this.base && this.handleClose();
+  };
+  handleClose = () => {
+    this.$locked.value || this.refs.backdrop.close();
+  };
+  template(props) {
     return /* @__PURE__ */ h(
       Backdrop,
       {
         ref: this.ref("backdrop"),
-        "store-locked": state.locked,
+        locked: this.$locked,
         "event-open": props["event-open"],
         "event-close": props["event-close"],
         "event-click": this.handleClick
@@ -374,7 +389,7 @@ class Modal extends Component {
           id: props.id,
           class: [
             style$7.modal,
-            ...Array.isArray(props.class) ? props.class : [props.class]
+            props.class
           ],
           "event-mouseenter": (e) => (props["event-mouseenter"] ?? noop)(e, this),
           "event-mouseleave": (e) => (props["event-mouseleave"] ?? noop)(e, this)
@@ -384,26 +399,20 @@ class Modal extends Component {
           {
             class: style$7.modal__title,
             icon: props.icon,
-            "store-label": state.title
+            label: this.$title
           }
         ), /* @__PURE__ */ h(
           Button,
           {
             class: style$7.modal__close,
             icon: IconClose,
-            "store-hidden": state.locked,
+            hidden: this.$locked,
             "event-click": this.handleClose
           }
         )),
         /* @__PURE__ */ h("div", { class: style$7.modal__content }, props.children)
       )
     );
-  }
-  handleClick(e) {
-    e.target === this.base && this.handleClose();
-  }
-  handleClose() {
-    this.state.locked.get() || this.refs.backdrop.close();
   }
 }
 const picker = "ui-picker-80o3v114", picker__toolbar = "ui-picker__toolbar-80o3v135", picker__toggle = "ui-picker__toggle-80o3v145", style$6 = {
@@ -414,88 +423,112 @@ const picker = "ui-picker-80o3v114", picker__toolbar = "ui-picker__toolbar-80o3v
   toolbar
 };
 class Toolbar extends Component {
-  beforeRender(props) {
-    this.state = {
-      compact: ensure(writable)(props["store-compact"], props.compact),
-      disabled: ensure(writable)(props["store-disabled"], props.disabled),
-      hidden: ensure(writable)(props["store-hidden"], props.hidden)
-    };
-  }
-  template(props, state) {
+  static props = {
+    compact: [Props.boolean, Props.Signal],
+    disabled: [Props.boolean, Props.Signal],
+    hidden: [Props.boolean, Props.Signal],
+    id: Props.string
+  };
+  $compact = $(this.props.compact);
+  $disabled = $(this.props.disabled);
+  $hidden = $(this.props.hidden);
+  template(props) {
     return /* @__PURE__ */ h(
       "div",
       {
         ...this.dataProps,
+        ...this.eventProps,
         id: props.id,
         class: [
           style$5.toolbar,
           {
-            "is-compact": state.compact,
-            "is-disabled": state.disabled,
-            "is-hidden": state.hidden
+            "is-compact": this.$compact,
+            "is-disabled": this.$disabled,
+            "is-hidden": this.$hidden
           },
-          ...Array.isArray(props.class) ? props.class : [props.class]
-        ],
-        "event-mouseenter": (e) => (props["event-mouseenter"] ?? noop)(e, this),
-        "event-mouseleave": (e) => (props["event-mouseleave"] ?? noop)(e, this)
+          props.class
+        ]
       },
       props.children
     );
   }
 }
 class Picker extends Component {
+  static props = {
+    label: [Props.string, Props.Signal],
+    title: [Props.string, Props.Signal],
+    iconOpen: [Props.string, Props.Signal],
+    iconClose: [Props.string, Props.Signal],
+    open: [Props.boolean, Props.Signal],
+    disabled: [Props.boolean, Props.Signal],
+    hidden: [Props.boolean, Props.Signal],
+    autoClose: Props.boolean,
+    autoOrder: Props.boolean,
+    id: Props.string
+  };
+  $label = $(this.props.label);
+  $title = $(this.props.title);
+  $iconOpen = $(this.props.iconOpen);
+  $iconClose = $(this.props.iconClose);
+  $open = $(this.props.open);
+  $disabled = $(this.props.disabled);
+  $hidden = $(this.props.hidden);
+  $toggleIcon = $(
+    [this.$open, this.$iconClose, this.$iconOpen],
+    ([open, iconClose, iconOpen]) => open ? iconClose : iconOpen
+  );
+  handleOpen = () => {
+    this.$open.value ? (this.props["event-open"] ?? noop)(null, this) : (this.props["event-close"] ?? noop)(null, this);
+  };
+  handleToggle = (e) => {
+    e.stopPropagation(), this.$open.value = !this.$open.value;
+  };
+  handleClick = (i, callback) => async (e) => {
+    if (!this.$open.value) {
+      e.stopPropagation(), this.$open.value = !0;
+      return;
+    }
+    for (let index = 0; index < this.refs.buttons.length; index++)
+      this.refs.buttons[index].$active.value = index === i;
+    this.props.autoClose && (this.$open.value = !1), (this.props["event-change"] ?? noop)(null, this), await callback(e, this.refs.buttons[i]);
+  };
   beforeRender(props) {
-    this.handleClick = this.handleClick.bind(this), this.handleOpen = this.handleOpen.bind(this), this.handleToggle = this.handleToggle.bind(this);
     const buttons = props.children.filter((child) => child.type === Button);
     for (const button2 of buttons)
       button2.props.ref = this.refArray("buttons"), button2.props["event-click"] = this.handleClick(
         buttons.indexOf(button2),
         button2.props["event-click"] || noop
       );
-    this.state = {
-      iconOpen: ensure(writable)(props["store-iconOpen"], props.iconOpen),
-      iconClose: ensure(writable)(props["store-iconClose"], props.iconClose),
-      label: ensure(writable)(props["store-label"], props.label),
-      title: ensure(writable)(props["store-title"], props.title),
-      open: ensure(writable)(props["store-open"], props.open),
-      disabled: ensure(writable)(props["store-disabled"], props.disabled),
-      hidden: ensure(writable)(props["store-hidden"], props.hidden)
-    }, this.state.toggleIcon = derived(
-      [
-        this.state.open,
-        this.state.iconClose,
-        this.state.iconOpen
-      ],
-      () => this.state.open.current ? this.state.iconClose.current : this.state.iconOpen.current
-    );
   }
-  template(props, state) {
+  afterRender() {
+    this.watch(this.$open, this.handleOpen);
+  }
+  template(props) {
     return /* @__PURE__ */ h(
       "div",
       {
         ...this.dataProps,
+        ...this.eventProps,
         id: props.id,
         class: [
           style$6.picker,
           {
             "has-auto-order": props.autoOrder,
-            "is-open": state.open,
-            "is-disabled": state.disabled,
-            "is-hidden": state.hidden
+            "is-open": this.$open,
+            "is-disabled": this.$disabled,
+            "is-hidden": this.$hidden
           },
-          ...Array.isArray(props.class) ? props.class : [props.class]
-        ],
-        "event-mouseenter": (e) => (props["event-mouseenter"] ?? noop)(e, this),
-        "event-mouseleave": (e) => (props["event-mouseleave"] ?? noop)(e, this)
+          props.class
+        ]
       },
       /* @__PURE__ */ h(
         Button,
         {
           class: style$6.picker__toggle,
-          "store-icon": state.toggleIcon,
-          "store-label": state.label,
-          "store-title": state.title,
-          "store-active": state.open,
+          icon: this.$toggleIcon,
+          label: this.$label,
+          title: this.$title,
+          active: this.$open,
           "event-click": this.handleToggle
         }
       ),
@@ -508,29 +541,6 @@ class Picker extends Component {
         props.children
       )
     );
-  }
-  afterRender() {
-    this.state.open.subscribe(this.handleOpen);
-  }
-  handleOpen() {
-    this.state.open.get() ? (this.props["event-open"] ?? noop)(null, this) : (this.props["event-close"] ?? noop)(null, this);
-  }
-  handleToggle(e) {
-    e.stopPropagation(), this.state.open.update((s) => !s);
-  }
-  handleClick(i, callback) {
-    return async (e) => {
-      if (!this.state.open.get()) {
-        e.stopPropagation(), this.state.open.set(!0);
-        return;
-      }
-      for (let index = 0; index < this.refs.buttons.length; index++)
-        this.refs.buttons[index].state.active.set(index === i);
-      this.props.autoClose && this.state.open.set(!1), (this.props["event-change"] ?? noop)(null, this), await callback(e, this.refs.buttons[i]);
-    };
-  }
-  beforeDestroy() {
-    this.state.open.unsubscribe(this.handleOpen);
   }
 }
 const range = "ui-range-vx8yl114", range__icon = "ui-range__icon-vx8yl147", range__inputs = "ui-range__inputs-vx8yl157", range__label = "ui-range__label-vx8yl217", style$4 = {
@@ -565,35 +575,48 @@ function requireDebounce() {
 }
 var debounceExports = requireDebounce();
 class Range extends Component {
-  beforeRender(props) {
-    this.handleInput = props.debounce ? debounceExports.debounce(this.handleInput.bind(this), props.debounce) : this.handleInput.bind(this), this.state = {
-      label: ensure(writable)(props["store-label"], props.label),
-      title: ensure(writable)(props["store-title"], props.title),
-      value: ensure(writable)(props["store-value"], props.value),
-      min: ensure(writable)(props["store-min"], props.min),
-      max: ensure(writable)(props["store-max"], props.max),
-      step: ensure(writable)(props["store-step"], props.step),
-      disabled: ensure(writable)(props["store-disabled"], props.disabled),
-      hidden: ensure(writable)(props["store-hidden"], props.hidden)
-    };
-  }
-  template(props, state) {
+  static props = {
+    value: [Props.number, Props.array, Props.Signal],
+    min: [Props.number, Props.Signal],
+    max: [Props.number, Props.Signal],
+    step: [Props.number, Props.Signal],
+    label: [Props.string, Props.Signal],
+    title: [Props.string, Props.Signal],
+    disabled: [Props.boolean, Props.Signal],
+    hidden: [Props.boolean, Props.Signal],
+    dual: Props.boolean,
+    debounce: Props.number,
+    id: Props.string,
+    tabindex: Props.number
+  };
+  $label = $(this.props.label);
+  $title = $(this.props.title);
+  $value = $(this.props.value);
+  $min = $(this.props.min);
+  $max = $(this.props.max);
+  $step = $(this.props.step);
+  $disabled = $(this.props.disabled);
+  $hidden = $(this.props.hidden);
+  #onInput = async (e) => {
+    this.props.dual ? this.$value.value = [+this.refs.inputs[0].value, +this.refs.inputs[1].value] : this.$value.value = +this.refs.inputs[0].value, await (this.props["event-input"] ?? noop)(e, this);
+  };
+  handleInput = this.props.debounce ? debounceExports.debounce(this.#onInput.bind(this), this.props.debounce) : this.#onInput;
+  template(props) {
     return /* @__PURE__ */ h(
       "div",
       {
         ...this.dataProps,
+        ...this.eventProps,
         id: props.id,
         class: [
           style$4.range,
           {
             "is-dual": props.dual,
-            "is-disabled": state.disabled,
-            "is-hidden": state.hidden
+            "is-disabled": this.$disabled,
+            "is-hidden": this.$hidden
           },
-          ...Array.isArray(props.class) ? props.class : [props.class]
-        ],
-        "event-mouseenter": (e) => (props["event-mouseenter"] ?? noop)(e, this),
-        "event-mouseleave": (e) => (props["event-mouseleave"] ?? noop)(e, this)
+          props.class
+        ]
       },
       props.icon && /* @__PURE__ */ h(
         "span",
@@ -609,12 +632,12 @@ class Range extends Component {
           ref: this.refArray("inputs"),
           tabIndex: props.tabindex,
           type: "range",
-          "store-min": state.min,
-          "store-max": state.max,
-          "store-step": state.step,
-          "store-title": state.title,
-          "store-value": derived(state.value, (value) => props.dual ? (value ?? [])[0] : value),
-          "store-disabled": state.disabled,
+          min: this.$min,
+          max: this.$max,
+          step: this.$step,
+          title: this.$title,
+          value: $(this.$value, (value) => props.dual ? (value ?? [])[0] : value),
+          disabled: this.$disabled,
           "event-input": this.handleInput
         }
       ), props.dual && /* @__PURE__ */ h(
@@ -623,20 +646,17 @@ class Range extends Component {
           ref: this.refArray("inputs"),
           tabIndex: props.tabindex,
           type: "range",
-          "store-min": state.min,
-          "store-max": state.max,
-          "store-step": state.step,
-          "store-title": state.title,
-          "store-value": derived(state.value, (value) => props.dual ? (value ?? [])[1] : value),
-          "store-disabled": state.disabled,
+          min: this.$min,
+          max: this.$max,
+          step: this.$step,
+          title: this.$title,
+          value: $(this.$value, (value) => props.dual ? (value ?? [])[1] : value),
+          disabled: this.$disabled,
           "event-input": this.handleInput
         }
       )),
-      /* @__PURE__ */ h("label", { class: style$4.range__label, "store-innerHTML": state.label })
+      /* @__PURE__ */ h("label", { class: style$4.range__label, innerHTML: this.$label })
     );
-  }
-  async handleInput(e) {
-    this.props.dual ? this.state.value.set([+this.refs.inputs[0].value, +this.refs.inputs[1].value]) : this.state.value.set(+this.refs.inputs[0].value), await (this.props["event-input"] ?? noop)(e, this);
   }
 }
 const select = "ui-select-4qr6c114", select__icon = "ui-select__icon-4qr6c151", select__label = "ui-select__label-4qr6c161", select__arrow = "ui-select__arrow-4qr6c205", style$3 = {
@@ -652,82 +672,51 @@ const select = "ui-select-4qr6c114", select__icon = "ui-select__icon-4qr6c151", 
 </svg>
 `;
 class Select extends Component {
+  static props = {
+    value: Props.Signal,
+    options: [Props.array, Props.Signal],
+    label: [Props.string, Props.Signal],
+    title: [Props.string, Props.Signal],
+    disabled: [Props.boolean, Props.Signal],
+    hidden: [Props.boolean, Props.Signal],
+    placeholder: Props.string,
+    name: Props.string,
+    id: Props.string,
+    tabindex: Props.number
+  };
   static get separator() {
     return { label: "", disabled: !0 };
   }
-  beforeRender(props) {
-    this.update = this.update.bind(this), this.handleChange = this.handleChange.bind(this), this.state = {
-      title: ensure(writable)(props["store-title"], props.title),
-      label: ensure(writable)(props["store-label"], props.label),
-      value: ensure(writable)(props["store-value"], props.value),
-      options: ensure(writable)(props["store-options"], props.options),
-      disabled: ensure(writable)(props["store-disabled"], props.disabled),
-      hidden: ensure(writable)(props["store-hidden"], props.hidden)
-    };
-    const compare = props.compare ?? ((a, b) => a === b);
-    this.state.selectedIndex = derived([this.state.value, this.state.options], () => this.state.options.get().findIndex((option) => compare(option.value ?? option, this.state.value.current)));
-  }
-  template(props, state) {
-    return /* @__PURE__ */ h(
-      "div",
-      {
-        ...this.dataProps,
-        id: props.id,
-        class: [
-          style$3.select,
-          {
-            "is-disabled": state.disabled,
-            "is-hidden": state.hidden
-          },
-          ...Array.isArray(props.class) ? props.class : [props.class]
-        ],
-        "event-mouseenter": (e) => (props["event-mouseenter"] ?? noop)(e, this),
-        "event-mouseleave": (e) => (props["event-mouseleave"] ?? noop)(e, this)
-      },
-      props.icon && /* @__PURE__ */ h(
-        "span",
-        {
-          ref: this.ref("icon"),
-          class: style$3.select__icon,
-          innerHTML: props.icon
-        }
-      ),
-      /* @__PURE__ */ h("div", { class: style$3.select__label, "store-innerHTML": state.label }),
-      /* @__PURE__ */ h(
-        "select",
-        {
-          ref: this.ref("select"),
-          name: props.name,
-          required: props.required,
-          tabIndex: props.tabindex,
-          "store-title": state.title,
-          "store-disabled": state.disabled,
-          "event-change": this.handleChange
-        }
-      ),
-      /* @__PURE__ */ h("span", { class: style$3.select__arrow, innerHTML: props.dropdown ?? IconDown })
-    );
-  }
-  afterRender() {
-    this.state.value.subscribe(this.update), this.state.options.subscribe(this.update), this.update();
-  }
-  clear() {
-    this.refs.select.innerHTML = "";
-  }
-  update() {
+  $title = $(this.props.title);
+  $label = $(this.props.label);
+  $value = $(this.props.value);
+  $options = $(this.props.options);
+  $disabled = $(this.props.disabled);
+  $hidden = $(this.props.hidden);
+  $selectedIndex = $(
+    [this.$value, this.$options],
+    ([value, options]) => {
+      const compare = this.props.compare ?? ((a, b) => a === b);
+      return options?.findIndex((option) => compare(option.value ?? option, value)) ?? -1;
+    }
+  );
+  update = () => {
     this.clear();
-    const options = this.state.options.get();
+    const options = this.$options.value;
     if (!options) return;
-    const selectedIndex = this.state.selectedIndex.get();
-    this.props.placeholder && this.render(/* @__PURE__ */ h(
-      "option",
-      {
-        value: "",
-        disabled: !0,
-        ...this.state.value.current === void 0 || selectedIndex < 0 ? { selected: !0 } : {}
-      },
-      this.props.placeholder
-    ), this.refs.select);
+    const selectedIndex = this.$selectedIndex.value;
+    this.props.placeholder && this.render(
+      /* @__PURE__ */ h(
+        "option",
+        {
+          value: "",
+          disabled: !0,
+          ...this.$value.value === void 0 || selectedIndex < 0 ? { selected: !0 } : {}
+        },
+        this.props.placeholder
+      ),
+      this.refs.select
+    );
     for (const [label, entries] of Object.entries(groupBy(options, "group"))) {
       const children = entries.map((option) => /* @__PURE__ */ h(
         "option",
@@ -740,13 +729,56 @@ class Select extends Component {
       ));
       label !== "undefined" ? this.render(/* @__PURE__ */ h("optgroup", { label }, children), this.refs.select) : this.render(children, this.refs.select);
     }
+  };
+  handleChange = (e) => {
+    const index = +e.target.value, selected = (this.$options.value ?? [])[index];
+    this.refs.select.blur(), this.$value.value = selected ? selected.value ?? selected : null, (this.props["event-change"] || noop)(e, this);
+  };
+  afterRender() {
+    this.watch([this.$value, this.$options], this.update, { immediate: !0 });
   }
-  handleChange(e) {
-    const index = +e.target.value, selected = (this.state.options.get() ?? [])[index];
-    this.refs.select.blur(), this.state.value.set(selected ? selected.value ?? selected : null), (this.props["event-change"] || noop)(e, this);
+  clear() {
+    this.refs.select.innerHTML = "";
   }
-  beforeDestroy() {
-    this.state.value.unsubscribe(this.update), this.state.options.unsubscribe(this.update);
+  template(props) {
+    return /* @__PURE__ */ h(
+      "div",
+      {
+        ...this.dataProps,
+        ...this.eventProps,
+        id: props.id,
+        class: [
+          style$3.select,
+          {
+            "is-disabled": this.$disabled,
+            "is-hidden": this.$hidden
+          },
+          props.class
+        ]
+      },
+      props.icon && /* @__PURE__ */ h(
+        "span",
+        {
+          ref: this.ref("icon"),
+          class: style$3.select__icon,
+          innerHTML: props.icon
+        }
+      ),
+      /* @__PURE__ */ h("div", { class: style$3.select__label, innerHTML: this.$label }),
+      /* @__PURE__ */ h(
+        "select",
+        {
+          ref: this.ref("select"),
+          name: props.name,
+          required: props.required,
+          tabIndex: props.tabindex,
+          title: this.$title,
+          disabled: this.$disabled,
+          "event-change": this.handleChange
+        }
+      ),
+      /* @__PURE__ */ h("span", { class: style$3.select__arrow, innerHTML: props.dropdown ?? IconDown })
+    );
   }
 }
 const tabs = "ui-tabs-6zoue114", tabs__toggles = "ui-tabs__toggles-6zoue117", tabs__panels = "ui-tabs__panels-6zoue120", tabs__panel = "ui-tabs__panel-6zoue120", style$2 = {
@@ -758,67 +790,73 @@ const tabs = "ui-tabs-6zoue114", tabs__toggles = "ui-tabs__toggles-6zoue117", ta
   toggles
 };
 class Toggles extends Component {
-  beforeRender(props) {
-    this.update = this.update.bind(this), this.handleChange = this.handleChange.bind(this), this.state = {
-      title: ensure(writable)(props["store-title"], props.title),
-      value: ensure(writable)(props["store-value"], props.value),
-      options: ensure(writable)(props["store-options"], props.options ?? []),
-      disabled: ensure(writable)(props["store-disabled"], props.disabled),
-      hidden: ensure(writable)(props["store-hidden"], props.hidden)
-    };
-  }
-  template(props, state) {
-    return /* @__PURE__ */ h(
-      "div",
-      {
-        ...this.dataProps,
-        id: props.id,
-        class: [
-          style$1.toggles,
-          {
-            "is-disabled": state.disabled,
-            "is-hidden": state.hidden
-          },
-          ...Array.isArray(props.class) ? props.class : [props.class]
-        ],
-        "store-title": state.title,
-        "event-mouseenter": (e) => (props["event-mouseenter"] ?? noop)(e, this),
-        "event-mouseleave": (e) => (props["event-mouseleave"] ?? noop)(e, this)
-      }
+  static props = {
+    value: [Props.string, Props.number, Props.Signal],
+    options: [Props.array, Props.Signal],
+    title: [Props.string, Props.Signal],
+    disabled: [Props.boolean, Props.Signal],
+    hidden: [Props.boolean, Props.Signal],
+    id: Props.string
+  };
+  $title = $(this.props.title);
+  $value = $(this.props.value);
+  $options = $(this.props.options ?? []);
+  $disabled = $(this.props.disabled);
+  $hidden = $(this.props.hidden);
+  update = () => {
+    this.clear();
+    const options = this.$options.value;
+    options && this.render(
+      options.map(({ icon, value, label, disabled, hidden } = {}, index) => /* @__PURE__ */ h(
+        Button,
+        {
+          ref: this.refArray("buttons"),
+          icon,
+          label: label ?? value ?? index,
+          active: (value ?? index) === this.$value.value,
+          disabled,
+          hidden,
+          "event-click": this.handleChange(value ?? index)
+        }
+      )),
+      this.base
     );
-  }
+  };
+  handleChange = (value) => (e) => {
+    this.$value.value = value, (this.props["event-change"] || noop)(e, this);
+  };
   afterRender() {
-    this.state.value.subscribe(this.update), this.state.options.subscribe(this.update), this.update();
+    this.watch([this.$value, this.$options], this.update, { immediate: !0 });
   }
   clear() {
     this.refs.buttons && (this.refs.buttons.forEach((button2) => button2?.destroy()), delete this.refs.buttons);
   }
-  update() {
-    this.clear();
-    const options = this.state.options.get();
-    options && this.render(options.map(({ icon, value, label, disabled, hidden } = {}, index) => /* @__PURE__ */ h(
-      Button,
+  template(props) {
+    return /* @__PURE__ */ h(
+      "div",
       {
-        ref: this.refArray("buttons"),
-        icon,
-        "store-label": label ?? value ?? index,
-        "store-active": (value ?? index) === this.state.value.current,
-        "store-disabled": disabled,
-        "store-hidden": hidden,
-        "event-click": this.handleChange(value ?? index)
+        ...this.dataProps,
+        ...this.eventProps,
+        id: props.id,
+        class: [
+          style$1.toggles,
+          {
+            "is-disabled": this.$disabled,
+            "is-hidden": this.$hidden
+          },
+          props.class
+        ],
+        title: this.$title
       }
-    )), this.base);
-  }
-  handleChange(value) {
-    return (e) => {
-      this.state.value.set(value), (this.props["event-change"] || noop)(e, this);
-    };
-  }
-  beforeDestroy() {
-    this.state.value.unsubscribe(this.update), this.state.options.unsubscribe(this.update);
+    );
   }
 }
 class Tabs extends Component {
+  static props = {
+    value: [Props.number, Props.Signal],
+    tabs: [Props.array, Props.Signal],
+    id: Props.string
+  };
   static panel(children, props = {}) {
     return /* @__PURE__ */ h(
       "div",
@@ -826,19 +864,25 @@ class Tabs extends Component {
         ...props,
         class: [
           style$2.tabs__panel,
-          ...Array.isArray(props.class) ? props.class : [props.class]
+          props.class
         ]
       },
       children
     );
   }
-  beforeRender(props) {
-    this.update = this.update.bind(this), this.state = {
-      value: ensure(writable)(props["store-value"], props.value ?? 0),
-      tabs: ensure(writable)(props["store-tabs"], props.tabs)
-    };
+  $value = $(this.props.value ?? 0);
+  $tabs = $(this.props.tabs);
+  update = () => {
+    const value = this.$value.value;
+    for (let index = 0; index < this.refs.panels.children.length; index++) {
+      const panel = this.refs.panels.children[index];
+      panel && panel.classList.toggle("is-hidden", index !== value);
+    }
+  };
+  afterRender() {
+    this.watch([this.$value, this.$tabs], this.update, { immediate: !0 });
   }
-  template(props, state) {
+  template(props) {
     return /* @__PURE__ */ h(
       "div",
       {
@@ -846,15 +890,15 @@ class Tabs extends Component {
         id: props.id,
         class: [
           style$2.tabs,
-          ...Array.isArray(props.class) ? props.class : [props.class]
+          props.class
         ]
       },
       /* @__PURE__ */ h(
         Toggles,
         {
           class: style$2.tabs__toggles,
-          "store-value": state.value,
-          "store-options": state.tabs,
+          value: this.$value,
+          options: this.$tabs,
           "event-change": props["event-change"]
         }
       ),
@@ -868,19 +912,6 @@ class Tabs extends Component {
       )
     );
   }
-  afterRender() {
-    this.state.value.subscribe(this.update), this.state.tabs.subscribe(this.update), this.update();
-  }
-  update() {
-    const value = this.state.value.get();
-    for (let index = 0; index < this.refs.panels.children.length; index++) {
-      const panel = this.refs.panels.children[index];
-      panel && panel.classList.toggle("is-hidden", index !== value);
-    }
-  }
-  beforeDestroy() {
-    this.state.value.unsubscribe(this.update), this.state.tabs.unsubscribe(this.update);
-  }
 }
 const toast = "ui-toast-1kys1123", toast__icon = "ui-toast__icon-1kys1196", toast__content = "ui-toast__content-1kys1221", style = {
   "toast-container": "ui-toast-container-1kys1123",
@@ -889,50 +920,61 @@ const toast = "ui-toast-1kys1123", toast__icon = "ui-toast__icon-1kys1196", toas
   toast__content
 };
 class Toast extends Component {
+  static props = {
+    label: [Props.string, Props.Signal],
+    title: [Props.string, Props.Signal],
+    icon: [Props.string, Props.Signal],
+    tone: [Props.string, Props.Signal],
+    count: [Props.number, Props.Signal],
+    duration: Props.number,
+    id: Props.string
+  };
   static display(message, { parent = Toast.container, ...props } = {}) {
     render(/* @__PURE__ */ h(Toast, { ...props }, message), parent);
   }
   static get container() {
     return document.querySelector("." + style["toast-container"]) ?? render(/* @__PURE__ */ h("div", { class: style["toast-container"] }), document.body).nodes[0];
   }
-  beforeRender(props) {
-    this.handleClose = this.handleClose.bind(this), this.state = {
-      label: ensure(writable)(props["store-label"], props.label),
-      title: ensure(writable)(props["store-title"], props.title),
-      icon: ensure(writable)(props["store-icon"], props.icon),
-      tone: ensure(writable)(props["store-tone"], props.tone),
-      count: ensure(writable)(props["store-count"], props.count)
-    };
+  $label = $(this.props.label);
+  $title = $(this.props.title);
+  $icon = $(this.props.icon);
+  $tone = $(this.props.tone);
+  $count = $(this.props.count);
+  handleClose = (e) => {
+    e.stopPropagation(), this.destroy();
+  };
+  afterMount() {
+    this.props.duration && (this.refs.timer = window.setTimeout(() => this.destroy(), this.props.duration));
   }
-  template(props, state) {
+  beforeDestroy() {
+    (this.props["event-close"] || noop)(), this.refs.timer && window.clearTimeout(this.refs.timer);
+  }
+  template(props) {
     return /* @__PURE__ */ h(
       "div",
       {
         ...this.dataProps,
+        ...this.eventProps,
         id: props.id,
         class: [
           style.toast,
           {
-            "has-icon": state.icon,
+            "has-icon": this.$icon,
             "has-duration": props.duration
           },
-          ...Array.isArray(props.class) ? props.class : [props.class]
+          props.class
         ],
-        "event-mouseenter": (e) => (props["event-mouseenter"] ?? noop)(e, this),
-        "event-mouseleave": (e) => (props["event-mouseleave"] ?? noop)(e, this),
-        "store-data-count": state.count,
-        "data-tone": state.tone,
-        style: {
-          "--toast-duration": (props.duration ?? -1) + "ms"
-        }
+        "data-count": this.$count,
+        "data-tone": this.$tone,
+        style: { "--toast-duration": (props.duration ?? -1) + "ms" }
       },
       /* @__PURE__ */ h(
         "span",
         {
           ref: this.ref("icon"),
           class: style.toast__icon,
-          "store-data-count": state.count,
-          "store-innerHTML": state.icon
+          "data-count": this.$count,
+          innerHTML: this.$icon
         }
       ),
       /* @__PURE__ */ h("div", { class: style.toast__content }, props.children),
@@ -946,15 +988,6 @@ class Toast extends Component {
         }
       )
     );
-  }
-  afterMount() {
-    this.props.duration && (this.refs.timer = window.setTimeout(() => this.destroy(), this.props.duration));
-  }
-  handleClose(e) {
-    e.stopPropagation(), this.destroy();
-  }
-  beforeDestroy() {
-    (this.props["event-close"] || noop)(), this.refs.timer && window.clearTimeout(this.refs.timer);
   }
 }
 export {

@@ -1,5 +1,5 @@
-import { h, e as extend } from "./Component-BRxFgiW-.js";
-import { C, P, r } from "./Component-BRxFgiW-.js";
+import { h, e as extend } from "./Component-B5YHZfVp.js";
+import { C, P, r } from "./Component-B5YHZfVp.js";
 function addRef(obj, key) {
   return function(ref) {
     obj[key] = ref;

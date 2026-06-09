@@ -27,8 +27,10 @@ class Collector {
       this.data[TYPES[i]] = [];
   }
   append(obj) {
-    for (const k in obj)
-      this.data[k] = this.data[k].concat(obj[k]);
+    for (const k in obj) {
+      const val2 = obj[k];
+      Array.isArray(val2) ? this.data[k].push(...val2) : this.data[k].push(val2);
+    }
   }
   set(obj) {
     for (const k in obj)
@@ -52,7 +54,7 @@ const namespaces = [
   "selected"
 ]), isSignal = (value) => value && String(value._symbol) === "Symbol(signal)";
 let val;
-const startsWith = (str, w) => str.substr(0, w.length) === w, updateClass = (n) => (v, el) => el.classList.toggle(n, v || !1), updateAttrib = (name = "textContent", isSvg) => (v, el) => {
+const startsWith = (str, w) => str.substr(0, w.length) === w, updateClass = (n, el) => (v) => el.classList.toggle(n, v || !1), updateAttrib = (name = "textContent", isSvg, el) => (v) => {
   if (isSvg && name !== (name = name.replace(/^xlink:?/, ""))) el.setAttributeNS("http://www.w3.org/1999/xlink", name.toLowerCase(), v);
   else {
     if (v === void 0) {
@@ -74,51 +76,43 @@ function setDomAttrib(el, name, value, collector, isSvg) {
     if (name !== "ref") if (startsWith(name, "event-")) {
       const eventName = name.toLowerCase().substring(6);
       collector.append({ domEvents: [{ el, evt: eventName, fn: value }] });
-    } else if (name === "store") {
-      const evts = Array.isArray(value) ? value : [value], events = [];
-      for (let i = 0, l = evts.length; i < l; i++) {
-        const evt = Array.isArray(evts[i]) ? evts[i] : [evts[i]], store = evt[0], fn = evt[1], init = evt[2] !== void 0 ? evt[2] : !0;
-        store && events.push({ store, fn, init, el });
-      }
-      collector.append({ storeEvents: events });
-    } else if (startsWith(name, "store-class-")) {
-      const className = name.substring(12), fn = updateClass(className);
-      collector.append({ storeEvents: [{ store: value, init: !0, fn, el }] });
-    } else if (startsWith(name, "store-") || isSignal(value)) {
-      let attrib = startsWith(name, "store-") ? name.substring(6) : name;
+    } else if (isSignal(value)) {
+      let attrib = name;
       attrib === "text" && (attrib = "textContent");
-      const fn = updateAttrib(attrib, isSvg);
-      collector.append({ storeEvents: [{ store: value, init: !0, fn, el }] });
+      const fn = updateAttrib(attrib, isSvg, el);
+      collector.append({ storeEvents: [{ store: value, init: !0, fn }] });
     } else if (typeof value == "function" && startsWith(name, "on")) {
       const eventType = name.toLowerCase();
       el[eventType] = value;
     } else if (name === "class") {
-      if (typeof value == "string" && (isSvg ? el.setAttribute("class", value || "") : el.className = value || ""), typeof value == "object")
-        for (const key in value) {
-          const v = value[key];
-          if (typeof v == "string" && el.classList.add(...v.split(" ")), typeof value == "object") {
+      if (typeof value == "string" && (isSvg ? el.setAttribute("class", value || "") : el.className = value || ""), typeof value == "object") {
+        const entries = Array.isArray(value) ? value.flat().filter(Boolean) : value;
+        for (const key in entries) {
+          const v = entries[key];
+          if (typeof v == "string" && el.classList.add(...v.split(" ")), typeof v == "object") {
             for (const k in v)
               if (typeof v[k] == "boolean" && el.classList.toggle(k, v[k]), isSignal(v[k])) {
-                const fn = updateClass(k);
-                collector.append({ storeEvents: [{ store: v[k], init: !0, fn, el }] });
+                const fn = updateClass(k, el);
+                collector.append({ storeEvents: [{ store: v[k], init: !0, fn }] });
               }
           }
         }
+      }
     } else if (name === "style")
       if (typeof value == "object")
         for (const key in value) {
           const updateProp = (v) => {
             key.startsWith("--") ? el.style.setProperty(key, v) : el.style[key] = v;
           };
-          isSignal((value ?? [])[key]) ? collector.append({ storeEvents: [{ store: value[key], init: !0, fn: updateProp, el }] }) : updateProp(value[key]);
+          isSignal((value ?? [])[key]) ? collector.append({ storeEvents: [{ store: value[key], init: !0, fn: updateProp }] }) : updateProp(value[key]);
         }
       else typeof value == "string" && (el.style.cssText = value);
     else if (name !== "list" && name !== "type" && !isSvg && name in el)
       try {
-        updateAttrib(name, isSvg)(value, el);
+        updateAttrib(name, isSvg, el)(value);
       } catch {
       }
-    else typeof value != "object" && typeof value != "function" && updateAttrib(name, isSvg)(value, el);
+    else typeof value != "object" && typeof value != "function" && updateAttrib(name, isSvg, el)(value);
   }
 }
 function arr(e) {
@@ -207,10 +201,8 @@ function callRefs(component) {
 }
 function callStoreListeners(component) {
   for (let i = 0; i < component._collector.storeEvents.length; i++) {
-    const event = component._collector.storeEvents[i], oldfn = event.fn;
-    event.fn = function(v) {
-      oldfn(v, event.el);
-    }, event.store.subscribe(event.fn), event.init && event.fn(event.store.current);
+    const event = component._collector.storeEvents[i];
+    event.store.subscribe(event.fn), event.init && event.fn(event.store.value);
   }
 }
 function callDomListeners(component) {
@@ -227,10 +219,63 @@ function dispatchListeners(component) {
   dispatch(component, callDomListeners), dispatch(component, callStoreListeners);
 }
 const SvgTagNames = /* @__PURE__ */ new Set([
-  "g",
   "svg",
+  "g",
   "defs",
-  "mask"
+  "mask",
+  "path",
+  "rect",
+  "circle",
+  "ellipse",
+  "line",
+  "polyline",
+  "polygon",
+  "text",
+  "tspan",
+  "textPath",
+  "use",
+  "symbol",
+  "image",
+  "linearGradient",
+  "radialGradient",
+  "stop",
+  "clipPath",
+  "pattern",
+  "filter",
+  "feBlend",
+  "feColorMatrix",
+  "feComponentTransfer",
+  "feComposite",
+  "feConvolveMatrix",
+  "feDiffuseLighting",
+  "feDisplacementMap",
+  "feDropShadow",
+  "feFlood",
+  "feFuncA",
+  "feFuncB",
+  "feFuncG",
+  "feFuncR",
+  "feGaussianBlur",
+  "feImage",
+  "feMerge",
+  "feMergeNode",
+  "feMorphology",
+  "feOffset",
+  "feSpecularLighting",
+  "feTile",
+  "feTurbulence",
+  "animate",
+  "animateMotion",
+  "animateTransform",
+  "mpath",
+  "set",
+  "marker",
+  "switch",
+  "foreignObject",
+  "desc",
+  "title",
+  "metadata",
+  "view"
 ]);
 function render(vnode, parent = document.body, context) {
   let i = 0;
@@ -314,15 +359,9 @@ class Component {
   base = null;
   mounted = !1;
   destroyed = !1;
-  static flatten(component) {
-    let children = [];
-    for (const child of Array.isArray(component) ? component : component.children ?? [])
-      children = children.concat(child, Component.flatten(child));
-    return children;
-  }
   constructor(props = {}) {
     const label = this.props.name || this.constructor.name || "Component";
-    validate(props, this.constructor.props, label), this._parent = null, this._collector = { refs: [], components: [], domEvents: [], storeEvents: [] }, this._storeListeners = [], this.props = props;
+    validate(props, this.constructor.props, label), this._parent = null, this._collector = { refs: [], components: [], domEvents: [], storeEvents: [] }, this.props = props;
     const { log, warn, error } = logger(label, "white", "#000", props.disableLog);
     this.log = log, this.warn = warn, this.error = error;
   }
@@ -364,6 +403,12 @@ class Component {
       el ? map.set(id, el) : map.delete(id);
     };
   }
+  watch(signals, fn, { immediate = !1 } = {}) {
+    const arr2 = Array.isArray(signals) ? signals : [signals];
+    for (const signal of arr2)
+      this._collector.storeEvents.push({ store: signal, fn, init: !1 });
+    immediate && fn(arr2.length === 1 ? arr2[0].value : arr2.map((s) => s.value));
+  }
   // Render a vnode or array of vnodes and register the rendered content as "child" of this component.
   // Use this method when you want to add content to the component
   // after the initial rendering. This ensures new items will be
@@ -385,10 +430,6 @@ class Component {
       const event = this._collector.storeEvents[i];
       event.store.unsubscribe(event.fn);
     }
-    for (i = this._storeListeners.length - 1; i >= 0; i--) {
-      const event = this._storeListeners[i];
-      event[0].unsubscribe(event[1], event[2]);
-    }
     for (i = this._collector.components.length - 1; i >= 0; i--)
       this._collector.components[i].destroy();
     if (this.mounted = !1, this.destroyed = !0, this._parent) {
@@ -400,7 +441,7 @@ class Component {
     let base = Array.isArray(this.base) ? this.base : [this.base];
     for (i = 0; i < base.length; i++)
       base[i] && base[i].parentNode && base[i].parentNode.removeChild(base[i]);
-    this.base = base = null, this.props = null, this.state = null, this.store = null, this.refs = null, this._storeListeners = null;
+    this.base = base = null, this.props = null, this.state = null, this.store = null, this.refs = null;
   }
 }
 export {
@@ -410,4 +451,4 @@ export {
   h,
   render as r
 };
-//# sourceMappingURL=Component-BRxFgiW-.js.map
+//# sourceMappingURL=Component-B5YHZfVp.js.map

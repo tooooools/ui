@@ -1,6 +1,8 @@
+@use '/lib/style/mixins' as ui;
+
 .range {
-  @include ui-container;
-  @include ui-font;
+  @include ui.container;
+  @include ui.font;
 
   &:focus-within,
   &:hover {
@@ -8,7 +10,7 @@
   }
 
   &__icon {
-    @include ui-icon;
+    @include ui.icon;
   }
 
   &__inputs {
@@ -22,7 +24,6 @@
     flex: 1;
 
     display: block;
-
     cursor: pointer;
 
     background: none;

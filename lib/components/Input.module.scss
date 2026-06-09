@@ -1,6 +1,8 @@
+@use '/lib/style/mixins' as ui;
+
 .input {
-  @include ui-container;
-  @include ui-font;
+  @include ui.container;
+  @include ui.font;
   @include easing(background, color);
 
   &:hover,
@@ -19,7 +21,7 @@
   }
 
   &__icon {
-    @include ui-icon;
+    @include ui.icon;
   }
 
   &:not(.has-icon) &__icon {

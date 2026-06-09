@@ -1,105 +1,50 @@
 import style from './Input.module.scss'
 
 import { Component } from '../jsx'
-import { ensure, writable } from '../state'
+import { $ } from '../state'
+import Props from '../jsx/Props'
 
 import noop from '../utils/noop'
 
 export default class Input extends Component {
-  beforeRender (props) {
-    this.update = this.update.bind(this)
-    this.handleClick = this.handleClick.bind(this)
-    this.handleDblClick = this.handleDblClick.bind(this)
-    this.handleInput = this.handleInput.bind(this)
-    this.handleFocus = this.handleFocus.bind(this)
-
-    this.state = {
-      value: ensure(writable)(props['store-value'], props.value),
-      files: ensure(writable)(props['store-files'], props.files),
-
-      placeholder: ensure(writable)(props['store-placeholder'], props.placeholder),
-      title: ensure(writable)(props['store-title'], props.title),
-      label: ensure(writable)(props['store-label'], props.label),
-      before: ensure(writable)(props['store-before'], props.before),
-      after: ensure(writable)(props['store-after'], props.after),
-      icon: ensure(writable)(props['store-icon'], props.icon),
-
-      accept: ensure(writable)(props['store-accept'], props.accept ?? '*'),
-      multiple: ensure(writable)(props['store-multiple'], props.multiple ?? '*'),
-      min: ensure(writable)(props['store-min'], props.min),
-      max: ensure(writable)(props['store-max'], props.max),
-      step: ensure(writable)(props['store-step'], props.step),
-
-      active: ensure(writable)(props['store-active'], props.active),
-      disabled: ensure(writable)(props['store-disabled'], props.disabled),
-      hidden: ensure(writable)(props['store-hidden'], props.hidden),
-      waiting: ensure(writable)(props['store-waiting'], props.waiting)
-    }
+  static props = {
+    value: [Props.string, Props.number, Props.Signal],
+    placeholder: [Props.string, Props.Signal],
+    label: [Props.string, Props.Signal],
+    before: [Props.string, Props.Signal],
+    after: [Props.string, Props.Signal],
+    icon: [Props.string, Props.Signal],
+    title: [Props.string, Props.Signal],
+    active: [Props.boolean, Props.Signal],
+    disabled: [Props.boolean, Props.Signal],
+    hidden: [Props.boolean, Props.Signal],
+    waiting: [Props.boolean, Props.Signal],
+    type: Props.string,
+    name: Props.string,
+    id: Props.string,
+    tabindex: Props.number
   }
 
-  template (props, state) {
-    return (
-      <div
-        {...this.dataProps}
-        id={props.id}
-        tabIndex={props.tabindex}
-        class={[
-          style.input,
-          {
-            'is-edited-on-dblclick': Boolean(props.editOnDblClick),
-            'has-icon': state.icon,
-            'is-active': state.active,
-            'is-disabled': state.disabled,
-            'is-hidden': state.hidden,
-            'is-waiting': state.waiting
-          },
-          ...(Array.isArray(props.class) ? props.class : [props.class])
-        ]}
-        data-type={props.type}
-        store-title={state.title}
-        event-click={this.handleClick}
-        event-dblclick={this.handleDblClick}
-        event-mouseenter={e => (props['event-mouseenter'] ?? noop)(e, this)}
-        event-mouseleave={e => (props['event-mouseleave'] ?? noop)(e, this)}
-      >
-        <span
-          ref={this.ref('icon')}
-          class={style.input__icon}
-          store-innerHTML={state.icon}
-        />
-        <label class={style.input__label} store-innerHTML={state.label} />
-        <label class={style.input__before} store-innerHTML={state.before} />
-        <input
-          ref={this.ref('input')}
-          type={props.type}
-          name={props.name}
-          autofocus={props.autofocus}
-          autocomplete={props.autocomplete ?? 'off'}
-          size={props.type !== 'number' ? (props.size === 'auto' ? '' : props.size) : undefined}
-          store-min={props.type === 'number' ? state.min : undefined}
-          store-max={props.type === 'number' ? state.max : undefined}
-          store-step={props.type === 'number' ? state.step : undefined}
-          store-placeholder={state.placeholder}
-          store-accept={props.type === 'file' ? state.accept : undefined}
-          store-multiple={props.type === 'file' ? state.multiple : undefined}
-          store-disabled={state.disabled}
-          event-click={e => e.stopPropagation()}
-          event-input={this.handleInput}
-          event-focus={this.handleFocus}
-          event-blur={e => (props['event-blur'] ?? noop)(e, this)}
-        />
-        <label class={style.input__after} store-innerHTML={state.after} />
-      </div>
-    )
-  }
+  $value = $(this.props.value)
+  $files = $(this.props.files)
+  $placeholder = $(this.props.placeholder)
+  $title = $(this.props.title)
+  $label = $(this.props.label)
+  $before = $(this.props.before)
+  $after = $(this.props.after)
+  $icon = $(this.props.icon)
+  $accept = $(this.props.accept ?? '*')
+  $multiple = $(this.props.multiple ?? '*')
+  $min = $(this.props.min)
+  $max = $(this.props.max)
+  $step = $(this.props.step)
+  $active = $(this.props.active)
+  $disabled = $(this.props.disabled)
+  $hidden = $(this.props.hidden)
+  $waiting = $(this.props.waiting)
 
-  afterRender () {
-    this.state.value.subscribe(this.update)
-    this.update()
-  }
-
-  update () {
-    const value = this.state.value.get()
+  update = () => {
+    const value = this.$value.value
 
     switch (this.props.type) {
       case 'number': {
@@ -118,7 +63,7 @@ export default class Input extends Component {
     }
 
     if (this.props.size === 'auto') {
-      const length = (String(this.refs.input.value) ?? '').length || (this.state.placeholder.current ?? '').length || 1
+      const length = (String(this.refs.input.value) ?? '').length || (this.$placeholder.value ?? '').length || 1
       if (this.props.type === 'number') {
         this.refs.input.style.width = (length + 1) + 'ch'
       } else {
@@ -127,42 +72,97 @@ export default class Input extends Component {
     }
   }
 
-  handleClick (e) {
+  handleClick = e => {
     if (this.props.type === 'file') this.refs.input.click()
     else if (!this.props.editOnDblClick) this.refs.input.focus()
 
     ;(this.props['event-click'] ?? noop)(e, this)
   }
 
-  async handleDblClick (e) {
+  handleDblClick = async e => {
     this.refs.input.focus()
     await (this.props['event-dblclick'] ?? noop)(e, this)
   }
 
-  async handleInput (e) {
-    if (this.state.waiting.get()) return e.preventDefault()
+  handleInput = async e => {
+    if (this.$waiting.value) return e.preventDefault()
 
-    this.state.waiting.set(true)
+    this.$waiting.value = true
 
     switch (this.props.type) {
-      case 'number': this.state.value.set(+this.refs.input.value); break
-      case 'file': this.state.value.set(this.refs.input.files); break
-      default: this.state.value.set(this.refs.input.value)
+      case 'number': this.$value.value = +this.refs.input.value; break
+      case 'file': this.$value.value = this.refs.input.files; break
+      default: this.$value.value = this.refs.input.value
     }
 
     await (this.props['event-input'] ?? noop)(e, this)
 
-    // Testing for mounted because event-click may have destroyed this component
+    // Testing for mounted because event-input may have destroyed this component
     if (!this.mounted) return
-    this.state.waiting.set(false)
+    this.$waiting.value = false
   }
 
-  handleFocus (e) {
+  handleFocus = e => {
     if (this.props.autoSelectAll) this.refs.input.select()
     ;(this.props['event-focus'] ?? noop)(e, this)
   }
 
-  beforeDestroy () {
-    this.state.value.unsubscribe(this.update)
+  afterRender () {
+    this.watch(this.$value, this.update, { immediate: true })
+  }
+
+  template (props) {
+    return (
+      <div
+        {...this.dataProps}
+        {...this.eventProps}
+        id={props.id}
+        tabIndex={props.tabindex}
+        class={[
+          style.input,
+          {
+            'is-edited-on-dblclick': Boolean(props.editOnDblClick),
+            'has-icon': this.$icon,
+            'is-active': this.$active,
+            'is-disabled': this.$disabled,
+            'is-hidden': this.$hidden,
+            'is-waiting': this.$waiting
+          },
+          props.class
+        ]}
+        data-type={props.type}
+        title={this.$title}
+        event-click={this.handleClick}
+        event-dblclick={this.handleDblClick}
+      >
+        <span
+          ref={this.ref('icon')}
+          class={style.input__icon}
+          innerHTML={this.$icon}
+        />
+        <label class={style.input__label} innerHTML={this.$label} />
+        <label class={style.input__before} innerHTML={this.$before} />
+        <input
+          ref={this.ref('input')}
+          type={props.type}
+          name={props.name}
+          autofocus={props.autofocus}
+          autocomplete={props.autocomplete ?? 'off'}
+          size={props.type !== 'number' ? (props.size === 'auto' ? '' : props.size) : undefined}
+          min={props.type === 'number' ? this.$min : undefined}
+          max={props.type === 'number' ? this.$max : undefined}
+          step={props.type === 'number' ? this.$step : undefined}
+          placeholder={this.$placeholder}
+          accept={props.type === 'file' ? this.$accept : undefined}
+          multiple={props.type === 'file' ? this.$multiple : undefined}
+          disabled={this.$disabled}
+          event-click={e => e.stopPropagation()}
+          event-input={this.handleInput}
+          event-focus={this.handleFocus}
+          event-blur={props['event-blur']}
+        />
+        <label class={style.input__after} innerHTML={this.$after} />
+      </div>
+    )
   }
 }

@@ -1,3 +1,5 @@
+@use 'sass:list';
+
 @mixin debug ($offset: 0, $color: red) {
   outline: 1px solid $color;
 
@@ -10,7 +12,7 @@
   transition-duration: var(--ui-easing-duration);
   transition-timing-function: var(--ui-easing-timing-function);
 
-  @if length($properties) > 1 {
+  @if list.length($properties) > 1 {
     transition-property: $properties;
   } @else {
     transition-property: all;
@@ -50,14 +52,11 @@
   -ms-overflow-style: none;
 
   @if $direction == x {
-    overflow-x: scroll;
-    overflow-y: hidden;
+    overflow: scroll hidden;
   } @else if $direction == y {
-    overflow-x: hidden;
-    overflow-y: scroll;
+    overflow: hidden scroll;
   } @else {
-    overflow-x: scroll;
-    overflow-y: scroll;
+    overflow: scroll scroll;
   }
 
   &::-webkit-scrollbar {
@@ -81,7 +80,6 @@
 
   width: $size;
   height: $size;
-
   pointer-events: none;
 
   border: $thickness solid $background;

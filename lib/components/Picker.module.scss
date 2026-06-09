@@ -1,5 +1,7 @@
+@use '/lib/style/mixins' as ui;
+
 .picker {
-  @include ui-container(false);
+  @include ui.container(false);
 
   gap: 0;
   background: var(--ui-color-background);

@@ -1,15 +1,9 @@
-import '@storybook/addon-console';
 import '../lib/style/preview.scss'
 
 export default {
-  globals: {
-    backgrounds: {
-      grid: true
-    }
-  },
   parameters: {
     layout: 'centered',
-    actions: { argTypesRegex: "^event-.*" },
+    actions: { argTypesRegex: /^event-.*/ },
     backgrounds: { default: 'dark' },
     controls: {
       matchers: {
@@ -17,5 +11,13 @@ export default {
         date: /Date$/,
       }
     }
-  }
+  },
+
+  initialGlobals: {
+    backgrounds: {
+      grid: true
+    }
+  },
+
+  tags: ['autodocs']
 }

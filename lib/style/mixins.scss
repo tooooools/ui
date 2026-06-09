@@ -1,9 +1,11 @@
+@use '/lib/style/_helpers' as *;
+
 @mixin export {
   // Used to force CSS-modules to export names for empty blocks
   box-sizing: inherit;
 }
 
-@mixin ui-font {
+@mixin font {
   font-family: var(--ui-font-family);
   font-size: var(--ui-font-size);
   line-height: var(--ui-line-height);
@@ -11,17 +13,16 @@
   font-variant-numeric: tabular-nums;
 }
 
-@mixin ui-container ($visual: true) {
+@mixin container ($visual: true) {
   @include no-select;
 
   position: relative;
 
   display: flex;
+  justify-content: center safe;
+  gap: var(--ui-gap);
   width: fit-content;
   overflow: hidden;
-
-  gap: var(--ui-gap);
-  justify-content: center safe;
 
   box-sizing: border-box;
 
@@ -48,7 +49,7 @@
   }
 }
 
-@mixin ui-icon {
+@mixin icon {
   animation: var(--ui-button-animation);
 
   svg {

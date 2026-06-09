@@ -1,5 +1,7 @@
+@use '/lib/style/mixins' as ui;
+
 .modal {
-  @include ui-font;
+  @include ui.font;
 
   position: relative;
   max-width: var(--ui-modal-width);
@@ -9,14 +11,14 @@
 
   &__header {
     display: flex;
-    padding: var(--ui-gap);
     justify-content: space-between;
+    padding: var(--ui-gap);
     background: var(--ui-color-background);
   }
 
   &__header &__title {
-    font-weight: bold;
     pointer-events: none;
+    font-weight: bold;
   }
 
   &__content {
@@ -47,8 +49,8 @@
 
     & > [class^='ui-tabs-'] > [class^='ui-toggles-'] > [class^='ui-button-'] {
       flex: 1;
-      min-width: fit-content;
       justify-content: center;
+      min-width: fit-content;
     }
 
     & > [class^='ui-tabs-'] > [class^='ui-toggles-'] > [class^='ui-button-']:not(:first-child) {
@@ -65,9 +67,9 @@
 
   &__content > footer {
     display: flex;
-    padding: var(--ui-gap);
     justify-content: flex-end;
     gap: var(--ui-gap);
+    padding: var(--ui-gap);
     background: var(--ui-color-background-dim);
   }
 }

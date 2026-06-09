@@ -1,105 +1,103 @@
 import style from './FileDropper.module.scss'
 
 import { Component } from '../jsx'
-import { writable } from '../state'
-
-import Button from './Button'
+import { $ } from '../state'
+import Props from '../jsx/Props'
 
 import noop from '../utils/noop'
 
+import Button from './Button'
+
 export default class FileDropper extends Component {
-  beforeRender (props) {
-    this.handleDragStart = this.handleDragStart.bind(this)
-    this.handleDragEnd = this.handleDragEnd.bind(this)
-    this.handleDrop = this.handleDrop.bind(this)
+  static props = {
+    label: Props.string,
+    icon: Props.string,
+    id: Props.string
+  }
 
-    this.state = {
-      appliedTo: writable(undefined),
-      draggedOver: writable(false),
+  $draggedOver = $(false)
+  $files = $(null)
 
-      files: writable(null)
+  #appliedTo = null
+
+  handleDragStart = e => {
+    if (!this.isVisible) return
+    if (!e.dataTransfer.types.includes('Files')) return
+    e.preventDefault()
+    e.stopPropagation()
+
+    this.$draggedOver.value = true
+  }
+
+  handleDrop = e => {
+    if (!this.isVisible) return
+
+    if (!e.dataTransfer.types.includes('Files')) {
+      this.$files.value = null
+      return
     }
+
+    e.preventDefault()
+    e.stopPropagation()
+
+    this.$files.value = e.dataTransfer.files
+    ;(this.props['event-drop'] ?? noop)(e, this)
+    this.handleDragEnd(e)
   }
 
-  template (props, state) {
-    return (
-      <div
-        {...this.dataProps}
-        id={props.id}
-        class={[
-          style['file-dropper'],
-          {
-            'is-dragged-over': state.draggedOver
-          },
-          ...(Array.isArray(props.class) ? props.class : [props.class])
-        ]}
-      >
-        {props.children.length > 0
-          ? props.children
-          : (
-              (props.icon || props.label) ? <Button icon={props.icon} label={props.label} tabIndex={-1} /> : null
-            )}
-      </div>
-    )
+  handleDragEnd = e => {
+    if (!this.isVisible) return
+
+    if (!e.dataTransfer.types.includes('Files')) {
+      this.$files.value = null
+      return
+    }
+
+    e.preventDefault()
+    e.stopPropagation()
+
+    this.$draggedOver.value = false
   }
 
-  afterMount (props) {
-    this.state.appliedTo = this.base.offsetParent ?? document.body
-    this.state.appliedTo.addEventListener('dragover', this.handleDragStart)
-    this.state.appliedTo.addEventListener('dragenter', this.handleDragStart)
-    this.state.appliedTo.addEventListener('dragleave', this.handleDragEnd)
-    this.state.appliedTo.addEventListener('dragend', this.handleDragEnd)
-    this.state.appliedTo.addEventListener('drop', this.handleDrop)
+  afterMount () {
+    this.#appliedTo = this.base.offsetParent ?? document.body
+    this.#appliedTo.addEventListener('dragover', this.handleDragStart)
+    this.#appliedTo.addEventListener('dragenter', this.handleDragStart)
+    this.#appliedTo.addEventListener('dragleave', this.handleDragEnd)
+    this.#appliedTo.addEventListener('dragend', this.handleDragEnd)
+    this.#appliedTo.addEventListener('drop', this.handleDrop)
+  }
+
+  beforeDestroy () {
+    this.#appliedTo?.removeEventListener('dragover', this.handleDragStart)
+    this.#appliedTo?.removeEventListener('dragenter', this.handleDragStart)
+    this.#appliedTo?.removeEventListener('dragleave', this.handleDragEnd)
+    this.#appliedTo?.removeEventListener('dragend', this.handleDragEnd)
+    this.#appliedTo?.removeEventListener('drop', this.handleDrop)
   }
 
   get isVisible () {
     return this.base.offsetParent !== null
   }
 
-  handleDragStart (e) {
-    if (!this.isVisible) return
-    if (!e.dataTransfer.types.includes('Files')) return
-    e.preventDefault()
-    e.stopPropagation()
-
-    this.state.draggedOver.set(true)
-  }
-
-  handleDrop (e) {
-    if (!this.isVisible) return
-
-    if (!e.dataTransfer.types.includes('Files')) {
-      this.state.files.set(null)
-      return
-    }
-
-    e.preventDefault()
-    e.stopPropagation()
-
-    this.state.files.set(e.dataTransfer.files)
-    ;(this.props['event-drop'] ?? noop)(e, this)
-    this.handleDragEnd(e)
-  }
-
-  handleDragEnd (e) {
-    if (!this.isVisible) return
-
-    if (!e.dataTransfer.types.includes('Files')) {
-      this.state.files.set(null)
-      return
-    }
-
-    e.preventDefault()
-    e.stopPropagation()
-
-    this.state.draggedOver.set(false)
-  }
-
-  beforeDestroy () {
-    this.state.appliedTo?.removeEventListener('dragover', this.handleDragStart)
-    this.state.appliedTo?.removeEventListener('dragenter', this.handleDragStart)
-    this.state.appliedTo?.removeEventListener('dragleave', this.handleDragEnd)
-    this.state.appliedTo?.removeEventListener('dragend', this.handleDragEnd)
-    this.state.appliedTo?.removeEventListener('drop', this.drop)
+  template (props) {
+    return (
+      <div
+        {...this.dataProps}
+        id={props.id}
+        class={[
+          style['file-dropper'],
+          { 'is-dragged-over': this.$draggedOver },
+          props.class
+        ]}
+      >
+        {props.children.length > 0
+          ? props.children
+          : ((props.icon || props.label)
+              ? <Button icon={props.icon} label={props.label} tabIndex={-1} />
+              : null
+            )}
+      </div>
+    )
   }
 }

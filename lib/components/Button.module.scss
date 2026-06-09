@@ -1,7 +1,9 @@
+@use '/lib/style/mixins' as ui;
+
 .button {
   @include reset-button;
-  @include ui-container;
-  @include ui-font;
+  @include ui.container;
+  @include ui.font;
   @include easing(background, color, border-color);
 
   &.has-click,
@@ -22,7 +24,7 @@
   }
 
   &__icon {
-    @include ui-icon;
+    @include ui.icon;
   }
 
   &:not(.has-icon) &__icon {

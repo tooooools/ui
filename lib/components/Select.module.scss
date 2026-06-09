@@ -1,6 +1,8 @@
+@use '/lib/style/mixins' as ui;
+
 .select {
-  @include ui-container;
-  @include ui-font;
+  @include ui.container;
+  @include ui.font;
   @include easing(background, color);
 
   padding-right: calc(var(--ui-icon-size) + var(--ui-gap) * 2);
@@ -11,14 +13,14 @@
   }
 
   &__icon {
-    @include ui-icon;
+    @include ui.icon;
   }
 
   &__label {
     overflow: hidden;
+    pointer-events: none;
     text-overflow: ellipsis;
     white-space: nowrap;
-    pointer-events: none;
 
     &:empty {
       display: none;
@@ -39,12 +41,12 @@
     @include reset-button;
     flex: 1;
     max-width: 100%;
-    text-overflow: ellipsis;
     cursor: pointer;
+    text-overflow: ellipsis;
   }
 
   &__arrow {
-    @include ui-icon;
+    @include ui.icon;
     position: absolute;
     right: 0;
     padding: var(--ui-padding-container);

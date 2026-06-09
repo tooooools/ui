@@ -1,18 +1,25 @@
 import style from './Tabs.module.scss'
 
 import { Component } from '../jsx'
-import { ensure, writable } from '../state'
+import { $ } from '../state'
+import Props from '../jsx/Props'
 
 import Toggles from './Toggles'
 
 export default class Tabs extends Component {
+  static props = {
+    value: [Props.number, Props.Signal],
+    tabs: [Props.array, Props.Signal],
+    id: Props.string
+  }
+
   static panel (children, props = {}) {
     return (
       <div
         {...props}
         class={[
           style.tabs__panel,
-          ...(Array.isArray(props.class) ? props.class : [props.class])
+          props.class
         ]}
       >
         {children}
@@ -20,29 +27,37 @@ export default class Tabs extends Component {
     )
   }
 
-  beforeRender (props) {
-    this.update = this.update.bind(this)
+  $value = $(this.props.value ?? 0)
+  $tabs = $(this.props.tabs)
 
-    this.state = {
-      value: ensure(writable)(props['store-value'], props.value ?? 0),
-      tabs: ensure(writable)(props['store-tabs'], props.tabs)
+  update = () => {
+    const value = this.$value.value
+
+    for (let index = 0; index < this.refs.panels.children.length; index++) {
+      const panel = this.refs.panels.children[index]
+      if (!panel) continue
+      panel.classList.toggle('is-hidden', index !== value)
     }
   }
 
-  template (props, state) {
+  afterRender () {
+    this.watch([this.$value, this.$tabs], this.update, { immediate: true })
+  }
+
+  template (props) {
     return (
       <div
         {...this.dataProps}
         id={props.id}
         class={[
           style.tabs,
-          ...(Array.isArray(props.class) ? props.class : [props.class])
+          props.class
         ]}
       >
         <Toggles
           class={style.tabs__toggles}
-          store-value={state.value}
-          store-options={state.tabs}
+          value={this.$value}
+          options={this.$tabs}
           event-change={props['event-change']}
         />
         <div
@@ -53,26 +68,5 @@ export default class Tabs extends Component {
         </div>
       </div>
     )
-  }
-
-  afterRender () {
-    this.state.value.subscribe(this.update)
-    this.state.tabs.subscribe(this.update)
-    this.update()
-  }
-
-  update () {
-    const value = this.state.value.get()
-
-    for (let index = 0; index < this.refs.panels.children.length; index++) {
-      const panel = this.refs.panels.children[index]
-      if (!panel) continue
-      panel.classList.toggle('is-hidden', index !== value)
-    }
-  }
-
-  beforeDestroy () {
-    this.state.value.unsubscribe(this.update)
-    this.state.tabs.unsubscribe(this.update)
   }
 }

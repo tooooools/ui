@@ -1,3 +1,6 @@
+
+@use '/lib/style/mixins' as ui;
+
 .file-dropper {
   @include easing(opacity);
 

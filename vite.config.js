@@ -23,6 +23,11 @@ export default defineConfig(async ({ mode }) => {
           state: path.resolve(__dirname, 'lib/state/index.js')
         },
         name: '@tooooools/ui'
+      },
+      rollupOptions: {
+        output: {
+          assetFileNames: 'style.css'
+        }
       }
     },
 
@@ -55,10 +60,9 @@ export default defineConfig(async ({ mode }) => {
       preprocessorOptions: {
         scss: {
           additionalData: `
-            @use 'lib/style/_helpers' as *;
-            @import 'lib/style/reset';
-            @import 'lib/style/variables';
-            @import 'lib/style/mixins';
+            @use '/lib/style/_helpers' as *;
+            @use '/lib/style/reset';
+            @use '/lib/style/variables';
           `
         }
       },
@@ -76,8 +80,10 @@ export default defineConfig(async ({ mode }) => {
     },
 
     esbuild: {
-      jsxInject: "import h from '/lib/jsx/h'",
-      jsxFactory: 'h'
+      jsxInject: "import { h, Fragment } from '/lib/jsx'",
+      jsxFactory: 'h',
+      jsxFragment: 'Fragment',
+      minifyIdentifiers: false
     }
   }
 })

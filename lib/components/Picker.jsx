@@ -32,7 +32,7 @@ export default class Picker extends Component {
   $hidden = $(this.props.hidden)
 
   $toggleIcon = $([this.$open, this.$iconClose, this.$iconOpen],
-    () => this.$open.value ? this.$iconClose.value : this.$iconOpen.value
+    ([open, iconClose, iconOpen]) => open ? iconClose : iconOpen
   )
 
   handleOpen = () => {

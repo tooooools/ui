@@ -35,10 +35,9 @@ export default class Select extends Component {
   $hidden = $(this.props.hidden)
 
   $selectedIndex = $([this.$value, this.$options],
-    () => {
+    ([value, options]) => {
       const compare = this.props.compare ?? ((a, b) => a === b)
-      const options = this.$options.value
-      return options?.findIndex(option => compare(option.value ?? option, this.$value.value)) ?? -1
+      return options?.findIndex(option => compare(option.value ?? option, value)) ?? -1
     }
   )
 

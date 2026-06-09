@@ -60,6 +60,30 @@ render((
 
 ```
 
+###### Batching signal updates
+
+```jsx
+import { $, batch } from '@tooooools/ui/state'
+
+const $todos = $([])
+const $filter = $('all')
+
+const $filtered = $([$todos, $filter], ([todos, filter]) => {
+  if (filter === 'all') return todos
+  return todos.filter(t => t.done === (filter === 'done'))
+})
+
+// Without batch: $filtered fires twice
+$todos.value = [{ text: 'Buy milk', done: true }]
+$filter.value = 'done'
+
+// With batch: $filtered fires once, with final values
+batch(() => {
+  $todos.value = [{ text: 'Buy milk', done: true }]
+  $filter.value = 'done'
+})
+```
+
 ###### Creating components
 
 ```jsx

@@ -91,14 +91,9 @@ export default class Select extends Component {
   }
 
   afterRender () {
-    this.$value.subscribe(this.update)
-    this.$options.subscribe(this.update)
+    this.watch(this.$value, this.update)
+    this.watch(this.$options, this.update)
     this.update()
-  }
-
-  beforeDestroy () {
-    this.$value.unsubscribe(this.update)
-    this.$options.unsubscribe(this.update)
   }
 
   clear () {

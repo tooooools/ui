@@ -78,11 +78,7 @@ export default class Picker extends Component {
   }
 
   afterRender () {
-    this.$open.subscribe(this.handleOpen)
-  }
-
-  beforeDestroy () {
-    this.$open.unsubscribe(this.handleOpen)
+    this.watch(this.$open, this.handleOpen)
   }
 
   template (props) {

@@ -41,14 +41,9 @@ export default class Tabs extends Component {
   }
 
   afterRender () {
-    this.$value.subscribe(this.update)
-    this.$tabs.subscribe(this.update)
+    this.watch(this.$value, this.update)
+    this.watch(this.$tabs, this.update)
     this.update()
-  }
-
-  beforeDestroy () {
-    this.$value.unsubscribe(this.update)
-    this.$tabs.unsubscribe(this.update)
   }
 
   template (props) {

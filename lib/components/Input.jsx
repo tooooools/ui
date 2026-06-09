@@ -108,12 +108,8 @@ export default class Input extends Component {
   }
 
   afterRender () {
-    this.$value.subscribe(this.update)
+    this.watch(this.$value, this.update)
     this.update()
-  }
-
-  beforeDestroy () {
-    this.$value.unsubscribe(this.update)
   }
 
   template (props) {

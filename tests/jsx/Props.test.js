@@ -80,6 +80,23 @@ describe('validate required props', () => {
 
 // ─── validate — enum props ────────────────────────────────────────────────────
 
+describe('validate union with enum', () => {
+  it('passes when value matches enum in union', () => {
+    expect(() => validate({ x: 'start' }, { x: [Props.enum('start', 'proportional'), Props.number] }, 'C')).not.toThrow()
+  })
+
+  it('passes when value matches type in union', () => {
+    expect(() => validate({ x: 42 }, { x: [Props.enum('start', 'proportional'), Props.number] }, 'C')).not.toThrow()
+  })
+
+  it('warns when value matches neither', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    validate({ x: 'other' }, { x: [Props.enum('start', 'proportional'), Props.number] }, 'C')
+    expect(warn.mock.calls[0][0]).toContain('enum("start"|"proportional")|number')
+    warn.mockRestore()
+  })
+})
+
 describe('validate enum props', () => {
   it('passes when value is in the enum', () => {
     expect(() => validate({ foo: 'a' }, { foo: Props.enum('a', 42, true) }, 'C')).not.toThrow()
@@ -87,13 +104,27 @@ describe('validate enum props', () => {
     expect(() => validate({ foo: true }, { foo: Props.enum('a', 42, true) }, 'C')).not.toThrow()
   })
 
-  it('throws when value is not in the enum', () => {
-    expect(() => validate({ foo: 'b' }, { foo: Props.enum('a', 42, true) }, 'C'))
-      .toThrow('<C foo={"b"} /> must be one of: "a", 42, true')
+  it('passes when value is absent (optional)', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    expect(() => validate({}, { foo: Props.enum('a', 42, true) }, 'C')).not.toThrow()
+    expect(warn).not.toHaveBeenCalled()
+    warn.mockRestore()
   })
 
-  it('throws when value is absent', () => {
-    expect(() => validate({}, { foo: Props.enum('a', 42, true) }, 'C'))
-      .toThrow('must be one of')
+  it('warns when value is not in the enum', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    validate({ foo: 'b' }, { foo: Props.enum('a', 42, true) }, 'C')
+    expect(warn.mock.calls[0][0]).toContain('enum("a"|42|true)')
+    warn.mockRestore()
+  })
+
+  it('throws when required and absent', () => {
+    expect(() => validate({}, { foo: Props.required(Props.enum('a', 42, true)) }, 'C'))
+      .toThrow('<C foo={enum("a"|42|true)} /> is required')
+  })
+
+  it('throws when required and value is not in the enum', () => {
+    expect(() => validate({ foo: 'b' }, { foo: Props.required(Props.enum('a', 42, true)) }, 'C'))
+      .toThrow('must be {enum("a"|42|true)}')
   })
 })

@@ -160,13 +160,25 @@ render(<Counter />, document.querySelector('#app'))
 
 ### Props
 
+Declare a `static props` schema for validation. Mismatches log a warning; required props throw.
+
 ```jsx
 import { Component, Props, render } from '@tooooools/ui'
 
 class Counter extends Component {
   static props = {
+    // optional — warns if wrong type
     label: Props.string,
-    initial: Props.number
+    initial: Props.number,
+
+    // required — throws if absent or wrong type
+    id: Props.required(Props.string),
+
+    // union — value must match one of the types
+    count: [Props.number, Props.Signal],
+
+    // enum — throws if value is not one of the listed values
+    size: Props.enum('sm', 'md', 'lg')
   }
 
   template ({ label, initial }) {
@@ -176,6 +188,11 @@ class Counter extends Component {
 
 render(<Counter label='Score' initial={0} />)
 ```
+
+Available types:
+- `Props.string`, `Props.number`, `Props.boolean`, `Props.function`
+- `Props.array`, `Props.object`
+- `Props.Element`, `Props.SVGElement`, `Props.Component`, `Props.Signal`
 
 ### Internal reactive state
 

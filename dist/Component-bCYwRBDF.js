@@ -317,7 +317,10 @@ const Props = new Proxy({
   array: (value) => Array.isArray(value),
   object: (value) => typeof value == "object" && !Array.isArray(value),
   // Special types
-  enum: (...values) => new Enum(values)
+  enum: (...values) => {
+    const fn = (value) => values.includes(value);
+    return Object.defineProperty(fn, "name", { value: `enum(${values.map((v) => JSON.stringify(v)).join("|")})` }), fn;
+  }
 }, {
   get(target, key) {
     if (key in target) return target[key];
@@ -331,11 +334,6 @@ function typeOf(value) {
 function validate(props, schema, name = "") {
   for (const prop in schema) {
     const value = props[prop], spec = schema[prop];
-    if (spec instanceof Enum) {
-      if (!spec.values.includes(value))
-        throw new TypeError(`<${name} ${prop}={${JSON.stringify(value)}} /> must be one of: ${spec.values.map((v) => JSON.stringify(v)).join(", ")}`);
-      continue;
-    }
     if (spec instanceof Required) {
       const tests2 = Array.isArray(spec.test) ? spec.test : [spec.test], label = tests2.map((t) => t.name).join("|");
       if (value === void 0)
@@ -353,15 +351,6 @@ class Required {
   test;
   constructor(test) {
     this.test = test;
-  }
-  get type() {
-    return this.test.name;
-  }
-}
-class Enum {
-  values;
-  constructor(values) {
-    this.values = values;
   }
 }
 class Component {
@@ -466,4 +455,4 @@ export {
   h,
   render as r
 };
-//# sourceMappingURL=Component-ChMLuhya.js.map
+//# sourceMappingURL=Component-bCYwRBDF.js.map

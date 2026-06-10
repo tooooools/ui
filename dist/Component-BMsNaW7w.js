@@ -302,7 +302,7 @@ function render(vnode, parent = document.body, context) {
   }
   return mockComponent = void 0, rendered;
 }
-const Props = {
+const Props = new Proxy({
   required: (test) => new Required(test),
   // Instances
   SVGElement: (value) => value instanceof Element,
@@ -316,7 +316,12 @@ const Props = {
   function: (value) => typeof value == "function",
   array: (value) => Array.isArray(value),
   object: (value) => typeof value == "object" && !Array.isArray(value)
-};
+}, {
+  get(target, key) {
+    if (key in target) return target[key];
+    throw new TypeError(`Props.${key} is not a valid prop type`);
+  }
+});
 function validate(props, schema, name = "") {
   for (const prop in schema) {
     const value = props[prop], [type] = Object.entries(Props).find(([type2, t]) => type2 !== "required" && t(value)) ?? [], test = schema[prop] instanceof Required ? schema[prop].test : schema[prop];
@@ -451,4 +456,4 @@ export {
   h,
   render as r
 };
-//# sourceMappingURL=Component-B5YHZfVp.js.map
+//# sourceMappingURL=Component-BMsNaW7w.js.map

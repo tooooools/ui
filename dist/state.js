@@ -67,7 +67,7 @@ class Writable extends Signal {
     return this.#value;
   }
   set value(value) {
-    value !== this.#value && (this.#previous = this.value, this.#value = value, this.dispatch(this.value, this.previous));
+    this.#previous = this.#value, this.#value = value, this.#value !== this.#previous && this.dispatch(this.#value, this.#previous);
   }
   get previous() {
     return this.#previous;
@@ -126,8 +126,8 @@ class Derived extends Writable {
   }
   #connect = (signal2) => signal2.subscribe(this.#derive);
   #derive = () => {
-    const value = Array.isArray(this.#source) ? this.#source.map((signal2) => signal2.value) : this.#source.value, previous = this.#previous, result = this.#callback(value, previous);
-    result !== previous && (this.#previous = result, this.#value = result, this.dispatch(result, previous));
+    const value = Array.isArray(this.#source) ? this.#source.map((signal2) => signal2.value) : this.#source.value;
+    this.#previous = this.#value, this.#value = this.#callback(value, this.#previous), this.#value !== this.#previous && this.dispatch(this.#value, this.#previous);
   };
 }
 function derived(signals, callback) {
@@ -147,15 +147,7 @@ function persist(value, key, {
   const NS = window.location.pathname + "__", item = localStorage.getItem(NS + key), signal2 = writable(item ? decode(item) : value);
   return item === null && localStorage.setItem(NS + key, encode(signal2.value)), signal2.persist = (value2) => localStorage.setItem(NS + key, encode(value2)), signal2.subscribe(signal2.persist), signal2;
 }
-const ensure = (signal2) => (...values) => {
-  for (const value of values) {
-    if (value instanceof Signal)
-      return value;
-    if (value !== void 0)
-      return signal2(value);
-  }
-  return signal2(null);
-}, $ = function(value, derivation, signal2 = writable, ...params) {
+const $ = function(value, derivation, signal2 = writable, ...params) {
   const hasDerivation = typeof derivation == "function", isSignal = String(value?._symbol) === "Symbol(signal)";
   if (hasDerivation) {
     const signals = Array.isArray(value) ? value.map((v) => $(v, null, signal2)) : $(value, null, signal2);
@@ -168,7 +160,6 @@ export {
   Writable,
   batch,
   derived,
-  ensure,
   not,
   persist,
   signal,

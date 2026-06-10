@@ -365,7 +365,7 @@ class Component {
   mounted = !1;
   destroyed = !1;
   constructor(props = {}) {
-    const label = this.props.name || this.constructor.name || "Component";
+    const label = props.name || this.constructor.name || "Component";
     validate(props, this.constructor.props, label), this._parent = null, this._collector = { refs: [], components: [], domEvents: [], storeEvents: [] }, this.props = props;
     const { log, warn, error } = logger(label, "white", "#000", props.disableLog);
     this.log = log, this.warn = warn, this.error = error;
@@ -411,7 +411,7 @@ class Component {
   watch(signals, fn, { immediate = !1 } = {}) {
     const arr2 = Array.isArray(signals) ? signals : [signals];
     for (const signal of arr2)
-      this._collector.storeEvents.push({ store: signal, fn, init: !1 });
+      this.mounted && signal.subscribe(fn), this._collector.storeEvents.push({ store: signal, fn, init: !1 });
     immediate && fn(arr2.length === 1 ? arr2[0].value : arr2.map((s) => s.value));
   }
   // Render a vnode or array of vnodes and register the rendered content as "child" of this component.
@@ -456,4 +456,4 @@ export {
   h,
   render as r
 };
-//# sourceMappingURL=Component-BMsNaW7w.js.map
+//# sourceMappingURL=Component-CdAFrSo8.js.map

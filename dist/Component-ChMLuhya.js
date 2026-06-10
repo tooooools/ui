@@ -305,7 +305,7 @@ function render(vnode, parent = document.body, context) {
 const Props = new Proxy({
   required: (test) => new Required(test),
   // Instances
-  SVGElement: (value) => value instanceof Element,
+  SVGElement: (value) => value instanceof SVGElement,
   Element: (value) => value instanceof Element,
   Component: (value) => value instanceof Component,
   Signal: (value) => String(value?._symbol) === "Symbol(signal)",
@@ -315,34 +315,38 @@ const Props = new Proxy({
   boolean: (value) => typeof value == "boolean",
   function: (value) => typeof value == "function",
   array: (value) => Array.isArray(value),
-  object: (value) => typeof value == "object" && !Array.isArray(value)
+  object: (value) => typeof value == "object" && !Array.isArray(value),
+  // Special types
+  enum: (...values) => new Enum(values)
 }, {
   get(target, key) {
     if (key in target) return target[key];
     throw new TypeError(`Props.${key} is not a valid prop type`);
   }
 });
+function typeOf(value) {
+  const [type] = Object.entries(Props).find(([k, t]) => k !== "required" && k !== "enum" && t(value)) ?? [];
+  return type;
+}
 function validate(props, schema, name = "") {
   for (const prop in schema) {
-    const value = props[prop], [type] = Object.entries(Props).find(([type2, t]) => type2 !== "required" && t(value)) ?? [], test = schema[prop] instanceof Required ? schema[prop].test : schema[prop];
-    if (test.name === "required" && value === void 0)
-      throw new TypeError(`<${name} ${prop} /> is required`);
-    if (schema[prop] instanceof Required) {
-      if (Array.isArray(test)) {
-        if (value === void 0) throw new TypeError(`<${name} ${prop}={${test.map((t) => t.name).join("|")}} />, is required`);
-        if (!test.find((t) => t(value))) throw new TypeError(`<${name} ${prop}={${type}} /> must be {${test.map((t) => t.name).join("|")}}`);
-      } else if (!test(value))
-        throw value === void 0 ? new TypeError(`<${name} ${prop}={${schema[prop].type}} /> is required`) : schema[prop].type && type !== schema[prop].type ? new TypeError(`<${name} ${prop}={${type}} /> must {${schema[prop].type}}`) : new TypeError(`<${name} ${prop}={${type}} /> must validate the following test:
-
-${test}
-`);
+    const value = props[prop], spec = schema[prop];
+    if (spec instanceof Enum) {
+      if (!spec.values.includes(value))
+        throw new TypeError(`<${name} ${prop}={${JSON.stringify(value)}} /> must be one of: ${spec.values.map((v) => JSON.stringify(v)).join(", ")}`);
+      continue;
     }
-    if (value !== void 0)
-      if (Array.isArray(test)) {
-        for (const t of test)
-          if (t(value)) return;
-        console.warn(`<${name} ${prop}={${test.map((t) => t.name).join("|")}} /> is {${type}}`);
-      } else test(value) || console.warn(`<${name} ${prop}={${test.name}} /> is {${type}}`);
+    if (spec instanceof Required) {
+      const tests2 = Array.isArray(spec.test) ? spec.test : [spec.test], label = tests2.map((t) => t.name).join("|");
+      if (value === void 0)
+        throw new TypeError(`<${name} ${prop}={${label}} /> is required`);
+      if (!tests2.some((t) => t(value)))
+        throw new TypeError(`<${name} ${prop}={${typeOf(value)}} /> must be {${label}}`);
+      continue;
+    }
+    if (value === void 0) continue;
+    const tests = Array.isArray(spec) ? spec : [spec];
+    tests.some((t) => t(value)) || console.warn(`<${name} ${prop}={${tests.map((t) => t.name).join("|")}} /> is {${typeOf(value)}}`);
   }
 }
 class Required {
@@ -352,6 +356,12 @@ class Required {
   }
   get type() {
     return this.test.name;
+  }
+}
+class Enum {
+  values;
+  constructor(values) {
+    this.values = values;
   }
 }
 class Component {
@@ -456,4 +466,4 @@ export {
   h,
   render as r
 };
-//# sourceMappingURL=Component-CdAFrSo8.js.map
+//# sourceMappingURL=Component-ChMLuhya.js.map

@@ -13,8 +13,10 @@ import IconClose from 'iconoir/icons/cancel.svg?raw'
 export default class Modal extends Component {
   static props = {
     title: [Props.string, Props.Signal],
+    icon: [Props.string, Props.Signal],
     locked: [Props.boolean, Props.Signal],
     id: Props.string,
+    class: [Props.string, Props.array, Props.object],
     style: [Props.string, Props.object]
   }
 

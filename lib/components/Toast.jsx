@@ -18,6 +18,7 @@ export default class Toast extends Component {
     count: [Props.number, Props.Signal],
     duration: Props.number,
     id: Props.string,
+    class: [Props.string, Props.array, Props.object],
     style: [Props.string, Props.object]
   }
 

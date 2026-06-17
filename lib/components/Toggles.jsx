@@ -16,6 +16,7 @@ export default class Toggles extends Component {
     disabled: [Props.boolean, Props.Signal],
     hidden: [Props.boolean, Props.Signal],
     id: Props.string,
+    class: [Props.string, Props.array, Props.object],
     style: [Props.string, Props.object]
   }
 

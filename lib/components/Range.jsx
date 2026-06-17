@@ -15,12 +15,14 @@ export default class Range extends Component {
     step: [Props.number, Props.Signal],
     label: [Props.string, Props.Signal],
     title: [Props.string, Props.Signal],
+    icon: Props.string,
     disabled: [Props.boolean, Props.Signal],
     hidden: [Props.boolean, Props.Signal],
     dual: Props.boolean,
     debounce: Props.number,
     id: Props.string,
     tabindex: Props.number,
+    class: [Props.string, Props.array, Props.object],
     style: [Props.string, Props.object]
   }
 

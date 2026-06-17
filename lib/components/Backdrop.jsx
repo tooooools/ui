@@ -9,6 +9,8 @@ import noop from '../utils/noop'
 export default class Backdrop extends Component {
   static props = {
     locked: [Props.boolean, Props.Signal],
+    id: Props.string,
+    class: [Props.string, Props.array, Props.object],
     style: [Props.string, Props.object]
   }
 

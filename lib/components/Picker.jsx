@@ -21,6 +21,7 @@ export default class Picker extends Component {
     autoClose: Props.boolean,
     autoOrder: Props.boolean,
     id: Props.string,
+    class: [Props.string, Props.array, Props.object],
     style: [Props.string, Props.object]
   }
 

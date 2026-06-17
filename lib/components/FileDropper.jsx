@@ -13,6 +13,7 @@ export default class FileDropper extends Component {
     label: Props.string,
     icon: Props.string,
     id: Props.string,
+    class: [Props.string, Props.array, Props.object],
     style: [Props.string, Props.object]
   }
 

@@ -11,6 +11,7 @@ export default class Tabs extends Component {
     value: [Props.number, Props.Signal],
     tabs: [Props.array, Props.Signal],
     id: Props.string,
+    class: [Props.string, Props.array, Props.object],
     style: [Props.string, Props.object]
   }
 

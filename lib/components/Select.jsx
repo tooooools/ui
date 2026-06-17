@@ -15,12 +15,17 @@ export default class Select extends Component {
     options: [Props.array, Props.Signal],
     label: [Props.string, Props.Signal],
     title: [Props.string, Props.Signal],
+    icon: Props.string,
+    dropdown: Props.string,
     disabled: [Props.boolean, Props.Signal],
     hidden: [Props.boolean, Props.Signal],
     placeholder: Props.string,
+    required: Props.boolean,
+    compare: Props.function,
     name: Props.string,
     id: Props.string,
     tabindex: Props.number,
+    class: [Props.string, Props.array, Props.object],
     style: [Props.string, Props.object]
   }
 

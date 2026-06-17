@@ -16,6 +16,7 @@ export default class Button extends Component {
     type: Props.string,
     id: Props.string,
     tabindex: Props.number,
+    class: [Props.string, Props.array, Props.object],
     style: [Props.string, Props.object]
   }
 

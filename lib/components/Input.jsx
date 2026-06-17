@@ -8,7 +8,7 @@ import noop from '../utils/noop'
 
 export default class Input extends Component {
   static props = {
-    value: [Props.string, Props.number, Props.Signal],
+    value: [Props.string, Props.number, Props.object, Props.Signal],
     placeholder: [Props.string, Props.Signal],
     label: [Props.string, Props.Signal],
     before: [Props.string, Props.Signal],
@@ -19,10 +19,21 @@ export default class Input extends Component {
     disabled: [Props.boolean, Props.Signal],
     hidden: [Props.boolean, Props.Signal],
     waiting: [Props.boolean, Props.Signal],
+    min: [Props.number, Props.Signal],
+    max: [Props.number, Props.Signal],
+    step: [Props.number, Props.Signal],
+    accept: Props.string,
+    multiple: Props.boolean,
+    size: [Props.number, Props.string],
+    autofocus: Props.boolean,
+    autocomplete: Props.string,
+    autoSelectAll: Props.boolean,
+    editOnDblClick: Props.boolean,
     type: Props.string,
     name: Props.string,
     id: Props.string,
     tabindex: Props.number,
+    class: [Props.string, Props.array, Props.object],
     style: [Props.string, Props.object]
   }
 

@@ -1,5 +1,7 @@
 import { n as noop } from "./noop-JwH-KCvh.js";
 function h(type, props) {
+  if (type === void 0)
+    throw new TypeError("h() called with undefined type: cannot render <undefined /> component");
   const vn = {};
   return vn.vnode = !0, vn.type = type, vn.props = props || {}, vn.children = [].concat.apply([], [].slice.call(arguments, 2)), vn.isInstance = type && type.template && typeof type.template == "function", vn.isComponent = typeof type == "function" && type.prototype && typeof type.prototype.render == "function", vn.isStateless = typeof type == "function" && !vn.isComponent, vn.isDom = typeof type == "string", vn;
 }
@@ -455,4 +457,4 @@ export {
   h,
   render as r
 };
-//# sourceMappingURL=Component-bCYwRBDF.js.map
+//# sourceMappingURL=Component-BH7W0g4B.js.map

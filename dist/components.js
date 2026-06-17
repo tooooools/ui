@@ -1,4 +1,4 @@
-import { C as Component, P as Props, h, r as render } from "./Component-bCYwRBDF.js";
+import { C as Component, P as Props, h, r as render } from "./Component-BH7W0g4B.js";
 import { $ } from "./state.js";
 import { n as noop } from "./noop-JwH-KCvh.js";
 const backdrop = "ui-backdrop-136kk114", style$b = {
@@ -6,7 +6,10 @@ const backdrop = "ui-backdrop-136kk114", style$b = {
 };
 class Backdrop extends Component {
   static props = {
-    locked: [Props.boolean, Props.Signal]
+    locked: [Props.boolean, Props.Signal],
+    id: Props.string,
+    class: [Props.string, Props.array, Props.object],
+    style: [Props.string, Props.object]
   };
   $locked = $(this.props.locked);
   #lastActiveElement = document.activeElement;
@@ -35,6 +38,7 @@ class Backdrop extends Component {
           style$b.backdrop,
           props.class
         ],
+        style: props.style,
         "event-click": (e) => (props["event-click"] ?? noop)(e, this)
       },
       props.children
@@ -57,7 +61,9 @@ class Button extends Component {
     waiting: [Props.boolean, Props.Signal],
     type: Props.string,
     id: Props.string,
-    tabindex: Props.number
+    tabindex: Props.number,
+    class: [Props.string, Props.array, Props.object],
+    style: [Props.string, Props.object]
   };
   $label = $(this.props.label);
   $title = $(this.props.title);
@@ -98,6 +104,7 @@ class Button extends Component {
           },
           props.class
         ],
+        style: props.style,
         title: this.$title,
         disabled: this.$disabled,
         "event-click": this.handleClick
@@ -122,7 +129,9 @@ class FileDropper extends Component {
   static props = {
     label: Props.string,
     icon: Props.string,
-    id: Props.string
+    id: Props.string,
+    class: [Props.string, Props.array, Props.object],
+    style: [Props.string, Props.object]
   };
   $draggedOver = $(!1);
   $files = $(null);
@@ -167,7 +176,8 @@ class FileDropper extends Component {
           style$9["file-dropper"],
           { "is-dragged-over": this.$draggedOver },
           props.class
-        ]
+        ],
+        style: props.style
       },
       props.children.length > 0 ? props.children : props.icon || props.label ? /* @__PURE__ */ h(Button, { icon: props.icon, label: props.label, tabIndex: -1 }) : null
     );
@@ -179,7 +189,7 @@ const input = "ui-input-r7lw0114", input__icon = "ui-input__icon-r7lw0157", styl
 };
 class Input extends Component {
   static props = {
-    value: [Props.string, Props.number, Props.Signal],
+    value: [Props.string, Props.number, Props.object, Props.Signal],
     placeholder: [Props.string, Props.Signal],
     label: [Props.string, Props.Signal],
     before: [Props.string, Props.Signal],
@@ -190,10 +200,22 @@ class Input extends Component {
     disabled: [Props.boolean, Props.Signal],
     hidden: [Props.boolean, Props.Signal],
     waiting: [Props.boolean, Props.Signal],
+    min: [Props.number, Props.Signal],
+    max: [Props.number, Props.Signal],
+    step: [Props.number, Props.Signal],
+    accept: Props.string,
+    multiple: Props.boolean,
+    size: [Props.number, Props.string],
+    autofocus: Props.boolean,
+    autocomplete: Props.string,
+    autoSelectAll: Props.boolean,
+    editOnDblClick: Props.boolean,
     type: Props.string,
     name: Props.string,
     id: Props.string,
-    tabindex: Props.number
+    tabindex: Props.number,
+    class: [Props.string, Props.array, Props.object],
+    style: [Props.string, Props.object]
   };
   $value = $(this.props.value);
   $files = $(this.props.files);
@@ -277,6 +299,7 @@ class Input extends Component {
           },
           props.class
         ],
+        style: props.style,
         "data-type": props.type,
         title: this.$title,
         "event-click": this.handleClick,
@@ -330,8 +353,11 @@ const modal = "ui-modal-f1wbu114", modal__header = "ui-modal__header-f1wbu126", 
 class Modal extends Component {
   static props = {
     title: [Props.string, Props.Signal],
+    icon: [Props.string, Props.Signal],
     locked: [Props.boolean, Props.Signal],
-    id: Props.string
+    id: Props.string,
+    class: [Props.string, Props.array, Props.object],
+    style: [Props.string, Props.object]
   };
   /**
    * Display a Modal in a functional way
@@ -391,6 +417,7 @@ class Modal extends Component {
             style$7.modal,
             props.class
           ],
+          style: props.style,
           "event-mouseenter": (e) => (props["event-mouseenter"] ?? noop)(e, this),
           "event-mouseleave": (e) => (props["event-mouseleave"] ?? noop)(e, this)
         },
@@ -427,7 +454,9 @@ class Toolbar extends Component {
     compact: [Props.boolean, Props.Signal],
     disabled: [Props.boolean, Props.Signal],
     hidden: [Props.boolean, Props.Signal],
-    id: Props.string
+    id: Props.string,
+    class: [Props.string, Props.array, Props.object],
+    style: [Props.string, Props.object]
   };
   $compact = $(this.props.compact);
   $disabled = $(this.props.disabled);
@@ -447,7 +476,8 @@ class Toolbar extends Component {
             "is-hidden": this.$hidden
           },
           props.class
-        ]
+        ],
+        style: props.style
       },
       props.children
     );
@@ -464,7 +494,9 @@ class Picker extends Component {
     hidden: [Props.boolean, Props.Signal],
     autoClose: Props.boolean,
     autoOrder: Props.boolean,
-    id: Props.string
+    id: Props.string,
+    class: [Props.string, Props.array, Props.object],
+    style: [Props.string, Props.object]
   };
   $label = $(this.props.label);
   $title = $(this.props.title);
@@ -519,7 +551,8 @@ class Picker extends Component {
             "is-hidden": this.$hidden
           },
           props.class
-        ]
+        ],
+        style: props.style
       },
       /* @__PURE__ */ h(
         Button,
@@ -582,12 +615,15 @@ class Range extends Component {
     step: [Props.number, Props.Signal],
     label: [Props.string, Props.Signal],
     title: [Props.string, Props.Signal],
+    icon: Props.string,
     disabled: [Props.boolean, Props.Signal],
     hidden: [Props.boolean, Props.Signal],
     dual: Props.boolean,
     debounce: Props.number,
     id: Props.string,
-    tabindex: Props.number
+    tabindex: Props.number,
+    class: [Props.string, Props.array, Props.object],
+    style: [Props.string, Props.object]
   };
   $label = $(this.props.label);
   $title = $(this.props.title);
@@ -616,7 +652,8 @@ class Range extends Component {
             "is-hidden": this.$hidden
           },
           props.class
-        ]
+        ],
+        style: props.style
       },
       props.icon && /* @__PURE__ */ h(
         "span",
@@ -677,12 +714,18 @@ class Select extends Component {
     options: [Props.array, Props.Signal],
     label: [Props.string, Props.Signal],
     title: [Props.string, Props.Signal],
+    icon: Props.string,
+    dropdown: Props.string,
     disabled: [Props.boolean, Props.Signal],
     hidden: [Props.boolean, Props.Signal],
     placeholder: Props.string,
+    required: Props.boolean,
+    compare: Props.function,
     name: Props.string,
     id: Props.string,
-    tabindex: Props.number
+    tabindex: Props.number,
+    class: [Props.string, Props.array, Props.object],
+    style: [Props.string, Props.object]
   };
   static get separator() {
     return { label: "", disabled: !0 };
@@ -754,7 +797,8 @@ class Select extends Component {
             "is-hidden": this.$hidden
           },
           props.class
-        ]
+        ],
+        style: props.style
       },
       props.icon && /* @__PURE__ */ h(
         "span",
@@ -796,7 +840,9 @@ class Toggles extends Component {
     title: [Props.string, Props.Signal],
     disabled: [Props.boolean, Props.Signal],
     hidden: [Props.boolean, Props.Signal],
-    id: Props.string
+    id: Props.string,
+    class: [Props.string, Props.array, Props.object],
+    style: [Props.string, Props.object]
   };
   $title = $(this.props.title);
   $value = $(this.props.value);
@@ -846,6 +892,7 @@ class Toggles extends Component {
           },
           props.class
         ],
+        style: props.style,
         title: this.$title
       }
     );
@@ -855,7 +902,9 @@ class Tabs extends Component {
   static props = {
     value: [Props.number, Props.Signal],
     tabs: [Props.array, Props.Signal],
-    id: Props.string
+    id: Props.string,
+    class: [Props.string, Props.array, Props.object],
+    style: [Props.string, Props.object]
   };
   static panel(children, props = {}) {
     return /* @__PURE__ */ h(
@@ -891,7 +940,8 @@ class Tabs extends Component {
         class: [
           style$2.tabs,
           props.class
-        ]
+        ],
+        style: props.style
       },
       /* @__PURE__ */ h(
         Toggles,
@@ -927,7 +977,9 @@ class Toast extends Component {
     tone: [Props.string, Props.Signal],
     count: [Props.number, Props.Signal],
     duration: Props.number,
-    id: Props.string
+    id: Props.string,
+    class: [Props.string, Props.array, Props.object],
+    style: [Props.string, Props.object]
   };
   static display(message, { parent = Toast.container, ...props } = {}) {
     render(/* @__PURE__ */ h(Toast, { ...props }, message), parent);
@@ -966,7 +1018,7 @@ class Toast extends Component {
         ],
         "data-count": this.$count,
         "data-tone": this.$tone,
-        style: { "--toast-duration": (props.duration ?? -1) + "ms" }
+        style: { "--toast-duration": (props.duration ?? -1) + "ms", ...props.style }
       },
       /* @__PURE__ */ h(
         "span",

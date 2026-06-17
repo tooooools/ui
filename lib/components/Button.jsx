@@ -15,7 +15,8 @@ export default class Button extends Component {
     waiting: [Props.boolean, Props.Signal],
     type: Props.string,
     id: Props.string,
-    tabindex: Props.number
+    tabindex: Props.number,
+    style: [Props.string, Props.object]
   }
 
   $label = $(this.props.label)
@@ -71,6 +72,7 @@ export default class Button extends Component {
           },
           props.class
         ]}
+        style={props.style}
         title={this.$title}
         disabled={this.$disabled}
         event-click={this.handleClick}

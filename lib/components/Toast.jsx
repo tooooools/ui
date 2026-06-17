@@ -17,7 +17,8 @@ export default class Toast extends Component {
     tone: [Props.string, Props.Signal],
     count: [Props.number, Props.Signal],
     duration: Props.number,
-    id: Props.string
+    id: Props.string,
+    style: [Props.string, Props.object]
   }
 
   static display (message, { parent = Toast.container, ...props } = {}) {
@@ -66,7 +67,7 @@ export default class Toast extends Component {
         ]}
         data-count={this.$count}
         data-tone={this.$tone}
-        style={{ '--toast-duration': (props.duration ?? -1) + 'ms' }}
+        style={{ '--toast-duration': (props.duration ?? -1) + 'ms', ...props.style }}
       >
         <span
           ref={this.ref('icon')}

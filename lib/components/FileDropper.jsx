@@ -12,7 +12,8 @@ export default class FileDropper extends Component {
   static props = {
     label: Props.string,
     icon: Props.string,
-    id: Props.string
+    id: Props.string,
+    style: [Props.string, Props.object]
   }
 
   $draggedOver = $(false)
@@ -90,6 +91,7 @@ export default class FileDropper extends Component {
           { 'is-dragged-over': this.$draggedOver },
           props.class
         ]}
+        style={props.style}
       >
         {props.children.length > 0
           ? props.children

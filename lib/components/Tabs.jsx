@@ -10,7 +10,8 @@ export default class Tabs extends Component {
   static props = {
     value: [Props.number, Props.Signal],
     tabs: [Props.array, Props.Signal],
-    id: Props.string
+    id: Props.string,
+    style: [Props.string, Props.object]
   }
 
   static panel (children, props = {}) {
@@ -53,6 +54,7 @@ export default class Tabs extends Component {
           style.tabs,
           props.class
         ]}
+        style={props.style}
       >
         <Toggles
           class={style.tabs__toggles}

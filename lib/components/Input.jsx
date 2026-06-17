@@ -22,7 +22,8 @@ export default class Input extends Component {
     type: Props.string,
     name: Props.string,
     id: Props.string,
-    tabindex: Props.number
+    tabindex: Props.number,
+    style: [Props.string, Props.object]
   }
 
   $value = $(this.props.value)
@@ -130,6 +131,7 @@ export default class Input extends Component {
           },
           props.class
         ]}
+        style={props.style}
         data-type={props.type}
         title={this.$title}
         event-click={this.handleClick}

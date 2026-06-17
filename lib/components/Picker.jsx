@@ -20,7 +20,8 @@ export default class Picker extends Component {
     hidden: [Props.boolean, Props.Signal],
     autoClose: Props.boolean,
     autoOrder: Props.boolean,
-    id: Props.string
+    id: Props.string,
+    style: [Props.string, Props.object]
   }
 
   $label = $(this.props.label)
@@ -96,6 +97,7 @@ export default class Picker extends Component {
           },
           props.class
         ]}
+        style={props.style}
       >
         <Button
           class={style.picker__toggle}

@@ -20,7 +20,8 @@ export default class Select extends Component {
     placeholder: Props.string,
     name: Props.string,
     id: Props.string,
-    tabindex: Props.number
+    tabindex: Props.number,
+    style: [Props.string, Props.object]
   }
 
   static get separator () {
@@ -110,6 +111,7 @@ export default class Select extends Component {
           },
           props.class
         ]}
+        style={props.style}
       >
         {props.icon && (
           <span

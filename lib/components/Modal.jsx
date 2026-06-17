@@ -14,7 +14,8 @@ export default class Modal extends Component {
   static props = {
     title: [Props.string, Props.Signal],
     locked: [Props.boolean, Props.Signal],
-    id: Props.string
+    id: Props.string,
+    style: [Props.string, Props.object]
   }
 
   /**
@@ -84,6 +85,7 @@ export default class Modal extends Component {
             style.modal,
             props.class
           ]}
+          style={props.style}
           event-mouseenter={e => (props['event-mouseenter'] ?? noop)(e, this)}
           event-mouseleave={e => (props['event-mouseleave'] ?? noop)(e, this)}
         >

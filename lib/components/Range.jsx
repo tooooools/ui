@@ -20,7 +20,8 @@ export default class Range extends Component {
     dual: Props.boolean,
     debounce: Props.number,
     id: Props.string,
-    tabindex: Props.number
+    tabindex: Props.number,
+    style: [Props.string, Props.object]
   }
 
   $label = $(this.props.label)
@@ -58,6 +59,7 @@ export default class Range extends Component {
           },
           props.class
         ]}
+        style={props.style}
       >
         {props.icon && (
           <span

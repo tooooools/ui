@@ -9,7 +9,8 @@ export default class Toolbar extends Component {
     compact: [Props.boolean, Props.Signal],
     disabled: [Props.boolean, Props.Signal],
     hidden: [Props.boolean, Props.Signal],
-    id: Props.string
+    id: Props.string,
+    style: [Props.string, Props.object]
   }
 
   $compact = $(this.props.compact)
@@ -31,6 +32,7 @@ export default class Toolbar extends Component {
           },
           props.class
         ]}
+        style={props.style}
       >
         {props.children}
       </div>

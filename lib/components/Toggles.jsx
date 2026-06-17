@@ -15,7 +15,8 @@ export default class Toggles extends Component {
     title: [Props.string, Props.Signal],
     disabled: [Props.boolean, Props.Signal],
     hidden: [Props.boolean, Props.Signal],
-    id: Props.string
+    id: Props.string,
+    style: [Props.string, Props.object]
   }
 
   $title = $(this.props.title)
@@ -75,6 +76,7 @@ export default class Toggles extends Component {
           },
           props.class
         ]}
+        style={props.style}
         title={this.$title}
       />
     )

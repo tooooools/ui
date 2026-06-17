@@ -8,7 +8,8 @@ import noop from '../utils/noop'
 
 export default class Backdrop extends Component {
   static props = {
-    locked: [Props.boolean, Props.Signal]
+    locked: [Props.boolean, Props.Signal],
+    style: [Props.string, Props.object]
   }
 
   $locked = $(this.props.locked)
@@ -54,6 +55,7 @@ export default class Backdrop extends Component {
           style.backdrop,
           props.class
         ]}
+        style={props.style}
         event-click={e => (props['event-click'] ?? noop)(e, this)}
       >
         {props.children}

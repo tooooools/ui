@@ -134,7 +134,7 @@ function derived(signals, callback) {
   return new Derived(signals, callback);
 }
 const not = (signal2) => derived(signal2, (value) => !value);
-function persist(value, key, {
+function persist(key, value, {
   encode = JSON.stringify,
   decode = (value2) => {
     try {

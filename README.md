@@ -108,7 +108,7 @@ localStorage-backed writable. Survives page reload.
 ```js
 import { persist } from '@tooooools/ui/state'
 
-const $count = persist(0, 'counter')
+const $count = persist('counter', 0)
 $count.value = 3
 // reload page
 $count.value   //=> 3

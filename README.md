@@ -114,6 +114,33 @@ $count.value = 3
 $count.value   //=> 3
 ```
 
+### `slot()`
+
+An empty signal usable in JSX before its real value exists. Fill it later with `fill()`.
+
+Useful when a prop needs to bind to a signal that only exists once a sibling has been rendered — here, the submit `Button` is disabled until the `Input` ref is available and its `$value` is non-empty:
+
+```jsx
+import { Component } from '@tooooools/ui'
+import { Input, Button } from '@tooooools/ui/components'
+import { $, slot } from '@tooooools/ui/state'
+
+class LoginForm extends Component {
+  $disabled = slot()
+
+  template () {
+    return <>
+      <Input ref={this.ref('email')} placeholder='Email' />
+      <Button text='Sign in' disabled={this.$disabled} />
+    </>
+  }
+
+  afterRender () {
+    this.$disabled.fill($(this.refs.email.$value, v => !v))
+  }
+}
+```
+
 ### `batch()`
 
 Defers all signal dispatches until the end of the block. Derived signals fire once with final values.

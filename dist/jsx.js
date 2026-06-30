@@ -1,5 +1,5 @@
-import { h, e as extend } from "./Component-bHEkOV3l.js";
-import { C, P, r } from "./Component-bHEkOV3l.js";
+import { h, e as extend } from "./Component-ClCoLe8n.js";
+import { C, P, r } from "./Component-ClCoLe8n.js";
 function addRef(obj, key) {
   return function(ref) {
     obj[key] = ref;

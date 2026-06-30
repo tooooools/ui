@@ -88,7 +88,7 @@ function setDomAttrib(el, name, value, collector, isSvg) {
       el[eventType] = value;
     } else if (name === "class") {
       if (typeof value == "string" && (isSvg ? el.setAttribute("class", value || "") : el.className = value || ""), typeof value == "object") {
-        const entries = Array.isArray(value) ? value.flat().filter(Boolean) : value;
+        const entries = Array.isArray(value) ? value.flat().filter(Boolean) : [value];
         for (const key in entries) {
           const v = entries[key];
           if (typeof v == "string" && el.classList.add(...v.split(" ")), typeof v == "object") {
@@ -457,4 +457,4 @@ export {
   h,
   render as r
 };
-//# sourceMappingURL=Component-bHEkOV3l.js.map
+//# sourceMappingURL=Component-ClCoLe8n.js.map

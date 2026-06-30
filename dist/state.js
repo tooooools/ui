@@ -1,61 +1,5 @@
-import { n as noop } from "./noop-JwH-KCvh.js";
-function SignalListener(owner, fn, ctx, once) {
-  this.fn = fn, this.ctx = ctx || null, this.owner = owner, this.once = !!once;
-}
-function removeNode(owner, node) {
-  node.prev && (node.prev.next = node.next), node.next && (node.next.prev = node.prev), node.ctx = node.fn = node.owner = null, node === owner._first && (owner._first = node.next), node === owner._last && (owner._last = node.prev);
-}
-let batchDepth = 0;
-const batchQueue = /* @__PURE__ */ new Map();
-class Signal {
-  constructor() {
-    this._first = this._last = null, this._symbol = Symbol.for("signal");
-  }
-  dispatch(...values) {
-    if (batchDepth > 0) {
-      batchQueue.set(this, values);
-      return;
-    }
-    let node = this._first;
-    for (; node; )
-      node.fn.call(node.ctx, ...values), node.once && this.unsubscribe(node), node = node.next;
-  }
-  subscribe(fn, ctx, once) {
-    const node = new SignalListener(this, fn, ctx, once);
-    return this._first ? (this._last.next = node, node.prev = this._last, this._last = node) : (this._first = node, this._last = node), node;
-  }
-  subscribeOnce(fn, ctx) {
-    return this.subscribe(fn, ctx, !0);
-  }
-  unsubscribe(fn, ctx) {
-    if (!fn) throw new Error("unsubscribe() called without a handler");
-    if (fn instanceof SignalListener) return removeNode(this, fn);
-    ctx || (ctx = null);
-    let node = this._first;
-    for (; node; )
-      node.fn === fn && node.ctx === ctx && removeNode(this, node), node = node.next;
-  }
-  unsubscribeAll() {
-    let node = this._first;
-    for (this._first = this._last = null; node; )
-      removeNode(this, node), node = node.next;
-  }
-}
-function batch(fn) {
-  batchDepth++;
-  try {
-    fn();
-  } finally {
-    if (batchDepth--, batchDepth === 0) {
-      const queue = [...batchQueue];
-      batchQueue.clear();
-      for (const [signal2, values] of queue) signal2.dispatch(...values);
-    }
-  }
-}
-function signal() {
-  return new Signal();
-}
+import { S as Signal, n as noop, i as isSignal } from "./signal-DpLAi1GD.js";
+import { b, s } from "./signal-DpLAi1GD.js";
 class Writable extends Signal {
   #value = void 0;
   #initial = void 0;
@@ -124,9 +68,9 @@ class Derived extends Writable {
   set previous(value) {
     throw new Error("Cannot manually set previous value");
   }
-  #connect = (signal2) => signal2.subscribe(this.#derive);
+  #connect = (signal) => signal.subscribe(this.#derive);
   #derive = () => {
-    const value = Array.isArray(this.#source) ? this.#source.map((signal2) => signal2.value) : this.#source.value;
+    const value = Array.isArray(this.#source) ? this.#source.map((signal) => signal.value) : this.#source.value;
     this.#previous = this.#value, this.#value = this.#callback(value, this.#previous), this.#value !== this.#previous && this.dispatch(this.#value, this.#previous);
   };
 }
@@ -145,7 +89,7 @@ class Slot extends Writable {
 function slot() {
   return new Slot();
 }
-const not = (signal2) => derived(signal2, (value) => !value);
+const not = (signal) => derived(signal, (value) => !value);
 function persist(key, value, {
   encode = JSON.stringify,
   decode = (value2) => {
@@ -156,26 +100,26 @@ function persist(key, value, {
     }
   }
 } = {}) {
-  const NS = window.location.pathname + "__", item = localStorage.getItem(NS + key), signal2 = writable(item ? decode(item) : value);
-  return item === null && localStorage.setItem(NS + key, encode(signal2.value)), signal2.persist = (value2) => localStorage.setItem(NS + key, encode(value2)), signal2.subscribe(signal2.persist), signal2;
+  const NS = window.location.pathname + "__", item = localStorage.getItem(NS + key), signal = writable(item ? decode(item) : value);
+  return item === null && localStorage.setItem(NS + key, encode(signal.value)), signal.persist = (value2) => localStorage.setItem(NS + key, encode(value2)), signal.subscribe(signal.persist), signal;
 }
-const $ = function(value, derivation, signal2 = writable, ...params) {
-  const hasDerivation = typeof derivation == "function", isSignal = String(value?._symbol) === "Symbol(signal)";
-  if (hasDerivation) {
-    const signals = Array.isArray(value) ? value.map((v) => $(v, null, signal2)) : $(value, null, signal2);
+const $ = function(value, derivation, signal = writable, ...params) {
+  if (typeof derivation == "function") {
+    const signals = Array.isArray(value) ? value.map((v) => $(v, null, signal)) : $(value, null, signal);
     return derived(signals, derivation);
-  } else return isSignal ? value : signal2(value, ...params);
+  } else return isSignal(value) ? value : signal(value, ...params);
 };
 export {
   $,
   Derived,
   Slot,
   Writable,
-  batch,
+  b as batch,
   derived,
+  isSignal,
   not,
   persist,
-  signal,
+  s as signal,
   slot,
   writable
 };

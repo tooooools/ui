@@ -1,4 +1,4 @@
-import { n as noop } from "./noop-JwH-KCvh.js";
+import { n as noop, i as isSignal } from "./signal-DpLAi1GD.js";
 function h(type, props) {
   if (type === void 0)
     throw new TypeError("h() called with undefined type: cannot render <undefined /> component");
@@ -54,7 +54,7 @@ const namespaces = [
   "webkit-playsinline",
   "playsinline",
   "selected"
-]), isSignal = (value) => value && String(value._symbol) === "Symbol(signal)";
+]);
 let val;
 const startsWith = (str, w) => str.substr(0, w.length) === w, updateClass = (n, el) => (v) => el.classList.toggle(n, v || !1), updateAttrib = (name = "textContent", isSvg, el) => (v) => {
   if (isSvg && name !== (name = name.replace(/^xlink:?/, ""))) el.setAttributeNS("http://www.w3.org/1999/xlink", name.toLowerCase(), v);
@@ -310,7 +310,7 @@ const Props = new Proxy({
   SVGElement: (value) => value instanceof SVGElement,
   Element: (value) => value instanceof Element,
   Component: (value) => value instanceof Component,
-  Signal: (value) => String(value?._symbol) === "Symbol(signal)",
+  Signal: (value) => isSignal(value),
   // Primitives
   number: (value) => typeof value == "number",
   string: (value) => typeof value == "string",
@@ -457,4 +457,4 @@ export {
   h,
   render as r
 };
-//# sourceMappingURL=Component-BH7W0g4B.js.map
+//# sourceMappingURL=Component-bHEkOV3l.js.map

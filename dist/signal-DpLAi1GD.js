@@ -1,0 +1,68 @@
+function noop() {
+}
+function SignalListener(owner, fn, ctx, once) {
+  this.fn = fn, this.ctx = ctx || null, this.owner = owner, this.once = !!once;
+}
+function removeNode(owner, node) {
+  node.prev && (node.prev.next = node.next), node.next && (node.next.prev = node.prev), node.ctx = node.fn = node.owner = null, node === owner._first && (owner._first = node.next), node === owner._last && (owner._last = node.prev);
+}
+let batchDepth = 0;
+const batchQueue = /* @__PURE__ */ new Map(), SIGNAL = Symbol.for("signal");
+class Signal {
+  constructor() {
+    this._first = this._last = null, this._symbol = SIGNAL;
+  }
+  dispatch(...values) {
+    if (batchDepth > 0) {
+      batchQueue.set(this, values);
+      return;
+    }
+    let node = this._first;
+    for (; node; )
+      node.fn.call(node.ctx, ...values), node.once && this.unsubscribe(node), node = node.next;
+  }
+  subscribe(fn, ctx, once) {
+    const node = new SignalListener(this, fn, ctx, once);
+    return this._first ? (this._last.next = node, node.prev = this._last, this._last = node) : (this._first = node, this._last = node), node;
+  }
+  subscribeOnce(fn, ctx) {
+    return this.subscribe(fn, ctx, !0);
+  }
+  unsubscribe(fn, ctx) {
+    if (!fn) throw new Error("unsubscribe() called without a handler");
+    if (fn instanceof SignalListener) return removeNode(this, fn);
+    ctx || (ctx = null);
+    let node = this._first;
+    for (; node; )
+      node.fn === fn && node.ctx === ctx && removeNode(this, node), node = node.next;
+  }
+  unsubscribeAll() {
+    let node = this._first;
+    for (this._first = this._last = null; node; )
+      removeNode(this, node), node = node.next;
+  }
+}
+function batch(fn) {
+  batchDepth++;
+  try {
+    fn();
+  } finally {
+    if (batchDepth--, batchDepth === 0) {
+      const queue = [...batchQueue];
+      batchQueue.clear();
+      for (const [signal2, values] of queue) signal2.dispatch(...values);
+    }
+  }
+}
+const isSignal = (value) => value?._symbol === SIGNAL;
+function signal() {
+  return new Signal();
+}
+export {
+  Signal as S,
+  batch as b,
+  isSignal as i,
+  noop as n,
+  signal as s
+};
+//# sourceMappingURL=signal-DpLAi1GD.js.map

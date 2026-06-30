@@ -133,6 +133,18 @@ class Derived extends Writable {
 function derived(signals, callback) {
   return new Derived(signals, callback);
 }
+class Slot extends Writable {
+  #source = void 0;
+  #onSourceChange = (value) => {
+    this.value = value;
+  };
+  fill(source) {
+    this.#source && this.#source.unsubscribe(this.#onSourceChange), this.#source = source, this.value = source.value, source.subscribe(this.#onSourceChange);
+  }
+}
+function slot() {
+  return new Slot();
+}
 const not = (signal2) => derived(signal2, (value) => !value);
 function persist(key, value, {
   encode = JSON.stringify,
@@ -157,12 +169,14 @@ const $ = function(value, derivation, signal2 = writable, ...params) {
 export {
   $,
   Derived,
+  Slot,
   Writable,
   batch,
   derived,
   not,
   persist,
   signal,
+  slot,
   writable
 };
 //# sourceMappingURL=state.js.map

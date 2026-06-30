@@ -1,6 +1,8 @@
 import { describe, it, expect, vi } from 'vitest'
-import signal, { batch } from '../../lib/state/signal.js'
+import signal, { batch, isSignal } from '../../lib/state/signal.js'
 import writable from '../../lib/state/writable.js'
+import derived from '../../lib/state/derived.js'
+import slot from '../../lib/state/slot.js'
 
 describe('signal', () => {
   it('dispatches to subscribers', () => {
@@ -53,6 +55,32 @@ describe('signal', () => {
 
   it('unsubscribe throws without argument', () => {
     expect(() => signal().unsubscribe()).toThrow()
+  })
+})
+
+describe('isSignal', () => {
+  it('recognizes a plain signal', () => {
+    expect(isSignal(signal())).toBe(true)
+  })
+
+  it('recognizes signal subclasses', () => {
+    expect(isSignal(writable(1))).toBe(true)
+    expect(isSignal(derived(writable(1), v => v))).toBe(true)
+    expect(isSignal(slot())).toBe(true)
+  })
+
+  it('rejects non-signals', () => {
+    expect(isSignal(undefined)).toBe(false)
+    expect(isSignal(null)).toBe(false)
+    expect(isSignal(1)).toBe(false)
+    expect(isSignal({})).toBe(false)
+  })
+
+  it('recognizes structurally-tagged objects across realms/bundle duplicates', () => {
+    // Symbol.for() uses the global registry, so a signal instance from a
+    // separate copy of this library (e.g. a duplicated dependency) is still
+    // recognized as long as it carries the same registered symbol.
+    expect(isSignal({ _symbol: Symbol.for('signal') })).toBe(true)
   })
 })
 

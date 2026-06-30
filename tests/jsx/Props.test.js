@@ -1,4 +1,5 @@
 import { describe, it, expect, vi } from 'vitest'
+import signal from '../../lib/state/signal'
 
 globalThis.Element = class Element {}
 globalThis.SVGElement = class SVGElement extends Element {}
@@ -16,7 +17,7 @@ describe('Props types', () => {
   it('object', () => { expect(Props.object({})).toBe(true); expect(Props.object([])).toBe(false) })
   it('Element', () => { expect(Props.Element(new Element())).toBe(true); expect(Props.Element('x')).toBe(false) })
   it('Signal', () => {
-    expect(Props.Signal({ _symbol: Symbol.for('signal') })).toBe(true)
+    expect(Props.Signal(signal())).toBe(true)
     expect(Props.Signal({})).toBe(false)
   })
   it('throws on unknown type', () => {

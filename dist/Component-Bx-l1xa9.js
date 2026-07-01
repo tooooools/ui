@@ -402,11 +402,18 @@ class Component {
       arr2[index] = el, poolable && pool.push(index);
     };
   }
-  // Quickly add ref to a hashmap of component refs
-  refMap(id, k) {
+  // Quickly add ref to a hashmap of component refs.
+  // With `multiple: true`, each key holds an array of refs instead of a single ref,
+  // and successive calls with the same id push a new slot into that array.
+  refMap(k, id, { multiple = !1 } = {}) {
     const map = this.refs[k] || (this.refs[k] = /* @__PURE__ */ new Map());
-    return function(el) {
-      el ? map.set(id, el) : map.delete(id);
+    if (!multiple)
+      return function(el) {
+        el ? map.set(id, el) : map.delete(id);
+      };
+    const arr2 = map.get(id) || map.set(id, []).get(id), index = arr2.length;
+    return arr2[index] = null, function(el) {
+      arr2[index] = el;
     };
   }
   watch(signals, fn, { immediate = !1 } = {}) {
@@ -457,4 +464,4 @@ export {
   h,
   render as r
 };
-//# sourceMappingURL=Component-ClCoLe8n.js.map
+//# sourceMappingURL=Component-Bx-l1xa9.js.map

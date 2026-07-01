@@ -19,6 +19,7 @@ export default class Backdrop extends Component {
   #lastActiveElement = document.activeElement
 
   captureEscapeKey = e => {
+    if (this.$locked.value) return
     if (e.key !== 'Escape') return
     this.close()
   }
@@ -31,6 +32,8 @@ export default class Backdrop extends Component {
 
   beforeDestroy () {
     if (this.destroyed) return
+
+    ;(this.props['event-close'] || noop)(null, this)
     window.removeEventListener('keyup', this.captureEscapeKey)
 
     if (this.#lastActiveElement) {
@@ -43,8 +46,6 @@ export default class Backdrop extends Component {
 
   close () {
     if (this.$locked.value) return
-    ;(this.props['event-close'] || noop)(null, this)
-    if (this.destroyed) return
     this.destroy()
   }
 

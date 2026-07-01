@@ -67,14 +67,14 @@ export default class Modal extends Component {
             <Button
               label='Cancel'
               {...no}
-              event-click={() => modal.handleClose()}
+              event-click={() => modal.close()}
             />
             <Button
               label='Confirm'
               {...yes}
               event-click={() => {
                 confirmed = true
-                modal.handleClose()
+                modal.close()
               }}
             />
           </footer>
@@ -87,11 +87,10 @@ export default class Modal extends Component {
   $locked = $(this.props.locked)
 
   handleClick = e => {
-    if (e.target === this.base) this.handleClose()
+    if (e.target === this.base) this.close()
   }
 
-  handleClose = () => {
-    if (this.$locked.value) return
+  close = () => {
     this.refs.backdrop.close()
   }
 
@@ -125,7 +124,7 @@ export default class Modal extends Component {
               class={style.modal__close}
               icon={IconClose}
               hidden={this.$locked}
-              event-click={this.handleClose}
+              event-click={this.close}
             />
           </header>
 

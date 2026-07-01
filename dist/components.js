@@ -14,19 +14,19 @@ class Backdrop extends Component {
   $locked = $(this.props.locked);
   #lastActiveElement = document.activeElement;
   captureEscapeKey = (e) => {
-    e.key === "Escape" && this.close();
+    this.$locked.value || e.key === "Escape" && this.close();
   };
   afterMount() {
     this.#lastActiveElement && this.#lastActiveElement.blur(), window.addEventListener("keyup", this.captureEscapeKey), (this.props["event-open"] ?? noop)(null, this);
   }
   beforeDestroy() {
-    if (!this.destroyed && (window.removeEventListener("keyup", this.captureEscapeKey), this.#lastActiveElement)) {
+    if (!this.destroyed && ((this.props["event-close"] || noop)(null, this), window.removeEventListener("keyup", this.captureEscapeKey), this.#lastActiveElement)) {
       const el = this.#lastActiveElement;
       window.setTimeout(() => el.focus(), 0);
     }
   }
   close() {
-    this.$locked.value || ((this.props["event-close"] || noop)(null, this), !this.destroyed && this.destroy());
+    this.$locked.value || this.destroy();
   }
   template(props) {
     return /* @__PURE__ */ h(
@@ -369,23 +369,47 @@ class Modal extends Component {
     return new Promise((resolve) => {
       render(/* @__PURE__ */ h(Modal, { "event-close": (...args) => {
         (props["event-close"] ?? noop)(...args), resolve(...args);
-      }, ...props }), parent);
+      }, ...props }, props.children), parent);
     });
   }
   /**
-   * WIP
+   * Display a confirmation Modal
+   * @param  {string|Element} message - Confirmation message, rendered as HTML when a string
+   * @param  {Object} [props] - Modal jsx props, plus no/yes Button props to customize the buttons
+   * @param  {Element} [parent=document.body] - Element to render the Modal
+   * @return {Promise<boolean>} resolve true when confirmed, false when cancelled/closed
    */
-  static async confirm(callback, message, props, parent = document.body) {
+  static async confirm(message, { no = {}, yes = {}, ...props } = {}, parent = document.body) {
     return new Promise((resolve) => {
+      let confirmed = !1, modal2;
       const onClose = (...args) => {
-        (props["event-close"] ?? noop)(...args), resolve(...args);
+        (props["event-close"] ?? noop)(...args), resolve(confirmed);
       };
       this.display({
         ...props,
+        ref: (instance) => {
+          props.ref?.(instance), modal2 = instance;
+        },
         "event-close": onClose,
         children: [
-          typeof props.message == "string" ? /* @__PURE__ */ h("div", { innerHTML: props.message }) : props.message,
-          ...props.children ?? []
+          /* @__PURE__ */ h("div", { innerHTML: message }),
+          /* @__PURE__ */ h("footer", null, /* @__PURE__ */ h(
+            Button,
+            {
+              label: "Cancel",
+              ...no,
+              "event-click": () => modal2.close()
+            }
+          ), /* @__PURE__ */ h(
+            Button,
+            {
+              label: "Confirm",
+              ...yes,
+              "event-click": () => {
+                confirmed = !0, modal2.close();
+              }
+            }
+          ))
         ]
       }, parent);
     });
@@ -393,10 +417,10 @@ class Modal extends Component {
   $title = $(this.props.title);
   $locked = $(this.props.locked);
   handleClick = (e) => {
-    e.target === this.base && this.handleClose();
+    e.target === this.base && this.close();
   };
-  handleClose = () => {
-    this.$locked.value || this.refs.backdrop.close();
+  close = () => {
+    this.refs.backdrop.close();
   };
   template(props) {
     return /* @__PURE__ */ h(
@@ -434,7 +458,7 @@ class Modal extends Component {
             class: style$7.modal__close,
             icon: IconClose,
             hidden: this.$locked,
-            "event-click": this.handleClose
+            "event-click": this.close
           }
         )),
         /* @__PURE__ */ h("div", { class: style$7.modal__content }, props.children)

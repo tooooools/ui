@@ -1,0 +1,23 @@
+import{C as Component,P as Props,r as render,h,$,n as noop}from"./index-DqvVFXpX.js";import{B as Button}from"./Button-AGVl-iU-.js";import{I as IconClose}from"./cancel-Dsa0KqKE.js";import{I as Icon}from"./circle-B3RGTZTt.js";const toast="ui-toast-1kys1123",toast__icon="ui-toast__icon-1kys1196",toast__content="ui-toast__content-1kys1221",style={"toast-container":"ui-toast-container-1kys1123",toast,toast__icon,toast__content};class Toast extends Component{static props={label:[Props.string,Props.Signal],title:[Props.string,Props.Signal],icon:[Props.string,Props.Signal],tone:[Props.string,Props.Signal],count:[Props.number,Props.Signal],duration:Props.number,id:Props.string,class:[Props.string,Props.array,Props.object],style:[Props.string,Props.object]};static display(message,{parent=Toast.container,...props}={}){render(h(Toast,{...props},message),parent)}static get container(){return document.querySelector("."+style["toast-container"])??render(h("div",{class:style["toast-container"]}),document.body).nodes[0]}$label=$(this.props.label);$title=$(this.props.title);$icon=$(this.props.icon);$tone=$(this.props.tone);$count=$(this.props.count);handleClose=e=>{e.stopPropagation(),this.destroy()};afterMount(){this.props.duration&&(this.refs.timer=window.setTimeout(()=>this.destroy(),this.props.duration))}beforeDestroy(){(this.props["event-close"]||noop)(),this.refs.timer&&window.clearTimeout(this.refs.timer)}template(props){return h("div",{...this.dataProps,...this.eventProps,id:props.id,class:[style.toast,{"has-icon":this.$icon,"has-duration":props.duration},props.class],"data-count":this.$count,"data-tone":this.$tone,style:{"--toast-duration":(props.duration??-1)+"ms",...props.style}},h("span",{ref:this.ref("icon"),class:style.toast__icon,"data-count":this.$count,innerHTML:this.$icon}),h("div",{class:style.toast__content},props.children),h(Button,{icon:IconClose,class:"toast__btn--close",title:"Effacer la notification","event-click":this.handleClose}))}}const Toast_stories={title:"Inputs/<Toast>",render:args=>render(h(Toast,args),null).nodes[0],argTypes:{icon:{type:"string",description:"`store-`"},tone:{type:"string",description:"`store-`"},count:{type:"string",description:"`store-`"},id:{type:"string"},class:{type:"string"},"event-click":{action:"event-click"},"event-mouseenter":{action:"event-mouseenter"},"event-mouseleave":{action:"event-mouseleave"}}},Primary={render:args=>render(h(Toast,args,"Hello world"),null).nodes[0],args:{icon:Icon}},StackTrace={render:args=>render(h(Toast,args,[h("p",{},"A problem occured"),h("pre",{},`Sapien eros platea nostra praesent neque
+Fringilla ligula nam iaculis duis sed conubia mus cubilia, ultricies
+vivamus class pretium porttitor maximus maecenas ad mi molestie imperdiet sodales.
+Sagittis elit litora netus mollis vel proin fames interdum parturient donec, tempor aliquam curabitur dignissim elementum porttitor posuere libero viverra. Diam mattis neque curae gravida tincidunt curabitur massa ornare sodales aenean, tortor eu parturient at ridiculus finibus a sociosqu.`)]),null).nodes[0],args:{icon:Icon,tone:"error",count:2}},Display={render:args=>render(h(Button,{label:"say hello","event-click":e=>Toast.display("hello world",{icon:Icon})})).nodes[0]};Primary.parameters={...Primary.parameters,docs:{...Primary.parameters?.docs,source:{originalSource:`{
+  render: args => render(h(Toast, args, 'Hello world'), null).nodes[0],
+  args: {
+    icon: Icon
+  }
+}`,...Primary.parameters?.docs?.source}}};StackTrace.parameters={...StackTrace.parameters,docs:{...StackTrace.parameters?.docs,source:{originalSource:`{
+  render: args => render(h(Toast, args, [h('p', {}, 'A problem occured'), h('pre', {}, 'Sapien eros platea nostra praesent neque\\nFringilla ligula nam iaculis duis sed conubia mus cubilia, ultricies\\nvivamus class pretium porttitor maximus maecenas ad mi molestie imperdiet sodales.\\nSagittis elit litora netus mollis vel proin fames interdum parturient donec, tempor aliquam curabitur dignissim elementum porttitor posuere libero viverra. Diam mattis neque curae gravida tincidunt curabitur massa ornare sodales aenean, tortor eu parturient at ridiculus finibus a sociosqu.')]), null).nodes[0],
+  args: {
+    icon: Icon,
+    tone: 'error',
+    count: 2
+  }
+}`,...StackTrace.parameters?.docs?.source}}};Display.parameters={...Display.parameters,docs:{...Display.parameters?.docs,source:{originalSource:`{
+  render: args => render(h(Button, {
+    label: 'say hello',
+    'event-click': e => Toast.display('hello world', {
+      icon: Icon
+    })
+  })).nodes[0]
+}`,...Display.parameters?.docs?.source}}};const __namedExportsOrder=["Primary","StackTrace","Display"];export{Display,Primary,StackTrace,__namedExportsOrder,Toast_stories as default};

@@ -33,27 +33,51 @@ export default class Modal extends Component {
         resolve(...args)
       }
 
-      render(<Modal event-close={onClose} {...props} />, parent)
+      render(<Modal event-close={onClose} {...props}>{props.children}</Modal>, parent)
     })
   }
 
   /**
-   * WIP
+   * Display a confirmation Modal
+   * @param  {string|Element} message - Confirmation message, rendered as HTML when a string
+   * @param  {Object} [props] - Modal jsx props, plus no/yes Button props to customize the buttons
+   * @param  {Element} [parent=document.body] - Element to render the Modal
+   * @return {Promise<boolean>} resolve true when confirmed, false when cancelled/closed
    */
-  static async confirm (callback, message, props, parent = document.body) {
+  static async confirm (message, { no = {}, yes = {}, ...props } = {}, parent = document.body) {
     return new Promise(resolve => {
+      let confirmed = false
+      let modal
+
       const onClose = (...args) => {
         ;(props['event-close'] ?? noop)(...args)
-        resolve(...args)
+        resolve(confirmed)
       }
+
       this.display({
         ...props,
+        ref: instance => {
+          props.ref?.(instance)
+          modal = instance
+        },
         'event-close': onClose,
         children: [
-          typeof props.message === 'string'
-            ? <div innerHTML={props.message} />
-            : props.message,
-          ...(props.children ?? [])
+          <div innerHTML={message} />,
+          <footer>
+            <Button
+              label='Cancel'
+              {...no}
+              event-click={() => modal.handleClose()}
+            />
+            <Button
+              label='Confirm'
+              {...yes}
+              event-click={() => {
+                confirmed = true
+                modal.handleClose()
+              }}
+            />
+          </footer>
         ]
       }, parent)
     })
